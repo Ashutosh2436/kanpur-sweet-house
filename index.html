@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title th:text="${pageTitle}">Kanpur Sweet Palace | Authentic Mithai & Snacks Since 1972</title>
-  <meta name="description" content="Savor the legendary taste of Kanpur's authentic sweets made with pure desi ghee. Order premium Kaju Katli, Motichoor Laddus, and samosas online." th:content="${pageDescription}">
+  <title th:text="${pageTitle}">Kanpur Sweet Palace | Premium 3D Mithai Experience</title>
+  <meta name="description" content="Experience the ultimate luxury of Kanpur's legendary sweets. Pure cow ghee delicacies presented in interactive 3D." th:content="${pageDescription}">
   
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800&family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
   
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -25,31 +25,43 @@
           colors: {
             maroon: {
               DEFAULT: '#800020',
-              dark: '#5a0016',
+              dark: '#400010',
               light: '#a61c3c',
+              gold: '#5c0018',
             },
             gold: {
               DEFAULT: '#D4AF37',
-              dark: '#b39028',
-              light: '#e5c358',
+              dark: '#aa8214',
+              light: '#f5d77f',
             },
             cream: {
               DEFAULT: '#FDFBF7',
-              dark: '#f3ece0',
+              dark: '#eadeca',
+            },
+            obsidian: {
+              DEFAULT: '#080204',
+              card: '#16080c',
+              border: '#38161d',
             }
           },
           fontFamily: {
+            cinzel: ['Cinzel', 'serif'],
             serif: ['Playfair Display', 'serif'],
             sans: ['Inter', 'sans-serif'],
           },
           animation: {
-            'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-            'float': 'float 6s ease-in-out infinite',
+            'spin-slow': 'spin 20s linear infinite',
+            'pulse-glow': 'pulseGlow 2s ease-in-out infinite',
+            'float-3d': 'float3d 6s ease-in-out infinite',
           },
           keyframes: {
-            float: {
-              '0%, 100%': { transform: 'translateY(0)' },
-              '50%': { transform: 'translateY(-15px)' },
+            pulseGlow: {
+              '0%, 100%': { opacity: '0.6', transform: 'scale(1)' },
+              '50%': { opacity: '1', transform: 'scale(1.05)' },
+            },
+            float3d: {
+              '0%, 100%': { transform: 'translateY(0) rotateX(5deg) rotateY(-5deg)' },
+              '50%': { transform: 'translateY(-20px) rotateX(-5deg) rotateY(5deg)' },
             }
           }
         }
@@ -59,54 +71,117 @@
 
   <style type="text/tailwindcss">
     @layer utilities {
-      .glassmorphism {
-        background: rgba(253, 251, 247, 0.85);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
+      /* Custom Cursor hiding on desktop */
+      @media (min-width: 1024px) {
+        body, a, button, select, input, textarea {
+          cursor: none !important;
+        }
       }
-      .bg-pattern {
-        background-color: #FDFBF7;
-        background-image: radial-gradient(rgba(212, 175, 55, 0.08) 1px, transparent 0);
-        background-size: 24px 24px;
+      .glass-premium {
+        background: rgba(22, 8, 12, 0.75);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(212, 175, 55, 0.15);
       }
-      .gold-gradient-border {
-        border-image: linear-gradient(to right, #D4AF37, #800020, #D4AF37) 1;
+      .gold-text-glow {
+        text-shadow: 0 0 10px rgba(212, 175, 55, 0.4), 0 0 20px rgba(212, 175, 55, 0.2);
+      }
+      .gold-glow-border {
+        box-shadow: 0 0 15px rgba(212, 175, 55, 0.1);
+        border: 1px solid rgba(212, 175, 55, 0.25);
+      }
+      .gold-glow-border:hover {
+        box-shadow: 0 0 25px rgba(212, 175, 55, 0.35);
+        border: 1px solid rgba(212, 175, 55, 0.6);
+      }
+      /* 3D Scene Perspective */
+      .perspective-3d {
+        perspective: 1200px;
+        transform-style: preserve-3d;
+      }
+      .preserve-3d {
+        transform-style: preserve-3d;
+      }
+      /* 3D Card Hover Physics */
+      .tilt-card {
+        transform-style: preserve-3d;
+        transition: transform 0.15s ease-out, box-shadow 0.3s ease;
+      }
+      /* Card Glare reflection */
+      .card-glare {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255,255,255,0.12) 0%, transparent 60%);
+        z-index: 5;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+      .tilt-card:hover .card-glare {
+        opacity: 1;
+      }
+      /* 3D Carousel container */
+      .carousel-3d-container {
+        position: relative;
+        width: 320px;
+        height: 320px;
+        transform-style: preserve-3d;
+        transition: transform 1s cubic-bezier(0.23, 1, 0.32, 1);
+      }
+      .carousel-3d-item {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        left: 0;
+        top: 0;
+        transform-style: preserve-3d;
+        backface-visibility: hidden;
       }
     }
   </style>
 </head>
-<body class="bg-cream font-sans text-stone-800 bg-pattern min-h-screen flex flex-col justify-between overflow-x-hidden">
+<body class="bg-obsidian text-stone-200 min-h-screen flex flex-col justify-between overflow-x-hidden relative selection:bg-gold selection:text-obsidian">
+
+  <!-- ==================== BACKGROUND DUST CANVAS ==================== -->
+  <canvas id="particles-canvas" class="fixed inset-0 w-full h-full pointer-events-none z-0"></canvas>
+
+  <!-- ==================== CUSTOM 3D CURSOR ==================== -->
+  <div id="custom-cursor-dot" class="fixed w-2 h-2 bg-gold rounded-full pointer-events-none z-50 transform -translate-x-1/2 -translate-y-1/2 hidden lg:block opacity-0 transition-opacity duration-300"></div>
+  <div id="custom-cursor-ring" class="fixed w-8 h-8 border border-gold/50 rounded-full pointer-events-none z-50 transform -translate-x-1/2 -translate-y-1/2 hidden lg:block opacity-0 transition-all duration-150 ease-out"></div>
 
   <!-- ==================== HEADER & NAVIGATION ==================== -->
-  <header class="sticky top-0 z-40 w-full border-b border-gold/15 glassmorphism transition-all duration-300">
+  <header class="sticky top-0 z-40 w-full border-b border-gold/15 glass-premium transition-all duration-300">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex items-center justify-between h-20">
         
         <!-- Logo -->
         <a href="#" class="flex items-center space-x-3 group">
-          <div class="w-12 h-12 bg-maroon rounded-full flex items-center justify-center border-2 border-gold shadow-md transform group-hover:rotate-12 transition-transform duration-300">
-            <span class="text-gold font-serif font-bold text-xl">K</span>
+          <div class="w-12 h-12 bg-gradient-to-br from-maroon to-maroon-dark rounded-full flex items-center justify-center border-2 border-gold shadow-[0_0_15px_rgba(212,175,55,0.2)] transform group-hover:rotate-12 transition-transform duration-300">
+            <span class="text-gold font-cinzel font-bold text-xl">K</span>
           </div>
           <div>
-            <h1 class="font-serif font-bold text-xl sm:text-2xl text-maroon leading-tight tracking-wide flex items-center gap-1">
+            <h1 class="font-cinzel font-bold text-lg sm:text-2xl text-gold leading-tight tracking-wider flex items-center gap-1 gold-text-glow">
               <span th:text="${storeName}">Kanpur Sweet Palace</span>
             </h1>
-            <p class="text-[10px] uppercase tracking-widest text-gold font-semibold -mt-1">Legacy of Pure Taste</p>
+            <p class="text-[9px] uppercase tracking-widest text-gold/60 font-semibold -mt-1">Luxury Indian Heritage</p>
           </div>
         </a>
 
         <!-- Desktop Navigation Links -->
         <nav class="hidden md:flex space-x-8 items-center">
-          <a href="#about" class="text-maroon/90 hover:text-maroon font-medium transition-colors hover:border-b-2 hover:border-gold pb-1">Our Story</a>
-          <a href="#specialties" class="text-maroon/90 hover:text-maroon font-medium transition-colors hover:border-b-2 hover:border-gold pb-1">Specialties</a>
-          <a href="#menu" class="text-maroon/90 hover:text-maroon font-medium transition-colors hover:border-b-2 hover:border-gold pb-1">Menu</a>
-          <a href="#testimonials" class="text-maroon/90 hover:text-maroon font-medium transition-colors hover:border-b-2 hover:border-gold pb-1">Reviews</a>
-          <a href="#contact" class="text-maroon/90 hover:text-maroon font-medium transition-colors hover:border-b-2 hover:border-gold pb-1">Contact Us</a>
+          <a href="#about" class="text-stone-300 hover:text-gold font-medium transition-all hover:tracking-wide pb-1">Our Story</a>
+          <a href="#specialties" class="text-stone-300 hover:text-gold font-medium transition-all hover:tracking-wide pb-1">Specialties</a>
+          <a href="#menu" class="text-stone-300 hover:text-gold font-medium transition-all hover:tracking-wide pb-1">Menu</a>
+          <a href="#testimonials" class="text-stone-300 hover:text-gold font-medium transition-all hover:tracking-wide pb-1">Reviews</a>
+          <a href="#contact" class="text-stone-300 hover:text-gold font-medium transition-all hover:tracking-wide pb-1">Contact Us</a>
         </nav>
 
         <!-- CTAs -->
         <div class="hidden lg:flex items-center space-x-4">
-          <a href="tel:+919876543210" class="text-maroon hover:text-maroon-light flex items-center space-x-1 font-semibold transition-colors" th:href="${'tel:' + storePhone}">
+          <a href="tel:+919876543210" class="text-stone-300 hover:text-gold flex items-center space-x-1.5 font-semibold transition-colors" th:href="${'tel:' + storePhone}">
             <i data-lucide="phone" class="w-4 h-4 text-gold"></i>
             <span th:text="${storePhone}">+91 98765 43210</span>
           </a>
@@ -114,7 +189,7 @@
           <a href="https://wa.me/919876543210?text=Hello%20Kanpur%20Sweet%20Palace%2C%20I%20would%20like%20to%20view%20your%20menu%20and%20place%20an%20order." 
              target="_blank"
              th:href="${whatsappUrl}" 
-             class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-5 rounded-full flex items-center space-x-2 shadow-lg shadow-emerald-600/20 transform hover:-translate-y-0.5 transition-all duration-300 animate-pulse-slow">
+             class="bg-gold hover:bg-gold-light text-obsidian font-bold py-2.5 px-6 rounded-full flex items-center space-x-2 shadow-[0_0_15px_rgba(212,175,55,0.3)] hover:shadow-[0_0_25px_rgba(212,175,55,0.6)] transform hover:-translate-y-0.5 transition-all duration-300">
             <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
               <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.335-1.662c1.746.953 3.71 1.458 5.704 1.459h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
             </svg>
@@ -124,7 +199,7 @@
 
         <!-- Mobile menu button -->
         <div class="md:hidden flex items-center">
-          <button id="mobile-menu-btn" type="button" class="text-maroon hover:text-maroon-light focus:outline-none p-2 rounded-lg border border-maroon/20 hover:bg-cream-dark transition-colors" aria-label="Toggle menu">
+          <button id="mobile-menu-btn" type="button" class="text-gold hover:text-gold-light focus:outline-none p-2 rounded-lg border border-gold/20 hover:bg-maroon-dark/40 transition-colors" aria-label="Toggle menu">
             <i data-lucide="menu" id="menu-icon" class="w-6 h-6"></i>
           </button>
         </div>
@@ -132,23 +207,23 @@
       </div>
     </div>
 
-    <!-- Mobile Menu Drawer (Hidden by default) -->
-    <div id="mobile-menu" class="hidden md:hidden border-t border-gold/10 bg-cream py-4 px-6 space-y-4 shadow-xl">
-      <a href="#about" class="block text-maroon font-medium text-lg border-b border-stone-200 pb-2">Our Story</a>
-      <a href="#specialties" class="block text-maroon font-medium text-lg border-b border-stone-200 pb-2">Specialties</a>
-      <a href="#menu" class="block text-maroon font-medium text-lg border-b border-stone-200 pb-2">Menu</a>
-      <a href="#testimonials" class="block text-maroon font-medium text-lg border-b border-stone-200 pb-2">Reviews</a>
-      <a href="#contact" class="block text-maroon font-medium text-lg pb-2">Contact Us</a>
+    <!-- Mobile Menu Drawer -->
+    <div id="mobile-menu" class="hidden md:hidden border-t border-gold/15 bg-obsidian py-4 px-6 space-y-4 shadow-xl">
+      <a href="#about" class="block text-stone-300 hover:text-gold font-medium text-lg border-b border-gold/5 pb-2">Our Story</a>
+      <a href="#specialties" class="block text-stone-300 hover:text-gold font-medium text-lg border-b border-gold/5 pb-2">Specialties</a>
+      <a href="#menu" class="block text-stone-300 hover:text-gold font-medium text-lg border-b border-gold/5 pb-2">Menu</a>
+      <a href="#testimonials" class="block text-stone-300 hover:text-gold font-medium text-lg border-b border-gold/5 pb-2">Reviews</a>
+      <a href="#contact" class="block text-stone-300 hover:text-gold font-medium text-lg pb-2">Contact Us</a>
       
       <div class="pt-4 flex flex-col space-y-3">
-        <a href="tel:+919876543210" class="text-maroon flex items-center space-x-2 font-semibold justify-center py-2.5 rounded-full border border-maroon/30 hover:bg-cream-dark transition-colors" th:href="${'tel:' + storePhone}">
+        <a href="tel:+919876543210" class="text-stone-300 flex items-center space-x-2 font-semibold justify-center py-2.5 rounded-full border border-gold/30 hover:bg-maroon-dark/20 transition-colors" th:href="${'tel:' + storePhone}">
           <i data-lucide="phone" class="w-5 h-5 text-gold"></i>
           <span th:text="${storePhone}">+91 98765 43210</span>
         </a>
         <a href="https://wa.me/919876543210?text=Hello%20Kanpur%20Sweet%20Palace%2C%20I%20would%20like%20to%20view%20your%20menu%20and%20place%20an%20order." 
            target="_blank"
            th:href="${whatsappUrl}" 
-           class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-5 rounded-full flex items-center justify-center space-x-2 shadow-lg shadow-emerald-600/25">
+           class="bg-gold hover:bg-gold-light text-obsidian font-bold py-3 px-5 rounded-full flex items-center justify-center space-x-2 shadow-lg">
           <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.335-1.662c1.746.953 3.71 1.458 5.704 1.459h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
           </svg>
@@ -158,88 +233,129 @@
     </div>
   </header>
 
-  <main class="flex-grow">
+  <main class="flex-grow z-10 relative">
     
     <!-- ==================== HERO SECTION ==================== -->
-    <section class="relative min-h-[calc(100vh-5rem)] flex items-center py-16 md:py-24 overflow-hidden bg-gradient-to-br from-cream via-cream to-amber-50">
+    <section class="relative min-h-[calc(100vh-5rem)] flex items-center py-16 md:py-24 overflow-hidden border-b border-gold/15">
       
-      <!-- Decorative gold background ring -->
-      <div class="absolute -right-32 top-10 w-[600px] h-[600px] border border-gold/10 rounded-full pointer-events-none hidden lg:block"></div>
-      <div class="absolute -right-16 top-24 w-[450px] h-[450px] border border-gold/20 rounded-full pointer-events-none hidden lg:block animate-pulse-slow"></div>
+      <!-- Ambient Backlights -->
+      <div class="absolute -left-48 top-12 w-96 h-96 bg-maroon/20 rounded-full blur-[120px] pointer-events-none"></div>
+      <div class="absolute -right-48 bottom-12 w-96 h-96 bg-gold/10 rounded-full blur-[120px] pointer-events-none"></div>
       
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 items-center">
           
-          <!-- Left Column: Copy & CTAs -->
-          <div class="text-center lg:text-left space-y-6 max-w-2xl mx-auto lg:mx-0">
-            <span class="inline-flex items-center px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider bg-maroon/10 text-maroon border border-maroon/15 shadow-sm">
-              ✨ Kanpur's Authentic Mithai Heritage
+          <!-- Left Column: Typography -->
+          <div class="text-center lg:text-left space-y-8 max-w-2xl mx-auto lg:mx-0 3d-scroll-reveal" style="transform: translateZ(50px);">
+            <span class="inline-flex items-center px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider bg-gold/10 text-gold border border-gold/25 shadow-[0_0_15px_rgba(212,175,55,0.1)]">
+              👑 Kanpur's Royal Sweet Legacy
             </span>
-            <h1 class="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold text-maroon leading-tight">
-              Authentic <span class="text-gold font-serif">Kanpur Sweets</span>, Crafted in Pure Desi Ghee
+            <h1 class="font-cinzel text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-tight">
+              Savor the <span class="text-gold font-cinzel gold-text-glow">Legendary</span> Taste in Interactive 3D
             </h1>
-            <p class="text-stone-600 text-base sm:text-lg leading-relaxed" th:text="${heroSubtitle}">
-              For over 50 years, Kanpur Sweet Palace has been sweetening your festivals, celebrations, and daily moments with the finest handmade traditional Indian delicacies. Cooked by master karigars with pure ingredients, hygiene, and love.
+            <p class="text-stone-400 text-base sm:text-lg leading-relaxed font-light" th:text="${heroSubtitle}">
+              For half a century, we've crafted pure desi ghee delights for Kanpur's elite. Now, step into our modern digital gallery—pre-order fresh delicacies, customize gift suites, and order instantly.
             </p>
             
             <!-- Button Group -->
             <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-4">
-              <a href="#menu" class="w-full sm:w-auto text-center bg-maroon hover:bg-maroon-dark text-white font-bold py-4 px-8 rounded-full shadow-lg shadow-maroon/20 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5">
-                Explore Our Menu
+              <a href="#menu" class="w-full sm:w-auto text-center bg-gradient-to-r from-gold to-gold-dark hover:from-gold-light hover:to-gold text-obsidian font-bold py-4 px-10 rounded-full shadow-[0_0_20px_rgba(212,175,55,0.2)] hover:shadow-[0_0_30px_rgba(212,175,55,0.4)] transition-all duration-300 transform hover:-translate-y-0.5">
+                Explore The Gallery
               </a>
               <a href="tel:+919876543210" 
                  th:href="${'tel:' + storePhone}" 
-                 class="w-full sm:w-auto text-center border-2 border-maroon hover:bg-maroon hover:text-white text-maroon font-bold py-3.5 px-8 rounded-full transition-all duration-300 flex items-center justify-center space-x-2">
+                 class="w-full sm:w-auto text-center border-2 border-gold/40 hover:border-gold hover:bg-gold/5 text-gold font-bold py-3.5 px-8 rounded-full transition-all duration-300 flex items-center justify-center space-x-2">
                 <i data-lucide="phone" class="w-5 h-5"></i>
-                <span>Call Store</span>
+                <span>Direct Hotline</span>
               </a>
             </div>
             
-            <!-- Quick stats / trust elements -->
-            <div class="grid grid-cols-3 gap-4 pt-8 border-t border-stone-200">
+            <!-- Quick stats -->
+            <div class="grid grid-cols-3 gap-4 pt-8 border-t border-gold/10">
               <div>
-                <p class="text-3xl font-serif font-bold text-maroon">50+</p>
-                <p class="text-xs text-stone-500 uppercase tracking-wider font-semibold">Years of Legacy</p>
+                <p class="text-3xl font-cinzel font-bold text-gold">50+</p>
+                <p class="text-[10px] text-stone-500 uppercase tracking-widest font-semibold mt-1">Heritage Years</p>
               </div>
               <div>
-                <p class="text-3xl font-serif font-bold text-maroon">100%</p>
-                <p class="text-xs text-stone-500 uppercase tracking-wider font-semibold">Pure Desi Ghee</p>
+                <p class="text-3xl font-cinzel font-bold text-gold">100%</p>
+                <p class="text-[10px] text-stone-500 uppercase tracking-widest font-semibold mt-1">Desi Ghee</p>
               </div>
               <div>
-                <p class="text-3xl font-serif font-bold text-maroon">30k+</p>
-                <p class="text-xs text-stone-500 uppercase tracking-wider font-semibold">Happy Kanpurites</p>
+                <p class="text-3xl font-cinzel font-bold text-gold">30k+</p>
+                <p class="text-[10px] text-stone-500 uppercase tracking-widest font-semibold mt-1">Kanpur Loyalists</p>
               </div>
             </div>
           </div>
           
-          <!-- Right Column: Premium Sweets Box Showcase -->
-          <div class="relative flex justify-center items-center lg:pl-8">
-            <div class="absolute inset-0 bg-gradient-to-tr from-gold/15 to-transparent rounded-full blur-3xl w-80 h-80 mx-auto pointer-events-none"></div>
-            <!-- Frame/Container -->
-            <div class="relative w-80 h-80 sm:w-96 sm:h-96 md:w-[420px] md:h-[420px] rounded-3xl overflow-hidden border-4 border-gold shadow-2xl animate-float group bg-stone-100">
-              <img src="images/hero_sweets.png" 
-                   th:src="@{/images/hero_sweets.png}" 
-                   alt="Signature Kanpur Sweets Box" 
-                   class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500">
-              <div class="absolute inset-0 bg-gradient-to-t from-maroon/70 via-transparent to-transparent flex items-end p-6">
-                <div class="text-white text-left">
-                  <span class="text-[10px] uppercase font-bold text-gold tracking-widest">Signature Selection</span>
-                  <h3 class="font-serif font-bold text-lg sm:text-xl">Shahi Utsav Assortment Box</h3>
-                  <p class="text-xs text-stone-200">Our signature festive collection curated for Kanpur's special occasions.</p>
+          <!-- Right Column: Interactive 3D Revolving Showcase -->
+          <div class="relative flex flex-col justify-center items-center lg:pl-8 perspective-3d py-10">
+            
+            <!-- Revolving Ring -->
+            <div id="carousel-3d-ring" class="carousel-3d-container animate-float-3d">
+              
+              <!-- Item 1: Sweet Box -->
+              <div class="carousel-3d-item bg-obsidian-card border border-gold/20 rounded-3xl overflow-hidden p-3 shadow-2xl flex flex-col justify-between" style="transform: rotateY(0deg) translateZ(280px);">
+                <div class="w-full h-4/5 rounded-2xl overflow-hidden bg-stone-900 border border-gold/10 relative">
+                  <img src="images/hero_sweets.png" th:src="@{/images/hero_sweets.png}" alt="Signature Selection" class="w-full h-full object-cover">
+                  <div class="absolute inset-0 bg-gradient-to-t from-obsidian via-transparent to-transparent flex items-end p-4">
+                    <div>
+                      <span class="text-[9px] uppercase font-bold text-gold tracking-widest">Masterpiece Selection</span>
+                      <h3 class="font-cinzel font-bold text-base text-white">Shahi Utsav Gift Suite</h3>
+                    </div>
+                  </div>
+                </div>
+                <div class="flex items-center justify-between text-xs px-2 pt-2">
+                  <span class="text-stone-400">Pure Ghee Assortment</span>
+                  <span class="text-gold font-bold font-serif">₹1,200</span>
                 </div>
               </div>
+
+              <!-- Item 2: Kaju Katli -->
+              <div class="carousel-3d-item bg-obsidian-card border border-gold/20 rounded-3xl overflow-hidden p-3 shadow-2xl flex flex-col justify-between" style="transform: rotateY(120deg) translateZ(280px);">
+                <div class="w-full h-4/5 rounded-2xl overflow-hidden bg-stone-900 border border-gold/10 relative">
+                  <img src="images/kaju_katli.png" th:src="@{/images/kaju_katli.png}" alt="Diamond Kaju Katli" class="w-full h-full object-cover">
+                  <div class="absolute inset-0 bg-gradient-to-t from-obsidian via-transparent to-transparent flex items-end p-4">
+                    <div>
+                      <span class="text-[9px] uppercase font-bold text-gold tracking-widest">Royal Classic</span>
+                      <h3 class="font-cinzel font-bold text-base text-white">Legendary Kaju Katli</h3>
+                    </div>
+                  </div>
+                </div>
+                <div class="flex items-center justify-between text-xs px-2 pt-2">
+                  <span class="text-stone-400">Silver Foiled Diamond</span>
+                  <span class="text-gold font-bold font-serif">₹900/kg</span>
+                </div>
+              </div>
+
+              <!-- Item 3: Laddus -->
+              <div class="carousel-3d-item bg-obsidian-card border border-gold/20 rounded-3xl overflow-hidden p-3 shadow-2xl flex flex-col justify-between" style="transform: rotateY(240deg) translateZ(280px);">
+                <div class="w-full h-4/5 rounded-2xl overflow-hidden bg-stone-900 border border-gold/10 relative">
+                  <img src="images/desi_ghee_laddu.png" th:src="@{/images/desi_ghee_laddu.png}" alt="Desi Ghee Laddus" class="w-full h-full object-cover">
+                  <div class="absolute inset-0 bg-gradient-to-t from-obsidian via-transparent to-transparent flex items-end p-4">
+                    <div>
+                      <span class="text-[9px] uppercase font-bold text-gold tracking-widest">Hand Rolled Gold</span>
+                      <h3 class="font-cinzel font-bold text-base text-white">Desi Ghee Laddu</h3>
+                    </div>
+                  </div>
+                </div>
+                <div class="flex items-center justify-between text-xs px-2 pt-2">
+                  <span class="text-stone-400">Cardamom Infused</span>
+                  <span class="text-gold font-bold font-serif">₹450/kg</span>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Carousel Rotators controls -->
+            <div class="flex space-x-6 mt-12 z-20">
+              <button id="carousel-prev" class="w-12 h-12 rounded-full border border-gold/30 hover:border-gold hover:bg-gold/10 text-gold flex items-center justify-center transition-all bg-obsidian-card/50 shadow" aria-label="Previous 3D Slide">
+                <i data-lucide="chevron-left" class="w-6 h-6"></i>
+              </button>
+              <button id="carousel-next" class="w-12 h-12 rounded-full border border-gold/30 hover:border-gold hover:bg-gold/10 text-gold flex items-center justify-center transition-all bg-obsidian-card/50 shadow" aria-label="Next 3D Slide">
+                <i data-lucide="chevron-right" class="w-6 h-6"></i>
+              </button>
             </div>
             
-            <!-- Floating Badge -->
-            <div class="absolute -bottom-4 -left-4 sm:left-4 bg-white border-2 border-gold shadow-xl p-4 rounded-2xl flex items-center space-x-3 transform -rotate-3 hover:rotate-0 transition-transform duration-300 z-20">
-              <div class="bg-amber-100 p-2.5 rounded-xl flex items-center justify-center text-gold">
-                <i data-lucide="award" class="w-6 h-6"></i>
-              </div>
-              <div>
-                <p class="text-[10px] font-bold text-stone-400 uppercase tracking-widest">Quality Assurance</p>
-                <p class="font-bold text-maroon text-sm font-serif">FSSAI Certified Hygiene</p>
-              </div>
-            </div>
           </div>
           
         </div>
@@ -247,79 +363,60 @@
     </section>
 
     <!-- ==================== ABOUT & STORY PITCH SECTION ==================== -->
-    <section id="about" class="py-20 bg-stone-50 border-y border-gold/15">
+    <section id="about" class="py-24 border-b border-gold/15 relative">
+      <div class="absolute inset-0 bg-gradient-to-b from-transparent via-maroon-dark/5 to-transparent pointer-events-none"></div>
+      
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           
-          <!-- Left: Heritage story images grid -->
-          <div class="grid grid-cols-2 gap-4">
-            <div class="space-y-4">
-              <div class="rounded-2xl overflow-hidden border-2 border-gold/30 shadow-lg h-48 bg-stone-200">
-                <img src="images/kaju_katli.png" th:src="@{/images/kaju_katli.png}" alt="Preparing Sweets" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300">
-              </div>
-              <div class="rounded-2xl overflow-hidden border-2 border-gold/30 shadow-lg h-64 bg-stone-200">
-                <img src="images/gift_box.png" th:src="@{/images/gift_box.png}" alt="Sweet Box Packing" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300">
-              </div>
+          <!-- Left: 3D Layered Image Showcase -->
+          <div class="relative w-full h-[400px] perspective-3d 3d-scroll-reveal">
+            <!-- Back Card -->
+            <div class="absolute left-6 top-6 w-[70%] h-[300px] rounded-3xl overflow-hidden border border-gold/20 shadow-2xl transform rotateY(15deg) rotateX(10deg) translateZ(-40px) bg-stone-900">
+              <img src="images/gift_box.png" th:src="@{/images/gift_box.png}" alt="Royal Packaging" class="w-full h-full object-cover opacity-80 hover:opacity-100 transition-opacity">
             </div>
-            <div class="space-y-4 pt-8">
-              <div class="rounded-2xl overflow-hidden border-2 border-gold/30 shadow-lg h-64 bg-stone-200">
-                <img src="images/desi_ghee_laddu.png" th:src="@{/images/desi_ghee_laddu.png}" alt="Desi Ghee Laddus" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300">
-              </div>
-              <div class="rounded-2xl overflow-hidden border-2 border-gold/30 shadow-lg h-48 bg-stone-200">
-                <img src="images/special_samosa.png" th:src="@{/images/special_samosa.png}" alt="Golden Samosas" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300">
-              </div>
+            <!-- Middle Card -->
+            <div class="absolute right-6 top-16 w-[65%] h-[280px] rounded-3xl overflow-hidden border border-gold/20 shadow-2xl transform rotateY(-20deg) rotateX(15deg) translateZ(0px) bg-stone-900">
+              <img src="images/special_samosa.png" th:src="@{/images/special_samosa.png}" alt="Hot Crispy Samosas" class="w-full h-full object-cover opacity-80 hover:opacity-100 transition-opacity">
+            </div>
+            <!-- Front Focal Card (Tiltable) -->
+            <div class="tilt-card absolute left-20 bottom-0 w-[55%] h-[240px] rounded-3xl overflow-hidden border-2 border-gold shadow-3xl transform rotateY(5deg) rotateX(-5deg) translateZ(80px) bg-stone-950">
+              <img src="images/kaju_katli.png" th:src="@{/images/kaju_katli.png}" alt="Premium Kaju Katli" class="w-full h-full object-cover">
+              <div class="card-glare"></div>
             </div>
           </div>
           
-          <!-- Right: Heritage Story text -->
-          <div class="space-y-6">
-            <span class="text-gold font-bold text-sm uppercase tracking-widest block">Our Heritage Story</span>
-            <h2 class="font-serif text-3xl sm:text-4xl font-bold text-maroon">50 Years of Sweetening Kanpur's Celebrations</h2>
-            <div class="h-1 w-20 bg-gold my-4"></div>
+          <!-- Right: Narrative -->
+          <div class="space-y-6 3d-scroll-reveal">
+            <span class="text-gold font-bold text-xs uppercase tracking-widest block">Legacy Restyled</span>
+            <h2 class="font-cinzel text-3xl sm:text-4xl font-extrabold text-white">Crafting Pure Emotion in Pure Cow Ghee</h2>
+            <div class="h-0.5 w-20 bg-gold my-4"></div>
             
-            <p class="text-stone-600 leading-relaxed">
-              Established in 1972 at the heart of Kanpur, our family-owned sweet shop started with a simple vision: to make the most authentic, rich, and high-quality traditional sweets using only 100% pure cow ghee.
+            <p class="text-stone-400 leading-relaxed text-sm sm:text-base font-light">
+              Since 1972, we have served the royal flavors of traditional Kanpur sweets. Our master karigars (artisans) take pride in preserving age-old family recipes, utilizing only the most premium ingredients with zero adulteration.
             </p>
-            <p class="text-stone-600 leading-relaxed">
-              Over the decades, we have maintained the exact same recipes passed down through generations. Our master karigars (artisans) take pride in hand-crafting each batch, ensuring the unique taste and quality that Kanpurites know and love.
+            <p class="text-stone-400 leading-relaxed text-sm sm:text-base font-light">
+              This digital gallery is our new bridge to your celebrations—blending our rich heritage with modern, frictionless pre-orders to save your time during busy festivals.
             </p>
             
-            <!-- Legacy features list -->
+            <!-- Features List -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4">
-              <div class="flex items-start space-x-3">
-                <div class="bg-maroon/10 p-2 rounded-lg text-maroon shrink-0">
+              <div class="flex items-start space-x-3 group">
+                <div class="bg-gold/10 p-2.5 rounded-xl text-gold border border-gold/25 group-hover:bg-gold group-hover:text-obsidian transition-colors">
                   <i data-lucide="check-circle" class="w-5 h-5"></i>
                 </div>
                 <div>
-                  <h4 class="font-serif font-bold text-maroon">Fresh Daily Production</h4>
-                  <p class="text-xs text-stone-500 mt-0.5">Every item is prepared fresh every morning with pure ingredients.</p>
+                  <h4 class="font-cinzel font-bold text-white text-sm">Fresh Dawn Cooking</h4>
+                  <p class="text-xs text-stone-500 mt-1">Prepared fresh at dawn and packaged immediately.</p>
                 </div>
               </div>
-              <div class="flex items-start space-x-3">
-                <div class="bg-maroon/10 p-2 rounded-lg text-maroon shrink-0">
+              <div class="flex items-start space-x-3 group">
+                <div class="bg-gold/10 p-2.5 rounded-xl text-gold border border-gold/25 group-hover:bg-gold group-hover:text-obsidian transition-colors">
                   <i data-lucide="shield" class="w-5 h-5"></i>
                 </div>
                 <div>
-                  <h4 class="font-serif font-bold text-maroon">Hygiene Guaranteed</h4>
-                  <p class="text-xs text-stone-500 mt-0.5">Untouched cooking process, sealed food-grade packaging.</p>
-                </div>
-              </div>
-              <div class="flex items-start space-x-3">
-                <div class="bg-maroon/10 p-2 rounded-lg text-maroon shrink-0">
-                  <i data-lucide="clock" class="w-5 h-5"></i>
-                </div>
-                <div>
-                  <h4 class="font-serif font-bold text-maroon">Festival Queue-skip</h4>
-                  <p class="text-xs text-stone-500 mt-0.5">Pre-order online via WhatsApp and collect your festival box instantly.</p>
-                </div>
-              </div>
-              <div class="flex items-start space-x-3">
-                <div class="bg-maroon/10 p-2 rounded-lg text-maroon shrink-0">
-                  <i data-lucide="shopping-cart" class="w-5 h-5"></i>
-                </div>
-                <div>
-                  <h4 class="font-serif font-bold text-maroon">Bulk Party Orders</h4>
-                  <p class="text-xs text-stone-500 mt-0.5">Catering and bulk packages customized for weddings and events.</p>
+                  <h4 class="font-cinzel font-bold text-white text-sm">Ultra-Hygienic Prep</h4>
+                  <p class="text-xs text-stone-500 mt-1">100% untouched cooking in clean kitchens.</p>
                 </div>
               </div>
             </div>
@@ -330,103 +427,103 @@
     </section>
 
     <!-- ==================== FEATURED SPECIALTIES GRID ==================== -->
-    <section id="specialties" class="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center max-w-3xl mx-auto mb-16 space-y-4">
-        <span class="text-gold font-bold text-sm uppercase tracking-widest block">Signature Sweets</span>
-        <h2 class="font-serif text-3xl sm:text-4xl font-bold text-maroon">Our Legendary Specialties</h2>
-        <div class="h-1 w-20 bg-gold mx-auto"></div>
-        <p class="text-stone-600">These are the classic, highly demanded delicacies that define our sweet shop. Beloved by locals, crafted with absolute precision.</p>
+    <section id="specialties" class="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-b border-gold/15">
+      <div class="text-center max-w-3xl mx-auto mb-20 space-y-4 3d-scroll-reveal">
+        <span class="text-gold font-bold text-xs uppercase tracking-widest block">Imperial Choices</span>
+        <h2 class="font-cinzel text-3xl sm:text-4xl font-extrabold text-white">Our Legendary Specialties</h2>
+        <div class="h-0.5 w-20 bg-gold mx-auto"></div>
+        <p class="text-stone-400 font-light">Beloved by generations, hand-rolled with cow ghee, and presented with a luxury experience.</p>
       </div>
 
-      <!-- Specialties dynamic grid with Thymeleaf capabilities -->
-      <!-- th:remove="all-but-first" tells Thymeleaf to remove the static mock placeholders when rendering in production -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8" th:remove="all-but-first">
+      <!-- Specialties 3D Tilt Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 p-2 perspective-3d" th:remove="all-but-first">
         
-        <!-- Specialty Card 1 (Thymeleaf Loop Anchor) -->
-        <div class="bg-white rounded-2xl shadow-xl hover:shadow-2xl overflow-hidden group border border-gold/15 flex flex-col justify-between h-full transform hover:-translate-y-1 transition-all duration-300"
+        <!-- Specialty Card 1 -->
+        <div class="tilt-card bg-obsidian-card rounded-3xl overflow-hidden border border-gold/15 hover:border-gold/50 flex flex-col justify-between h-[450px] shadow-2xl relative"
              th:each="item : ${featuredItems}">
-          <div class="relative h-64 overflow-hidden bg-stone-200">
-            <img src="images/kaju_katli.png" 
-                 th:src="${item.imageUrl}" 
-                 th:alt="${item.name}" 
-                 alt="Legendary Kaju Katli" 
-                 class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500">
-            <div class="absolute top-4 right-4 bg-maroon text-gold font-bold px-4 py-1.5 rounded-full text-sm border border-gold/45 shadow-lg">
+          <!-- Card glare element -->
+          <div class="card-glare"></div>
+          
+          <div class="relative h-56 overflow-hidden bg-stone-900 border-b border-gold/10">
+            <img src="images/kaju_katli.png" th:src="${item.imageUrl}" th:alt="${item.name}" alt="Legendary Kaju Katli" class="w-full h-full object-cover transform scale-100 hover:scale-105 transition-transform duration-700">
+            <div class="absolute top-4 right-4 bg-obsidian/85 text-gold border border-gold/40 font-bold px-4 py-1.5 rounded-full text-xs shadow-lg backdrop-blur">
               <span th:text="${'₹' + item.price + '/' + item.unit}">₹900/kg</span>
             </div>
           </div>
-          <div class="p-6 flex-grow flex flex-col justify-between space-y-4">
+          <div class="p-6 flex-grow flex flex-col justify-between space-y-4 relative z-10">
             <div class="space-y-2">
-              <h3 class="font-serif text-xl font-bold text-maroon" th:text="${item.name}">Kaju Katli (Royal Cashew Fudge)</h3>
-              <p class="text-stone-600 text-sm leading-relaxed line-clamp-3" th:text="${item.description}">
-                Made with premium-grade cashews and pure sugar syrup, decorated with delicate edible silver foil (varq). It's smooth, rich, and melts seamlessly in the mouth.
+              <h3 class="font-cinzel text-lg font-bold text-white tracking-wide" th:text="${item.name}">Kaju Katli (Royal Cashew Fudge)</h3>
+              <p class="text-stone-400 text-xs leading-relaxed line-clamp-3 font-light" th:text="${item.description}">
+                Premium double-refined cashews slow cooked, glazed in sugar syrup, and garnished with delicate edible silver foil. Smooth and melt-in-mouth.
               </p>
             </div>
             
-            <button class="quick-view-btn w-full bg-maroon text-white hover:bg-maroon-dark py-3 rounded-xl font-bold transition-colors flex items-center justify-center space-x-2 border border-gold/20 shadow-md"
+            <button class="quick-view-btn w-full bg-gradient-to-r from-gold/10 to-gold/20 hover:from-gold hover:to-gold-dark text-gold hover:text-obsidian py-3 rounded-xl font-bold transition-all duration-300 flex items-center justify-center space-x-2 border border-gold/30 hover:border-gold shadow-lg"
                     data-name="Kaju Katli"
                     data-price="900"
                     data-image="images/kaju_katli.png"
                     data-desc="Our signature Kaju Katli is prepared using top-tier cashews with zero adulterants, slow-cooked to perfection, and garnished with premium edible silver foil. A timeless traditional indulgence."
                     data-unit="kg"
                     th:attr="data-name=${item.name},data-price=${item.price},data-image=${item.imageUrl},data-desc=${item.description},data-unit=${item.unit}">
-              <i data-lucide="shopping-cart" class="w-4 h-4 text-gold"></i>
+              <i data-lucide="shopping-cart" class="w-4 h-4"></i>
               <span>Quick View & Order</span>
             </button>
           </div>
         </div>
 
-        <!-- Specialty Card 2 (Static Mockup Fallback Only) -->
-        <div class="bg-white rounded-2xl shadow-xl hover:shadow-2xl overflow-hidden group border border-gold/15 flex flex-col justify-between h-full transform hover:-translate-y-1 transition-all duration-300">
-          <div class="relative h-64 overflow-hidden bg-stone-200">
-            <img src="images/desi_ghee_laddu.png" alt="Desi Ghee Laddu" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500">
-            <div class="absolute top-4 right-4 bg-maroon text-gold font-bold px-4 py-1.5 rounded-full text-sm border border-gold/45 shadow-lg">
+        <!-- Specialty Card 2 (Static Fallback) -->
+        <div class="tilt-card bg-obsidian-card rounded-3xl overflow-hidden border border-gold/15 hover:border-gold/50 flex flex-col justify-between h-[450px] shadow-2xl relative">
+          <div class="card-glare"></div>
+          <div class="relative h-56 overflow-hidden bg-stone-900 border-b border-gold/10">
+            <img src="images/desi_ghee_laddu.png" alt="Desi Ghee Laddu" class="w-full h-full object-cover transform scale-100 hover:scale-105 transition-transform duration-700">
+            <div class="absolute top-4 right-4 bg-obsidian/85 text-gold border border-gold/40 font-bold px-4 py-1.5 rounded-full text-xs shadow-lg backdrop-blur">
               <span>₹450/kg</span>
             </div>
           </div>
-          <div class="p-6 flex-grow flex flex-col justify-between space-y-4">
+          <div class="p-6 flex-grow flex flex-col justify-between space-y-4 relative z-10">
             <div class="space-y-2">
-              <h3 class="font-serif text-xl font-bold text-maroon">Motichoor Laddu (Desi Ghee)</h3>
-              <p class="text-stone-600 text-sm leading-relaxed line-clamp-3">
-                Delicate, tiny gram flour pearls fried in pure cow ghee, sweetened to perfection, and mixed with melons, almonds, and cardamom. Hand-rolled with traditional care.
+              <h3 class="font-cinzel text-lg font-bold text-white tracking-wide">Motichoor Laddu (Desi Ghee)</h3>
+              <p class="text-stone-400 text-xs leading-relaxed line-clamp-3 font-light">
+                Glistening round laddus formed with micro gram-flour boondi fried in pure cow ghee and infused with cardamom and roasted seeds.
               </p>
             </div>
             
-            <button class="quick-view-btn w-full bg-maroon text-white hover:bg-maroon-dark py-3 rounded-xl font-bold transition-colors flex items-center justify-center space-x-2 border border-gold/20 shadow-md"
+            <button class="quick-view-btn w-full bg-gradient-to-r from-gold/10 to-gold/20 hover:from-gold hover:to-gold-dark text-gold hover:text-obsidian py-3 rounded-xl font-bold transition-all duration-300 flex items-center justify-center space-x-2 border border-gold/30 hover:border-gold shadow-lg"
                     data-name="Motichoor Laddu (Desi Ghee)"
                     data-price="450"
                     data-image="images/desi_ghee_laddu.png"
                     data-desc="Prepared in 100% pure desi ghee, these melt-in-mouth Motichoor Laddus are sweet, aromatic, and loaded with roasted nuts. An essential sweet for poojas, festivals, and celebrations in Kanpur."
                     data-unit="kg">
-              <i data-lucide="shopping-cart" class="w-4 h-4 text-gold"></i>
+              <i data-lucide="shopping-cart" class="w-4 h-4"></i>
               <span>Quick View & Order</span>
             </button>
           </div>
         </div>
 
-        <!-- Specialty Card 3 (Static Mockup Fallback Only) -->
-        <div class="bg-white rounded-2xl shadow-xl hover:shadow-2xl overflow-hidden group border border-gold/15 flex flex-col justify-between h-full transform hover:-translate-y-1 transition-all duration-300">
-          <div class="relative h-64 overflow-hidden bg-stone-200">
-            <img src="images/special_samosa.png" alt="Crispy Special Samosa" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500">
-            <div class="absolute top-4 right-4 bg-maroon text-gold font-bold px-4 py-1.5 rounded-full text-sm border border-gold/45 shadow-lg">
+        <!-- Specialty Card 3 (Static Fallback) -->
+        <div class="tilt-card bg-obsidian-card rounded-3xl overflow-hidden border border-gold/15 hover:border-gold/50 flex flex-col justify-between h-[450px] shadow-2xl relative">
+          <div class="card-glare"></div>
+          <div class="relative h-56 overflow-hidden bg-stone-900 border-b border-gold/10">
+            <img src="images/special_samosa.png" alt="Crispy Special Samosa" class="w-full h-full object-cover transform scale-100 hover:scale-105 transition-transform duration-700">
+            <div class="absolute top-4 right-4 bg-obsidian/85 text-gold border border-gold/40 font-bold px-4 py-1.5 rounded-full text-xs shadow-lg backdrop-blur">
               <span>₹20/pc</span>
             </div>
           </div>
-          <div class="p-6 flex-grow flex flex-col justify-between space-y-4">
+          <div class="p-6 flex-grow flex flex-col justify-between space-y-4 relative z-10">
             <div class="space-y-2">
-              <h3 class="font-serif text-xl font-bold text-maroon">Special Kanpur Samosa</h3>
-              <p class="text-stone-600 text-sm leading-relaxed line-clamp-3">
-                Extra crispy, golden-fried pyramid pastry shells stuffed with perfectly spiced potatoes, crushed peas, paneer cubes, cashews, and traditional home-ground garam masala.
+              <h3 class="font-cinzel text-lg font-bold text-white tracking-wide">Special Kanpur Samosa</h3>
+              <p class="text-stone-400 text-xs leading-relaxed line-clamp-3 font-light">
+                Extra-crispy golden shell stuffed with a rich filling of spiced potatoes, green peas, cashews, and soft paneer cubes.
               </p>
             </div>
             
-            <button class="quick-view-btn w-full bg-maroon text-white hover:bg-maroon-dark py-3 rounded-xl font-bold transition-colors flex items-center justify-center space-x-2 border border-gold/20 shadow-md"
+            <button class="quick-view-btn w-full bg-gradient-to-r from-gold/10 to-gold/20 hover:from-gold hover:to-gold-dark text-gold hover:text-obsidian py-3 rounded-xl font-bold transition-all duration-300 flex items-center justify-center space-x-2 border border-gold/30 hover:border-gold shadow-lg"
                     data-name="Special Kanpur Samosa"
                     data-price="20"
                     data-image="images/special_samosa.png"
                     data-desc="Our special samosas are locally famous for their crispy shell and rich paneer-cashew spiced potato filling. Served piping hot with our special tangy mint and tamarind chutneys."
                     data-unit="pc">
-              <i data-lucide="shopping-cart" class="w-4 h-4 text-gold"></i>
+              <i data-lucide="shopping-cart" class="w-4 h-4"></i>
               <span>Quick View & Order</span>
             </button>
           </div>
@@ -435,82 +532,82 @@
       </div>
     </section>
 
-    <!-- ==================== HERITAGE / WHY GO DIGITAL? BANNER ==================== -->
-    <section class="relative bg-maroon text-white py-20 overflow-hidden border-y-4 border-gold">
-      <!-- Backdrop Pattern -->
-      <div class="absolute inset-0 opacity-5 bg-[radial-gradient(#D4AF37_1.5px,transparent_1.5px)] bg-[size:16px_16px]"></div>
+    <!-- ==================== PREMIUM BRAND STORY BANNER ==================== -->
+    <section class="relative bg-gradient-to-br from-obsidian via-maroon-dark/60 to-obsidian text-white py-24 overflow-hidden border-b border-gold/15">
+      <div class="absolute inset-0 bg-[radial-gradient(#D4AF37_1px,transparent_1px)] opacity-5 bg-[size:16px_16px]"></div>
       
-      <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 space-y-8">
-        <span class="text-gold font-bold uppercase tracking-widest text-xs sm:text-sm">Why We're Going Digital</span>
-        <h2 class="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight">
-          Bringing Kanpur's Favorite Flavors Directly to Your Screen
+      <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 space-y-8 3d-scroll-reveal">
+        <span class="text-gold font-bold uppercase tracking-widest text-xs sm:text-sm">Exquisite Convenience</span>
+        <h2 class="font-cinzel text-3xl sm:text-4xl lg:text-5xl font-extrabold leading-tight">
+          Redefining Your Mithai Experience
         </h2>
-        <div class="h-1 w-24 bg-gold mx-auto"></div>
-        <p class="text-stone-300 max-w-3xl mx-auto leading-relaxed text-sm sm:text-base">
-          For half a century, you stood in queues to buy our special festival laddoos and morning samosas. We believe your busy life deserves convenience without compromising on authentic heritage. Today, we are opening this digital window so you can pre-order online, customize gift hampers, and receive pristine, fresh boxes seamlessly.
+        <div class="h-0.5 w-24 bg-gold mx-auto"></div>
+        <p class="text-stone-400 max-w-3xl mx-auto leading-relaxed text-sm sm:text-base font-light">
+          Say goodbye to long queues and chaotic crowds during festival rushes. Pre-order your customized luxury gift box online, select an exact pick-up slot, and check out instantly on WhatsApp.
         </p>
         
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8 pt-8">
-          <div class="p-6 bg-maroon-dark/50 rounded-2xl border border-gold/20 shadow-inner">
-            <div class="w-12 h-12 bg-gold/10 text-gold rounded-full flex items-center justify-center mx-auto mb-4 border border-gold/30">
+          <div class="p-8 bg-obsidian-card/80 rounded-3xl border border-gold/15 shadow-inner hover:border-gold/40 transition-colors">
+            <div class="w-12 h-12 bg-gold/10 text-gold rounded-full flex items-center justify-center mx-auto mb-4 border border-gold/25">
               <i data-lucide="clock" class="w-6 h-6"></i>
             </div>
-            <h3 class="font-serif font-bold text-lg text-gold mb-2">Zero Waiting Time</h3>
-            <p class="text-xs text-stone-300 leading-relaxed">Place your festival orders beforehand on WhatsApp. Skip the crowds, show your code at the counter, and take your box in seconds.</p>
+            <h3 class="font-cinzel font-bold text-gold text-base mb-2">Zero Wait Pickups</h3>
+            <p class="text-xs text-stone-500 leading-relaxed font-light">Select your festival boxes on WhatsApp, retrieve them from our digital counter instantly, and bypass the holiday rush.</p>
           </div>
           
-          <div class="p-6 bg-maroon-dark/50 rounded-2xl border border-gold/20 shadow-inner">
-            <div class="w-12 h-12 bg-gold/10 text-gold rounded-full flex items-center justify-center mx-auto mb-4 border border-gold/30">
+          <div class="p-8 bg-obsidian-card/80 rounded-3xl border border-gold/15 shadow-inner hover:border-gold/40 transition-colors">
+            <div class="w-12 h-12 bg-gold/10 text-gold rounded-full flex items-center justify-center mx-auto mb-4 border border-gold/25">
               <i data-lucide="shield" class="w-6 h-6"></i>
             </div>
-            <h3 class="font-serif font-bold text-lg text-gold mb-2">100% Sealed Freshness</h3>
-            <p class="text-xs text-stone-300 leading-relaxed">Our digital pre-orders are vacuum-packed and sealed in double-secured eco-friendly containers. Stays untouched and fresh for longer.</p>
+            <h3 class="font-cinzel font-bold text-gold text-base mb-2">Nitrogen Fresh Seal</h3>
+            <p class="text-xs text-stone-500 leading-relaxed font-light">Our boxes are nitrogen-sealed to lock in aroma and freshness. Ensuring sweets arrive exactly as they left the wok.</p>
           </div>
           
-          <div class="p-6 bg-maroon-dark/50 rounded-2xl border border-gold/20 shadow-inner">
-            <div class="w-12 h-12 bg-gold/10 text-gold rounded-full flex items-center justify-center mx-auto mb-4 border border-gold/30">
+          <div class="p-8 bg-obsidian-card/80 rounded-3xl border border-gold/15 shadow-inner hover:border-gold/40 transition-colors">
+            <div class="w-12 h-12 bg-gold/10 text-gold rounded-full flex items-center justify-center mx-auto mb-4 border border-gold/25">
               <i data-lucide="award" class="w-6 h-6"></i>
             </div>
-            <h3 class="font-serif font-bold text-lg text-gold mb-2">Personalized Gifts</h3>
-            <p class="text-xs text-stone-300 leading-relaxed">Choose custom combinations of dry fruit sweets, laddus, and savories. We will pack it in royal gift wrap with custom text tags.</p>
+            <h3 class="font-cinzel font-bold text-gold text-base mb-2">Shahi Gift Customizer</h3>
+            <p class="text-xs text-stone-500 leading-relaxed font-light">Create custom configurations of dry fruits, silver sweets, and savories inside royal velvet-coated packaging.</p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ==================== INTERACTIVE FILTERABLE MENU PREVIEW ==================== -->
-    <section id="menu" class="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center max-w-3xl mx-auto mb-12 space-y-4">
-        <span class="text-gold font-bold text-sm uppercase tracking-widest block">Taste Catalog</span>
-        <h2 class="font-serif text-3xl sm:text-4xl font-bold text-maroon">Explore Our Full Menu</h2>
-        <div class="h-1 w-20 bg-gold mx-auto"></div>
-        <p class="text-stone-600">Select a category below to filter our popular catalog items. Click on any item for quick customization and ordering.</p>
+    <!-- ==================== INTERACTIVE FILTERABLE MENU ==================== -->
+    <section id="menu" class="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-b border-gold/15">
+      <div class="text-center max-w-3xl mx-auto mb-16 space-y-4 3d-scroll-reveal">
+        <span class="text-gold font-bold text-xs uppercase tracking-widest block">Taste Catalog</span>
+        <h2 class="font-cinzel text-3xl sm:text-4xl font-extrabold text-white">Explore Our Premium Menu</h2>
+        <div class="h-0.5 w-20 bg-gold mx-auto"></div>
+        <p class="text-stone-400 font-light">Filter by category and select item options for quick pricing calculations and direct ordering.</p>
       </div>
 
-      <!-- Filter Tabs Container -->
-      <div class="flex justify-center space-x-2 sm:space-x-4 mb-12 border-b border-stone-200 max-w-md mx-auto pb-4">
-        <button class="menu-tab-btn active px-5 py-2.5 rounded-full font-bold text-sm transition-all bg-maroon text-white border border-maroon" data-filter="all">All</button>
-        <button class="menu-tab-btn px-5 py-2.5 rounded-full font-bold text-sm transition-all bg-white text-maroon hover:bg-stone-100 border border-stone-200" data-filter="sweets">Sweets</button>
-        <button class="menu-tab-btn px-5 py-2.5 rounded-full font-bold text-sm transition-all bg-white text-maroon hover:bg-stone-100 border border-stone-200" data-filter="snacks">Snacks</button>
-        <button class="menu-tab-btn px-5 py-2.5 rounded-full font-bold text-sm transition-all bg-white text-maroon hover:bg-stone-100 border border-stone-200" data-filter="gifts">Gift Boxes</button>
+      <!-- Filter Tabs -->
+      <div class="flex justify-center space-x-2 sm:space-x-4 mb-16 border-b border-gold/10 max-w-md mx-auto pb-4 z-20 relative">
+        <button class="menu-tab-btn active px-6 py-2.5 rounded-full font-bold text-xs uppercase tracking-wider transition-all bg-gold text-obsidian border border-gold" data-filter="all">All</button>
+        <button class="menu-tab-btn px-6 py-2.5 rounded-full font-bold text-xs uppercase tracking-wider transition-all bg-obsidian text-gold hover:bg-gold/10 border border-gold/20" data-filter="sweets">Sweets</button>
+        <button class="menu-tab-btn px-6 py-2.5 rounded-full font-bold text-xs uppercase tracking-wider transition-all bg-obsidian text-gold hover:bg-gold/10 border border-gold/20" data-filter="snacks">Snacks</button>
+        <button class="menu-tab-btn px-6 py-2.5 rounded-full font-bold text-xs uppercase tracking-wider transition-all bg-obsidian text-gold hover:bg-gold/10 border border-gold/20" data-filter="gifts">Gift Suites</button>
       </div>
 
       <!-- Filterable Items Grid -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="menu-items-grid" th:remove="all-but-first">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 perspective-3d" id="menu-items-grid" th:remove="all-but-first">
         
         <!-- Menu Item 1: Sweets -->
-        <div class="menu-card sweets bg-white p-4 rounded-2xl shadow-md border border-stone-100 hover:border-gold/30 hover:shadow-lg transition-all flex space-x-4">
-          <div class="w-24 h-24 rounded-xl overflow-hidden shrink-0 bg-stone-200">
+        <div class="menu-card sweets bg-obsidian-card p-4 rounded-3xl border border-gold/10 hover:border-gold/45 shadow-lg hover:shadow-2xl transition-all duration-300 flex space-x-4 tilt-card relative">
+          <div class="card-glare"></div>
+          <div class="w-24 h-24 rounded-2xl overflow-hidden shrink-0 bg-stone-900 border border-gold/10 relative z-10">
             <img src="images/kaju_katli.png" alt="Kaju Katli" class="w-full h-full object-cover">
           </div>
-          <div class="flex-grow flex flex-col justify-between">
+          <div class="flex-grow flex flex-col justify-between relative z-10">
             <div>
-              <h4 class="font-serif font-bold text-maroon text-base">Classic Kaju Katli</h4>
-              <p class="text-stone-500 text-xs mt-1 line-clamp-2">Diamond cut cashew fudge with high grade cashew content.</p>
+              <h4 class="font-cinzel font-bold text-white text-sm tracking-wide">Classic Kaju Katli</h4>
+              <p class="text-stone-500 text-[11px] mt-1 line-clamp-2 font-light">Diamond cut cashew fudge with high grade cashew content.</p>
             </div>
             <div class="flex items-center justify-between mt-2">
-              <span class="font-bold text-maroon text-sm">₹900/kg</span>
-              <button class="quick-view-btn text-gold hover:text-gold-dark font-bold text-xs flex items-center space-x-1"
+              <span class="font-bold text-gold text-sm font-serif">₹900/kg</span>
+              <button class="quick-view-btn text-gold hover:text-white font-bold text-xs flex items-center space-x-1"
                       data-name="Classic Kaju Katli"
                       data-price="900"
                       data-image="images/kaju_katli.png"
@@ -524,18 +621,19 @@
         </div>
 
         <!-- Menu Item 2: Sweets -->
-        <div class="menu-card sweets bg-white p-4 rounded-2xl shadow-md border border-stone-100 hover:border-gold/30 hover:shadow-lg transition-all flex space-x-4">
-          <div class="w-24 h-24 rounded-xl overflow-hidden shrink-0 bg-stone-200">
+        <div class="menu-card sweets bg-obsidian-card p-4 rounded-3xl border border-gold/10 hover:border-gold/45 shadow-lg hover:shadow-2xl transition-all duration-300 flex space-x-4 tilt-card relative">
+          <div class="card-glare"></div>
+          <div class="w-24 h-24 rounded-2xl overflow-hidden shrink-0 bg-stone-900 border border-gold/10 relative z-10">
             <img src="images/desi_ghee_laddu.png" alt="Motichoor Laddu" class="w-full h-full object-cover">
           </div>
-          <div class="flex-grow flex flex-col justify-between">
+          <div class="flex-grow flex flex-col justify-between relative z-10">
             <div>
-              <h4 class="font-serif font-bold text-maroon text-base">Shahi Motichoor Laddu</h4>
-              <p class="text-stone-500 text-xs mt-1 line-clamp-2">Golden boondi fried in pure cow ghee and hand shaped.</p>
+              <h4 class="font-cinzel font-bold text-white text-sm tracking-wide">Shahi Motichoor Laddu</h4>
+              <p class="text-stone-500 text-[11px] mt-1 line-clamp-2 font-light">Golden boondi fried in pure cow ghee and hand shaped.</p>
             </div>
             <div class="flex items-center justify-between mt-2">
-              <span class="font-bold text-maroon text-sm">₹450/kg</span>
-              <button class="quick-view-btn text-gold hover:text-gold-dark font-bold text-xs flex items-center space-x-1"
+              <span class="font-bold text-gold text-sm font-serif">₹450/kg</span>
+              <button class="quick-view-btn text-gold hover:text-white font-bold text-xs flex items-center space-x-1"
                       data-name="Shahi Motichoor Laddu"
                       data-price="450"
                       data-image="images/desi_ghee_laddu.png"
@@ -548,20 +646,20 @@
           </div>
         </div>
 
-        <!-- Menu Item 3: Sweets (Placeholder Kesar Peda) -->
-        <div class="menu-card sweets bg-white p-4 rounded-2xl shadow-md border border-stone-100 hover:border-gold/30 hover:shadow-lg transition-all flex space-x-4">
-          <div class="w-24 h-24 rounded-xl overflow-hidden shrink-0 bg-stone-200">
-            <!-- Reuse laddu for pedal mockup -->
+        <!-- Menu Item 3: Sweets -->
+        <div class="menu-card sweets bg-obsidian-card p-4 rounded-3xl border border-gold/10 hover:border-gold/45 shadow-lg hover:shadow-2xl transition-all duration-300 flex space-x-4 tilt-card relative">
+          <div class="card-glare"></div>
+          <div class="w-24 h-24 rounded-2xl overflow-hidden shrink-0 bg-stone-900 border border-gold/10 relative z-10">
             <img src="images/desi_ghee_laddu.png" alt="Kesar Peda" class="w-full h-full object-cover filter sepia-[15%]">
           </div>
-          <div class="flex-grow flex flex-col justify-between">
+          <div class="flex-grow flex flex-col justify-between relative z-10">
             <div>
-              <h4 class="font-serif font-bold text-maroon text-base">Kesari Mathura Peda</h4>
-              <p class="text-stone-500 text-xs mt-1 line-clamp-2">Traditional condensed milk sweet blended with saffron strands.</p>
+              <h4 class="font-cinzel font-bold text-white text-sm tracking-wide">Kesari Mathura Peda</h4>
+              <p class="text-stone-500 text-[11px] mt-1 line-clamp-2 font-light">Traditional condensed milk sweet blended with saffron strands.</p>
             </div>
             <div class="flex items-center justify-between mt-2">
-              <span class="font-bold text-maroon text-sm">₹600/kg</span>
-              <button class="quick-view-btn text-gold hover:text-gold-dark font-bold text-xs flex items-center space-x-1"
+              <span class="font-bold text-gold text-sm font-serif">₹600/kg</span>
+              <button class="quick-view-btn text-gold hover:text-white font-bold text-xs flex items-center space-x-1"
                       data-name="Kesari Mathura Peda"
                       data-price="600"
                       data-image="images/desi_ghee_laddu.png"
@@ -575,18 +673,19 @@
         </div>
 
         <!-- Menu Item 4: Snacks -->
-        <div class="menu-card snacks bg-white p-4 rounded-2xl shadow-md border border-stone-100 hover:border-gold/30 hover:shadow-lg transition-all flex space-x-4">
-          <div class="w-24 h-24 rounded-xl overflow-hidden shrink-0 bg-stone-200">
+        <div class="menu-card snacks bg-obsidian-card p-4 rounded-3xl border border-gold/10 hover:border-gold/45 shadow-lg hover:shadow-2xl transition-all duration-300 flex space-x-4 tilt-card relative">
+          <div class="card-glare"></div>
+          <div class="w-24 h-24 rounded-2xl overflow-hidden shrink-0 bg-stone-900 border border-gold/10 relative z-10">
             <img src="images/special_samosa.png" alt="Samosa" class="w-full h-full object-cover">
           </div>
-          <div class="flex-grow flex flex-col justify-between">
+          <div class="flex-grow flex flex-col justify-between relative z-10">
             <div>
-              <h4 class="font-serif font-bold text-maroon text-base">Kanpur Spiced Samosa</h4>
-              <p class="text-stone-500 text-xs mt-1 line-clamp-2">Crispy pyramid shell with cashew and paneer potato filling.</p>
+              <h4 class="font-cinzel font-bold text-white text-sm tracking-wide">Kanpur Spiced Samosa</h4>
+              <p class="text-stone-500 text-[11px] mt-1 line-clamp-2 font-light">Crispy pyramid shell with cashew and paneer potato filling.</p>
             </div>
             <div class="flex items-center justify-between mt-2">
-              <span class="font-bold text-maroon text-sm">₹20/pc</span>
-              <button class="quick-view-btn text-gold hover:text-gold-dark font-bold text-xs flex items-center space-x-1"
+              <span class="font-bold text-gold text-sm font-serif">₹20/pc</span>
+              <button class="quick-view-btn text-gold hover:text-white font-bold text-xs flex items-center space-x-1"
                       data-name="Kanpur Spiced Samosa"
                       data-price="20"
                       data-image="images/special_samosa.png"
@@ -599,19 +698,20 @@
           </div>
         </div>
 
-        <!-- Menu Item 5: Snacks (Placeholder Pyaz Kachori) -->
-        <div class="menu-card snacks bg-white p-4 rounded-2xl shadow-md border border-stone-100 hover:border-gold/30 hover:shadow-lg transition-all flex space-x-4">
-          <div class="w-24 h-24 rounded-xl overflow-hidden shrink-0 bg-stone-200">
+        <!-- Menu Item 5: Snacks -->
+        <div class="menu-card snacks bg-obsidian-card p-4 rounded-3xl border border-gold/10 hover:border-gold/45 shadow-lg hover:shadow-2xl transition-all duration-300 flex space-x-4 tilt-card relative">
+          <div class="card-glare"></div>
+          <div class="w-24 h-24 rounded-2xl overflow-hidden shrink-0 bg-stone-900 border border-gold/10 relative z-10">
             <img src="images/special_samosa.png" alt="Pyaz Kachori" class="w-full h-full object-cover filter hue-rotate-15">
           </div>
-          <div class="flex-grow flex flex-col justify-between">
+          <div class="flex-grow flex flex-col justify-between relative z-10">
             <div>
-              <h4 class="font-serif font-bold text-maroon text-base">Crispy Pyaz Kachori</h4>
-              <p class="text-stone-500 text-xs mt-1 line-clamp-2">Flaky hot pastry filled with spiced onions and dal paste.</p>
+              <h4 class="font-cinzel font-bold text-white text-sm tracking-wide">Crispy Pyaz Kachori</h4>
+              <p class="text-stone-500 text-[11px] mt-1 line-clamp-2 font-light">Flaky hot pastry filled with spiced onions and dal paste.</p>
             </div>
             <div class="flex items-center justify-between mt-2">
-              <span class="font-bold text-maroon text-sm">₹30/pc</span>
-              <button class="quick-view-btn text-gold hover:text-gold-dark font-bold text-xs flex items-center space-x-1"
+              <span class="font-bold text-gold text-sm font-serif">₹30/pc</span>
+              <button class="quick-view-btn text-gold hover:text-white font-bold text-xs flex items-center space-x-1"
                       data-name="Crispy Pyaz Kachori"
                       data-price="30"
                       data-image="images/special_samosa.png"
@@ -625,19 +725,20 @@
         </div>
 
         <!-- Menu Item 6: Gift Boxes -->
-        <div class="menu-card gifts bg-white p-4 rounded-2xl shadow-md border border-stone-100 hover:border-gold/30 hover:shadow-lg transition-all flex space-x-4">
-          <div class="w-24 h-24 rounded-xl overflow-hidden shrink-0 bg-stone-200">
+        <div class="menu-card gifts bg-obsidian-card p-4 rounded-3xl border border-gold/10 hover:border-gold/45 shadow-lg hover:shadow-2xl transition-all duration-300 flex space-x-4 tilt-card relative">
+          <div class="card-glare"></div>
+          <div class="w-24 h-24 rounded-2xl overflow-hidden shrink-0 bg-stone-900 border border-gold/10 relative z-10">
             <img src="images/gift_box.png" alt="Shahi Gift Box" class="w-full h-full object-cover">
           </div>
-          <div class="flex-grow flex flex-col justify-between">
+          <div class="flex-grow flex flex-col justify-between relative z-10">
             <div>
-              <h4 class="font-serif font-bold text-maroon text-base">Shahi Utsav Gift Box</h4>
-              <p class="text-stone-500 text-xs mt-1 line-clamp-2">Royal crimson packaging with mixed premium sweets.</p>
+              <h4 class="font-cinzel font-bold text-white text-sm tracking-wide">Shahi Utsav Gift Suite</h4>
+              <p class="text-stone-500 text-[11px] mt-1 line-clamp-2 font-light">Royal crimson packaging with mixed premium sweets.</p>
             </div>
             <div class="flex items-center justify-between mt-2">
-              <span class="font-bold text-maroon text-sm">₹1200/box</span>
-              <button class="quick-view-btn text-gold hover:text-gold-dark font-bold text-xs flex items-center space-x-1"
-                      data-name="Shahi Utsav Gift Box"
+              <span class="font-bold text-gold text-sm font-serif">₹1200/box</span>
+              <button class="quick-view-btn text-gold hover:text-white font-bold text-xs flex items-center space-x-1"
+                      data-name="Shahi Utsav Gift Suite"
                       data-price="1200"
                       data-image="images/gift_box.png"
                       data-desc="Includes 250g Kaju Katli, 250g Motichoor Laddus, 250g Peda, and 250g Premium Salted Dryfruits."
@@ -650,99 +751,97 @@
         </div>
 
       </div>
-
-      <!-- Spring Boot Thymeleaf code block rendering anchor -->
-      <!-- This block serves as documentation for Spring Boot developers on how to dynamically render categories. -->
-      <div class="hidden" th:each="category : ${categories}">
-        <!-- This code block won't render in static HTML but shows Thymeleaf structure -->
-        <p th:text="${category.name}">Category Name</p>
-      </div>
     </section>
 
     <!-- ==================== TESTIMONIALS SECTION ==================== -->
-    <section id="testimonials" class="py-20 bg-stone-50 border-t border-stone-200">
+    <section id="testimonials" class="py-24 border-b border-gold/15 relative">
+      <div class="absolute inset-0 bg-gradient-to-t from-transparent via-maroon-dark/5 to-transparent pointer-events-none"></div>
+      
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        <div class="text-center max-w-3xl mx-auto mb-16 space-y-4">
-          <span class="text-gold font-bold text-sm uppercase tracking-widest block">Customer Reviews</span>
-          <h2 class="font-serif text-3xl sm:text-4xl font-bold text-maroon">What Kanpurites Say About Us</h2>
-          <div class="h-1 w-20 bg-gold mx-auto"></div>
-          <p class="text-stone-600">Pure taste creates lifelong relationships. Here is some feedback from our long-term patrons.</p>
+        <div class="text-center max-w-3xl mx-auto mb-20 space-y-4 3d-scroll-reveal">
+          <span class="text-gold font-bold text-xs uppercase tracking-widest block">Patron Reviews</span>
+          <h2 class="font-cinzel text-3xl sm:text-4xl font-extrabold text-white">What Kanpurites Say About Us</h2>
+          <div class="h-0.5 w-20 bg-gold mx-auto"></div>
+          <p class="text-stone-400 font-light">Authentic taste builds generations of relationships.</p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8" th:remove="all-but-first">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 perspective-3d" th:remove="all-but-first">
           
           <!-- Testimonial 1 -->
-          <div class="bg-white p-8 rounded-2xl shadow-md border border-stone-100 flex flex-col justify-between space-y-6" th:each="review : ${reviews}">
-            <div class="space-y-4">
-              <div class="flex text-amber-400">
-                <i data-lucide="star" class="w-5 h-5 fill-current"></i>
-                <i data-lucide="star" class="w-5 h-5 fill-current"></i>
-                <i data-lucide="star" class="w-5 h-5 fill-current"></i>
-                <i data-lucide="star" class="w-5 h-5 fill-current"></i>
-                <i data-lucide="star" class="w-5 h-5 fill-current"></i>
+          <div class="bg-obsidian-card p-8 rounded-3xl border border-gold/15 hover:border-gold/45 shadow-lg flex flex-col justify-between space-y-6 tilt-card relative" th:each="review : ${reviews}">
+            <div class="card-glare"></div>
+            <div class="space-y-4 relative z-10">
+              <div class="flex text-gold">
+                <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                <i data-lucide="star" class="w-4 h-4 fill-current"></i>
               </div>
-              <p class="text-stone-600 italic text-sm leading-relaxed" th:text="${review.content}">
+              <p class="text-stone-400 italic text-xs sm:text-sm leading-relaxed font-light" th:text="${review.content}">
                 "For three generations, my family has bought sweets from here for every festival. Their Kaju Katli has the most authentic texture and flavor. The pure desi ghee aroma in their Motichoor Laddus is unmistakable!"
               </p>
             </div>
-            <div class="flex items-center space-x-3">
-              <div class="w-10 h-10 bg-maroon/10 text-maroon rounded-full flex items-center justify-center font-bold font-serif text-base">
+            <div class="flex items-center space-x-3 relative z-10">
+              <div class="w-10 h-10 bg-gold/10 border border-gold/30 text-gold rounded-full flex items-center justify-center font-bold font-cinzel text-sm">
                 A
               </div>
               <div>
-                <h4 class="font-serif font-bold text-maroon text-sm" th:text="${review.author}">Anand Singhania</h4>
-                <p class="text-stone-400 text-xs" th:text="${review.location}">Swaroop Nagar, Kanpur</p>
+                <h4 class="font-cinzel font-bold text-white text-xs tracking-wide" th:text="${review.author}">Anand Singhania</h4>
+                <p class="text-stone-500 text-[10px]" th:text="${review.location}">Swaroop Nagar, Kanpur</p>
               </div>
             </div>
           </div>
 
-          <!-- Testimonial 2 (Static Fallback Only) -->
-          <div class="bg-white p-8 rounded-2xl shadow-md border border-stone-100 flex flex-col justify-between space-y-6">
-            <div class="space-y-4">
-              <div class="flex text-amber-400">
-                <i data-lucide="star" class="w-5 h-5 fill-current"></i>
-                <i data-lucide="star" class="w-5 h-5 fill-current"></i>
-                <i data-lucide="star" class="w-5 h-5 fill-current"></i>
-                <i data-lucide="star" class="w-5 h-5 fill-current"></i>
-                <i data-lucide="star" class="w-5 h-5 fill-current"></i>
+          <!-- Testimonial 2 (Static Fallback) -->
+          <div class="bg-obsidian-card p-8 rounded-3xl border border-gold/15 hover:border-gold/45 shadow-lg flex flex-col justify-between space-y-6 tilt-card relative">
+            <div class="card-glare"></div>
+            <div class="space-y-4 relative z-10">
+              <div class="flex text-gold">
+                <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                <i data-lucide="star" class="w-4 h-4 fill-current"></i>
               </div>
-              <p class="text-stone-600 italic text-sm leading-relaxed">
+              <p class="text-stone-400 italic text-xs sm:text-sm leading-relaxed font-light">
                 "Their samosas are legendary! Whenever relatives visit us in Kanpur, our first evening snack stop is always here. Crispy outer crust with heavily paneer-stuffed potato core. Highly recommended!"
               </p>
             </div>
-            <div class="flex items-center space-x-3">
-              <div class="w-10 h-10 bg-maroon/10 text-maroon rounded-full flex items-center justify-center font-bold font-serif text-base">
+            <div class="flex items-center space-x-3 relative z-10">
+              <div class="w-10 h-10 bg-gold/10 border border-gold/30 text-gold rounded-full flex items-center justify-center font-bold font-cinzel text-sm">
                 R
               </div>
               <div>
-                <h4 class="font-serif font-bold text-maroon text-sm">Ruchi Gupta</h4>
-                <p class="text-stone-400 text-xs">Arya Nagar, Kanpur</p>
+                <h4 class="font-cinzel font-bold text-white text-xs tracking-wide">Ruchi Gupta</h4>
+                <p class="text-stone-500 text-[10px]">Arya Nagar, Kanpur</p>
               </div>
             </div>
           </div>
 
-          <!-- Testimonial 3 (Static Fallback Only) -->
-          <div class="bg-white p-8 rounded-2xl shadow-md border border-stone-100 flex flex-col justify-between space-y-6">
-            <div class="space-y-4">
-              <div class="flex text-amber-400">
-                <i data-lucide="star" class="w-5 h-5 fill-current"></i>
-                <i data-lucide="star" class="w-5 h-5 fill-current"></i>
-                <i data-lucide="star" class="w-5 h-5 fill-current"></i>
-                <i data-lucide="star" class="w-5 h-5 fill-current"></i>
-                <i data-lucide="star" class="w-5 h-5 fill-current"></i>
+          <!-- Testimonial 3 (Static Fallback) -->
+          <div class="bg-obsidian-card p-8 rounded-3xl border border-gold/15 hover:border-gold/45 shadow-lg flex flex-col justify-between space-y-6 tilt-card relative">
+            <div class="card-glare"></div>
+            <div class="space-y-4 relative z-10">
+              <div class="flex text-gold">
+                <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                <i data-lucide="star" class="w-4 h-4 fill-current"></i>
               </div>
-              <p class="text-stone-600 italic text-sm leading-relaxed">
+              <p class="text-stone-400 italic text-xs sm:text-sm leading-relaxed font-light">
                 "Absolutely loved the online pre-ordering! Stood zero minutes in queue on Diwali night. Checked out in seconds. The gift boxes packaging is extremely royal and clean. Perfect visual aesthetics."
               </p>
             </div>
-            <div class="flex items-center space-x-3">
-              <div class="w-10 h-10 bg-maroon/10 text-maroon rounded-full flex items-center justify-center font-bold font-serif text-base">
+            <div class="flex items-center space-x-3 relative z-10">
+              <div class="w-10 h-10 bg-gold/10 border border-gold/30 text-gold rounded-full flex items-center justify-center font-bold font-cinzel text-sm">
                 V
               </div>
               <div>
-                <h4 class="font-serif font-bold text-maroon text-sm">Vikram Bajpai</h4>
-                <p class="text-stone-400 text-xs">Kalyanpur, Kanpur</p>
+                <h4 class="font-cinzel font-bold text-white text-xs tracking-wide">Vikram Bajpai</h4>
+                <p class="text-stone-500 text-[10px]">Kalyanpur, Kanpur</p>
               </div>
             </div>
           </div>
@@ -751,34 +850,35 @@
       </div>
     </section>
 
-    <!-- ==================== LEAD CAPTURE & CONTACT FOOTER ==================== -->
-    <section id="contact" class="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="bg-white rounded-3xl border border-gold/25 shadow-2xl overflow-hidden">
+    <!-- ==================== LEAD CAPTURE & CONTACT ==================== -->
+    <section id="contact" class="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="bg-obsidian-card rounded-[40px] border border-gold/20 shadow-3xl overflow-hidden relative">
+        
         <div class="grid grid-cols-1 lg:grid-cols-2">
           
-          <!-- Left Side: Lead Capture Form -->
-          <div class="p-8 sm:p-12 space-y-6">
+          <!-- Left Side: Form -->
+          <div class="p-8 sm:p-16 space-y-8 relative z-10">
             <div class="space-y-2">
               <span class="text-gold font-bold text-xs uppercase tracking-widest block">Get in Touch</span>
-              <h2 class="font-serif text-2xl sm:text-3xl font-bold text-maroon">Place an Inquiry / Pre-order</h2>
-              <p class="text-xs text-stone-500">Submit this form and our manager will call you back to confirm pricing and bulk arrangements.</p>
+              <h2 class="font-cinzel text-3xl font-extrabold text-white">Place an Inquiry / Pre-order</h2>
+              <p class="text-stone-500 text-xs font-light">Submit your bulk orders or festival bookings below. Our manager will connect instantly.</p>
             </div>
             
-            <form action="#" method="POST" th:action="@{/submit-inquiry}" class="space-y-4">
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <form action="#" method="POST" th:action="@{/submit-inquiry}" class="space-y-6">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div>
-                  <label class="block text-xs font-semibold text-stone-600 uppercase mb-1">Your Name</label>
-                  <input type="text" name="name" required placeholder="E.g., Rajesh Kumar" class="w-full bg-stone-50 border border-stone-200 focus:border-maroon rounded-xl px-4 py-3 text-sm focus:outline-none transition-colors">
+                  <label class="block text-[10px] font-bold text-gold uppercase tracking-widest mb-1.5">Your Name</label>
+                  <input type="text" name="name" required placeholder="E.g., Rajesh Kumar" class="w-full bg-obsidian border border-gold/15 focus:border-gold rounded-xl px-4 py-3.5 text-sm focus:outline-none transition-colors text-white">
                 </div>
                 <div>
-                  <label class="block text-xs font-semibold text-stone-600 uppercase mb-1">Phone Number</label>
-                  <input type="tel" name="phone" required placeholder="E.g., +91 98765 43210" class="w-full bg-stone-50 border border-stone-200 focus:border-maroon rounded-xl px-4 py-3 text-sm focus:outline-none transition-colors">
+                  <label class="block text-[10px] font-bold text-gold uppercase tracking-widest mb-1.5">Phone Number</label>
+                  <input type="tel" name="phone" required placeholder="E.g., +91 98765 43210" class="w-full bg-obsidian border border-gold/15 focus:border-gold rounded-xl px-4 py-3.5 text-sm focus:outline-none transition-colors text-white">
                 </div>
               </div>
               
               <div>
-                <label class="block text-xs font-semibold text-stone-600 uppercase mb-1">Select Inquiry Type</label>
-                <select name="type" class="w-full bg-stone-50 border border-stone-200 focus:border-maroon rounded-xl px-4 py-3 text-sm focus:outline-none transition-colors">
+                <label class="block text-[10px] font-bold text-gold uppercase tracking-widest mb-1.5">Inquiry Type</label>
+                <select name="type" class="w-full bg-obsidian border border-gold/15 focus:border-gold rounded-xl px-4 py-3.5 text-sm focus:outline-none transition-colors text-stone-400">
                   <option value="festival">Festival Pre-ordering</option>
                   <option value="wedding">Wedding / Bulk Catering</option>
                   <option value="corporate">Corporate Gifting</option>
@@ -787,32 +887,32 @@
               </div>
               
               <div>
-                <label class="block text-xs font-semibold text-stone-600 uppercase mb-1">Detailed Message</label>
-                <textarea name="message" rows="4" required placeholder="E.g., I would like to order 15 boxes of Shahi Utsav Gift Boxes for Diwali distribution on 20th Oct..." class="w-full bg-stone-50 border border-stone-200 focus:border-maroon rounded-xl px-4 py-3 text-sm focus:outline-none transition-colors resize-none"></textarea>
+                <label class="block text-[10px] font-bold text-gold uppercase tracking-widest mb-1.5">Your Message</label>
+                <textarea name="message" rows="4" required placeholder="Describe your request..." class="w-full bg-obsidian border border-gold/15 focus:border-gold rounded-xl px-4 py-3.5 text-sm focus:outline-none transition-colors text-white resize-none"></textarea>
               </div>
 
               <!-- Button -->
-              <button type="submit" class="w-full bg-maroon hover:bg-maroon-dark text-white font-bold py-3.5 rounded-xl border border-gold/30 shadow-md hover:shadow-lg transition-all text-center">
+              <button type="submit" class="w-full bg-gold hover:bg-gold-light text-obsidian font-bold py-4 rounded-xl shadow-[0_0_15px_rgba(212,175,55,0.2)] hover:shadow-[0_0_25px_rgba(212,175,55,0.5)] transition-all text-center uppercase tracking-wider text-xs">
                 Submit Inquiry / Pre-order
               </button>
             </form>
           </div>
           
-          <!-- Right Side: Details & Interactive Map Mockup -->
-          <div class="bg-gradient-to-br from-maroon via-maroon-dark to-[#400010] text-white p-8 sm:p-12 flex flex-col justify-between relative">
-            <div class="absolute inset-0 opacity-5 bg-[radial-gradient(#D4AF37_1px,transparent_1px)] bg-[size:12px_12px] pointer-events-none"></div>
+          <!-- Right Side: Store Details & Google Map -->
+          <div class="bg-gradient-to-br from-maroon-dark via-maroon/90 to-obsidian p-8 sm:p-16 flex flex-col justify-between border-t lg:border-t-0 lg:border-l border-gold/25 relative">
+            <div class="absolute inset-0 bg-[radial-gradient(#D4AF37_1px,transparent_1px)] opacity-5 bg-[size:10px_10px] pointer-events-none"></div>
             
-            <div class="space-y-6 relative z-10">
-              <h3 class="font-serif text-xl sm:text-2xl font-bold text-gold">Store Information</h3>
+            <div class="space-y-8 relative z-10">
+              <h3 class="font-cinzel text-xl sm:text-2xl font-bold text-gold gold-text-glow">Bespoke Store Information</h3>
               
-              <div class="space-y-4">
+              <div class="space-y-6">
                 
                 <!-- Address -->
-                <div class="flex items-start space-x-3">
+                <div class="flex items-start space-x-3 group">
                   <i data-lucide="map-pin" class="w-5 h-5 text-gold shrink-0 mt-0.5"></i>
                   <div>
-                    <h4 class="font-bold text-stone-200 text-sm">Our Store Location</h4>
-                    <p class="text-xs text-stone-300 mt-0.5 leading-relaxed" th:text="${storeAddress}">
+                    <h4 class="font-cinzel font-bold text-white text-sm">Our Flagship Store</h4>
+                    <p class="text-xs text-stone-400 mt-1 leading-relaxed" th:text="${storeAddress}">
                       112/45, Swaroop Nagar Main Road, opposite Moti Jheel, Kanpur, Uttar Pradesh 208002
                     </p>
                   </div>
@@ -822,9 +922,9 @@
                 <div class="flex items-start space-x-3">
                   <i data-lucide="clock" class="w-5 h-5 text-gold shrink-0 mt-0.5"></i>
                   <div>
-                    <h4 class="font-bold text-stone-200 text-sm">Working Hours</h4>
-                    <p class="text-xs text-stone-300 mt-0.5 leading-relaxed" th:text="${storeHours}">
-                      Monday - Sunday: 8:00 AM - 10:00 PM (Open all festival days)
+                    <h4 class="font-cinzel font-bold text-white text-sm">Operating Hours</h4>
+                    <p class="text-xs text-stone-400 mt-1 leading-relaxed" th:text="${storeHours}">
+                      Monday - Sunday: 8:00 AM - 10:00 PM (Active on all major holidays)
                     </p>
                   </div>
                 </div>
@@ -833,8 +933,8 @@
                 <div class="flex items-start space-x-3">
                   <i data-lucide="phone" class="w-5 h-5 text-gold shrink-0 mt-0.5"></i>
                   <div>
-                    <h4 class="font-bold text-stone-200 text-sm">Call Support / Manager</h4>
-                    <p class="text-xs text-stone-300 mt-0.5 leading-relaxed" th:text="${storePhone}">
+                    <h4 class="font-cinzel font-bold text-white text-sm">Manager Contact</h4>
+                    <p class="text-xs text-stone-400 mt-1 leading-relaxed" th:text="${storePhone}">
                       +91 98765 43210
                     </p>
                   </div>
@@ -844,16 +944,15 @@
             </div>
 
             <!-- Map Mockup Container -->
-            <div class="mt-8 relative z-10 w-full rounded-2xl overflow-hidden border border-gold/30 shadow-lg h-44 sm:h-52 bg-maroon-dark flex items-center justify-center">
-              <!-- Inline Iframe Google Map for Swaroop Nagar Kanpur -->
+            <div class="mt-8 relative z-10 w-full rounded-2xl overflow-hidden border border-gold/30 shadow-2xl h-48 sm:h-56 bg-obsidian flex items-center justify-center">
               <iframe 
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14285.498450165507!2d80.31557008107693!3d26.47585098939634!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x399c388d55555555%3A0x7d0a2830ad288efd!2sSwaroop%20Nagar%20Kanpur!5e0!3m2!1sen!2sin!4v1717462000000!5m2!1sen!2sin" 
-                class="w-full h-full border-0 grayscale opacity-85 hover:grayscale-0 hover:opacity-100 transition-all duration-500" 
+                class="w-full h-full border-0 grayscale opacity-70 hover:grayscale-0 hover:opacity-100 transition-all duration-700" 
                 allowfullscreen="" 
                 loading="lazy" 
                 referrerpolicy="no-referrer-when-downgrade">
               </iframe>
-              <div class="absolute bottom-2 right-2 bg-maroon border border-gold/50 text-gold text-[10px] font-bold py-1 px-3.5 rounded-full pointer-events-none shadow-md">
+              <div class="absolute bottom-2 right-2 bg-obsidian border border-gold/50 text-gold text-[9px] font-bold py-1 px-3.5 rounded-full pointer-events-none shadow-md">
                 Kanpur, UP
               </div>
             </div>
@@ -867,39 +966,40 @@
   </main>
 
   <!-- ==================== FOOTER ==================== -->
-  <footer class="bg-maroon-dark text-white border-t-2 border-gold py-12 relative">
+  <footer class="bg-obsidian border-t border-gold/15 py-16 relative">
     <div class="absolute inset-0 opacity-[0.02] bg-[radial-gradient(#D4AF37_1px,transparent_1px)] bg-[size:10px_10px] pointer-events-none"></div>
+    
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
       <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
         
         <!-- About Column -->
         <div class="space-y-4">
           <div class="flex items-center space-x-2">
-            <div class="w-8 h-8 bg-maroon rounded-full flex items-center justify-center border border-gold shadow">
-              <span class="text-gold font-serif font-bold text-sm">K</span>
+            <div class="w-8 h-8 bg-gradient-to-br from-maroon to-maroon-dark rounded-full flex items-center justify-center border border-gold shadow">
+              <span class="text-gold font-cinzel font-bold text-sm">K</span>
             </div>
-            <h4 class="font-serif font-bold text-lg text-gold tracking-wide">Kanpur Sweet Palace</h4>
+            <h4 class="font-cinzel font-bold text-base text-gold tracking-wide">Kanpur Sweet Palace</h4>
           </div>
-          <p class="text-xs text-stone-300 leading-relaxed">
-            Preserving the ancient culinary craftsmanship of traditional Indian sweets and savories with cow-ghee preparation.
+          <p class="text-[11px] text-stone-500 leading-relaxed font-light">
+            Preserving traditional culinary heritage with cow-ghee preparation and presenting it through modern high-end technology.
           </p>
         </div>
 
-        <!-- Quick Links Column -->
+        <!-- Quick Links -->
         <div class="space-y-4">
-          <h4 class="font-serif font-bold text-gold text-sm tracking-wide">Quick Navigation</h4>
-          <ul class="space-y-2 text-xs text-stone-300">
-            <li><a href="#about" class="hover:text-gold transition-colors">Our Heritage</a></li>
+          <h4 class="font-cinzel font-bold text-gold text-xs tracking-wider uppercase">Navigation</h4>
+          <ul class="space-y-2 text-xs text-stone-400 font-light">
+            <li><a href="#about" class="hover:text-gold transition-colors">Our Story</a></li>
             <li><a href="#specialties" class="hover:text-gold transition-colors">Specialties</a></li>
-            <li><a href="#menu" class="hover:text-gold transition-colors">Browse Menu</a></li>
-            <li><a href="#testimonials" class="hover:text-gold transition-colors">Reviews</a></li>
+            <li><a href="#menu" class="hover:text-gold transition-colors">Browse Catalog</a></li>
+            <li><a href="#testimonials" class="hover:text-gold transition-colors">Patron Reviews</a></li>
           </ul>
         </div>
 
-        <!-- Contact details links -->
+        <!-- Contacts -->
         <div class="space-y-4">
-          <h4 class="font-serif font-bold text-gold text-sm tracking-wide">Contact Details</h4>
-          <ul class="space-y-2 text-xs text-stone-300">
+          <h4 class="font-cinzel font-bold text-gold text-xs tracking-wider uppercase">Get In Touch</h4>
+          <ul class="space-y-2 text-xs text-stone-400 font-light">
             <li class="flex items-center gap-2">
               <i data-lucide="phone" class="w-3.5 h-3.5 text-gold"></i>
               <span>+91 98765 43210</span>
@@ -915,105 +1015,104 @@
           </ul>
         </div>
 
-        <!-- Social Column -->
+        <!-- Social Media links -->
         <div class="space-y-4">
-          <h4 class="font-serif font-bold text-gold text-sm tracking-wide">Connect With Us</h4>
+          <h4 class="font-cinzel font-bold text-gold text-xs tracking-wider uppercase">Follow Us</h4>
           <div class="flex space-x-3">
-            <a href="#" class="w-9 h-9 bg-maroon hover:bg-gold hover:text-maroon text-gold border border-gold/20 rounded-full flex items-center justify-center transition-all duration-300">
+            <a href="#" class="w-9 h-9 bg-obsidian-card hover:bg-gold hover:text-obsidian text-gold border border-gold/10 rounded-full flex items-center justify-center transition-all duration-300">
               <i data-lucide="facebook" class="w-4 h-4"></i>
             </a>
-            <a href="#" class="w-9 h-9 bg-maroon hover:bg-gold hover:text-maroon text-gold border border-gold/20 rounded-full flex items-center justify-center transition-all duration-300">
+            <a href="#" class="w-9 h-9 bg-obsidian-card hover:bg-gold hover:text-obsidian text-gold border border-gold/10 rounded-full flex items-center justify-center transition-all duration-300">
               <i data-lucide="instagram" class="w-4 h-4"></i>
             </a>
-            <a href="#" class="w-9 h-9 bg-maroon hover:bg-gold hover:text-maroon text-gold border border-gold/20 rounded-full flex items-center justify-center transition-all duration-300">
-              <!-- Standard message circle for chat / social link -->
+            <a href="#" class="w-9 h-9 bg-obsidian-card hover:bg-gold hover:text-obsidian text-gold border border-gold/10 rounded-full flex items-center justify-center transition-all duration-300">
               <i data-lucide="message-square" class="w-4 h-4"></i>
             </a>
           </div>
-          <p class="text-[10px] text-stone-400 font-semibold leading-relaxed">© <span id="year">2026</span> Kanpur Sweet Palace. All rights reserved.</p>
+          <p class="text-[10px] text-stone-600 font-semibold leading-relaxed">© <span id="year">2026</span> Kanpur Sweet Palace. All rights reserved.</p>
         </div>
 
       </div>
 
-      <div class="mt-8 pt-6 border-t border-stone-800 text-center text-[10px] text-stone-400">
-        Designed for visual presentation. Fully compatible with Spring Boot & Thymeleaf attributes.
+      <div class="mt-12 pt-8 border-t border-gold/10 text-center text-[10px] text-stone-600">
+        Designed for premium visual presentation. Fully compatible with Spring Boot & Thymeleaf.
       </div>
     </div>
   </footer>
 
   <!-- ==================== INTERACTIVE QUICK VIEW MODAL ==================== -->
-  <div id="quick-view-modal" class="fixed inset-0 z-50 overflow-y-auto flex items-center justify-center p-4 opacity-0 pointer-events-none transition-all duration-300 bg-stone-900/60 backdrop-blur-sm">
+  <div id="quick-view-modal" class="fixed inset-0 z-50 overflow-y-auto flex items-center justify-center p-4 opacity-0 pointer-events-none transition-all duration-300 bg-obsidian/80 backdrop-blur-md">
     
     <!-- Modal Content Card -->
-    <div class="bg-white rounded-3xl border border-gold/30 shadow-2xl w-full max-w-2xl overflow-hidden transform scale-95 transition-all duration-300 flex flex-col md:flex-row relative">
+    <div class="bg-obsidian-card rounded-[35px] border border-gold/30 shadow-3xl w-full max-w-2xl overflow-hidden transform scale-95 transition-all duration-300 flex flex-col md:flex-row relative">
       
       <!-- Close Button -->
-      <button id="close-modal-btn" class="absolute top-4 right-4 z-10 w-9 h-9 bg-stone-100 hover:bg-stone-200 text-stone-600 rounded-full flex items-center justify-center shadow-md border border-stone-200 focus:outline-none transition-colors">
+      <button id="close-modal-btn" class="absolute top-4 right-4 z-10 w-9 h-9 bg-obsidian border border-gold/25 text-gold rounded-full flex items-center justify-center shadow-md focus:outline-none transition-colors">
         <i data-lucide="x" class="w-5 h-5"></i>
       </button>
 
       <!-- Left Panel: Product Image -->
-      <div class="w-full md:w-1/2 h-64 md:h-auto bg-stone-100 relative shrink-0">
+      <div class="w-full md:w-1/2 h-64 md:h-auto bg-stone-900 relative shrink-0">
         <img id="modal-img" src="images/kaju_katli.png" alt="Mithai" class="w-full h-full object-cover">
         <!-- Floating category badge -->
-        <span class="absolute top-4 left-4 bg-maroon text-gold text-xs font-bold py-1 px-3 border border-gold/40 rounded-full shadow-lg">
-          Kanpur's Choice
+        <span class="absolute top-4 left-4 bg-obsidian/85 text-gold text-xs font-bold py-1 px-3 border border-gold/40 rounded-full shadow-lg">
+          Imperial Choice
         </span>
       </div>
 
       <!-- Right Panel: Description & Action -->
-      <div class="w-full md:w-1/2 p-6 sm:p-8 flex flex-col justify-between space-y-6">
+      <div class="w-full md:w-1/2 p-8 flex flex-col justify-between space-y-6">
         
-        <div class="space-y-3">
-          <h3 id="modal-title" class="font-serif text-2xl font-bold text-maroon">Kaju Katli (Cashew Fudge)</h3>
+        <div class="space-y-4">
+          <h3 id="modal-title" class="font-cinzel text-xl font-bold text-white tracking-wide">Kaju Katli (Cashew Fudge)</h3>
           
           <!-- Price display -->
-          <div class="flex items-baseline space-x-1">
-            <span class="text-stone-400 text-sm font-semibold">Price:</span>
-            <span class="text-maroon font-bold text-xl font-serif">₹</span>
-            <span id="modal-price-val" class="text-maroon font-bold text-xl font-serif">900</span>
+          <div class="flex items-baseline space-x-1.5">
+            <span class="text-stone-500 text-xs font-semibold uppercase tracking-wider">Unit Price:</span>
+            <span class="text-gold font-bold text-xl font-serif">₹</span>
+            <span id="modal-price-val" class="text-gold font-bold text-xl font-serif">900</span>
             <span class="text-stone-500 text-sm font-semibold">/</span>
             <span id="modal-unit" class="text-stone-500 text-sm font-semibold">kg</span>
           </div>
 
-          <div class="h-px bg-stone-200 w-full my-3"></div>
+          <div class="h-px bg-gold/15 w-full my-3"></div>
           
-          <p id="modal-desc" class="text-stone-600 text-xs sm:text-sm leading-relaxed">
+          <p id="modal-desc" class="text-stone-400 text-xs sm:text-sm leading-relaxed font-light">
             Our signature Kaju Katli is prepared using top-tier cashews with zero adulterants, slow-cooked to perfection, and garnished with premium edible silver foil. A timeless traditional indulgence.
           </p>
         </div>
 
         <div class="space-y-4">
           <!-- Counter Block -->
-          <div class="flex items-center justify-between bg-stone-50 p-3 rounded-xl border border-stone-200">
-            <span class="text-xs font-bold text-stone-600 uppercase">Quantity</span>
+          <div class="flex items-center justify-between bg-obsidian p-3 rounded-xl border border-gold/15">
+            <span class="text-[10px] font-bold text-stone-500 uppercase tracking-widest">Quantity Selection</span>
             
             <div class="flex items-center space-x-3">
-              <button id="counter-minus" class="w-8 h-8 rounded-lg bg-stone-200 hover:bg-stone-300 flex items-center justify-center text-stone-700 font-bold focus:outline-none transition-colors">
+              <button id="counter-minus" class="w-8 h-8 rounded-lg bg-obsidian-card hover:bg-gold/10 border border-gold/20 flex items-center justify-center text-gold font-bold focus:outline-none transition-colors">
                 <i data-lucide="minus" class="w-4 h-4"></i>
               </button>
-              <span id="counter-value" class="font-serif font-bold text-base text-maroon w-8 text-center select-none">1</span>
-              <button id="counter-plus" class="w-8 h-8 rounded-lg bg-stone-200 hover:bg-stone-300 flex items-center justify-center text-stone-700 font-bold focus:outline-none transition-colors">
+              <span id="counter-value" class="font-serif font-bold text-base text-gold w-8 text-center select-none">1</span>
+              <button id="counter-plus" class="w-8 h-8 rounded-lg bg-obsidian-card hover:bg-gold/10 border border-gold/20 flex items-center justify-center text-gold font-bold focus:outline-none transition-colors">
                 <i data-lucide="plus" class="w-4 h-4"></i>
               </button>
             </div>
           </div>
 
           <!-- Total Calculation Block -->
-          <div class="flex justify-between items-center text-sm font-bold text-stone-800">
-            <span>Total Price:</span>
-            <span class="text-lg text-maroon font-serif">₹<span id="modal-total-val">900</span></span>
+          <div class="flex justify-between items-center text-xs font-bold text-stone-400 uppercase tracking-widest">
+            <span>Total Bill:</span>
+            <span class="text-lg text-gold font-serif">₹<span id="modal-total-val" class="text-lg text-gold font-serif">900</span></span>
           </div>
 
           <!-- WhatsApp Cart CTA -->
           <a id="modal-whatsapp-cta" 
              href="#" 
              target="_blank" 
-             class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 rounded-xl flex items-center justify-center space-x-2 shadow-lg shadow-emerald-600/20 transition-all border border-emerald-500/20 text-sm">
+             class="w-full bg-gold hover:bg-gold-light text-obsidian font-bold py-3.5 rounded-xl flex items-center justify-center space-x-2 shadow-lg shadow-gold/20 transition-all border border-gold/30 text-xs uppercase tracking-wider">
             <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
               <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.335-1.662c1.746.953 3.71 1.458 5.704 1.459h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
             </svg>
-            <span>Order via WhatsApp</span>
+            <span>Proceed to WhatsApp</span>
           </a>
         </div>
         
@@ -1028,11 +1127,9 @@
       // 1. Initialize Lucide Icons
       lucide.createIcons();
 
-      // Set current year in footer
+      // Set current year
       const yearEl = document.getElementById("year");
-      if (yearEl) {
-        yearEl.textContent = new Date().getFullYear();
-      }
+      if (yearEl) yearEl.textContent = new Date().getFullYear();
 
       // 2. Mobile Menu Controller
       const mobileMenuBtn = document.getElementById("mobile-menu-btn");
@@ -1043,56 +1140,161 @@
         const isHidden = mobileMenu.classList.contains("hidden");
         if (isHidden) {
           mobileMenu.classList.remove("hidden");
-          // Change icon to X
           menuIcon.setAttribute("data-lucide", "x");
         } else {
           mobileMenu.classList.add("hidden");
-          // Change icon to menu
           menuIcon.setAttribute("data-lucide", "menu");
         }
         lucide.createIcons();
       });
 
-      // Close mobile menu when a link is clicked
-      const mobileLinks = mobileMenu.querySelectorAll("a");
-      mobileLinks.forEach(link => {
-        link.addEventListener("click", () => {
-          mobileMenu.classList.add("hidden");
-          menuIcon.setAttribute("data-lucide", "menu");
-          lucide.createIcons();
+      // 3. 3D Revolving Showcase Carousel
+      const carouselRing = document.getElementById("carousel-3d-ring");
+      const nextBtn = document.getElementById("carousel-next");
+      const prevBtn = document.getElementById("carousel-prev");
+      let currentRotation = 0;
+
+      const rotateCarousel = (direction) => {
+        currentRotation += direction * 120;
+        carouselRing.style.transform = `rotateY(${currentRotation}deg)`;
+      };
+
+      nextBtn.addEventListener("click", () => rotateCarousel(-1));
+      prevBtn.addEventListener("click", () => rotateCarousel(1));
+
+      // Optional mouse drag rotation on the 3D ring
+      let isDragging = false;
+      let startX = 0;
+      let previousRotation = 0;
+
+      carouselRing.addEventListener("mousedown", (e) => {
+        isDragging = true;
+        startX = e.clientX;
+        previousRotation = currentRotation;
+        carouselRing.style.transition = "none";
+      });
+
+      window.addEventListener("mousemove", (e) => {
+        if (!isDragging) return;
+        const deltaX = e.clientX - startX;
+        const dragRotation = previousRotation + (deltaX * 0.3);
+        carouselRing.style.transform = `rotateY(${dragRotation}deg)`;
+      });
+
+      window.addEventListener("mouseup", (e) => {
+        if (!isDragging) return;
+        isDragging = false;
+        carouselRing.style.transition = "transform 1s cubic-bezier(0.23, 1, 0.32, 1)";
+        const deltaX = e.clientX - startX;
+        const relativeMove = Math.round((deltaX * 0.3) / 120);
+        currentRotation = previousRotation + (relativeMove * 120);
+        carouselRing.style.transform = `rotateY(${currentRotation}deg)`;
+      });
+
+      // 4. Custom Trailing Cursor Controller
+      const cursorDot = document.getElementById("custom-cursor-dot");
+      const cursorRing = document.getElementById("custom-cursor-ring");
+      
+      let mouseX = 0;
+      let mouseY = 0;
+      let ringX = 0;
+      let ringY = 0;
+
+      window.addEventListener("mousemove", (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        
+        // Show cursor elements
+        cursorDot.style.opacity = "1";
+        cursorRing.style.opacity = "1";
+
+        cursorDot.style.left = `${mouseX}px`;
+        cursorDot.style.top = `${mouseY}px`;
+      });
+
+      // Physics delay (lerp) loop for the outer trailing cursor ring
+      const animateCursor = () => {
+        ringX += (mouseX - ringX) * 0.15;
+        ringY += (mouseY - ringY) * 0.15;
+        
+        cursorRing.style.left = `${ringX}px`;
+        cursorRing.style.top = `${ringY}px`;
+        
+        requestAnimationFrame(animateCursor);
+      };
+      animateCursor();
+
+      // Expand custom cursor when hovering links/buttons
+      const interactiveElements = document.querySelectorAll("a, button, select, input, textarea, .tilt-card");
+      interactiveElements.forEach(el => {
+        el.addEventListener("mouseenter", () => {
+          cursorRing.classList.add("w-12", "h-12", "border-gold", "bg-gold/10");
+          cursorRing.classList.remove("w-8", "h-8", "border-gold/50");
+        });
+        el.addEventListener("mouseleave", () => {
+          cursorRing.classList.add("w-8", "h-8", "border-gold/50");
+          cursorRing.classList.remove("w-12", "h-12", "border-gold", "bg-gold/10");
         });
       });
 
-      // 3. Filterable Menu Preview Controller
+      // 5. Holographic 3D Card Tilt Glare Effect
+      const tiltCards = document.querySelectorAll(".tilt-card");
+      
+      tiltCards.forEach(card => {
+        card.addEventListener("mousemove", (e) => {
+          const rect = card.getBoundingClientRect();
+          const x = e.clientX - rect.left; // x coordinate relative to card
+          const y = e.clientY - rect.top;  // y coordinate relative to card
+          
+          const centerX = rect.width / 2;
+          const centerY = rect.height / 2;
+          
+          // Calculate angle relative to coordinates (-15 to 15 degrees max)
+          const rotateX = ((centerY - y) / centerY) * 15;
+          const rotateY = ((x - centerX) / centerX) * 15;
+          
+          card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02) translateZ(10px)`;
+          card.style.boxShadow = "0 25px 50px -12px rgba(212,175,55,0.25)";
+          
+          // Set custom glare position variables
+          card.style.setProperty('--mouse-x', `${(x / rect.width) * 100}%`);
+          card.style.setProperty('--mouse-y', `${(y / rect.height) * 100}%`);
+        });
+
+        card.addEventListener("mouseleave", () => {
+          // Smoothly reset transformations on leave
+          card.style.transform = "rotateX(0deg) rotateY(0deg) scale(1) translateZ(0px)";
+          card.style.boxShadow = "none";
+        });
+      });
+
+      // 6. Interactive Filterable Menu Categories
       const tabButtons = document.querySelectorAll(".menu-tab-btn");
       const menuCards = document.querySelectorAll(".menu-card");
 
       tabButtons.forEach(btn => {
         btn.addEventListener("click", () => {
-          // Remove active styles from all buttons
           tabButtons.forEach(tb => {
-            tb.classList.remove("active", "bg-maroon", "text-white", "border-maroon");
-            tb.classList.add("bg-white", "text-maroon", "hover:bg-stone-100", "border-stone-200");
+            tb.classList.remove("active", "bg-gold", "text-obsidian", "border-gold");
+            tb.classList.add("bg-obsidian", "text-gold", "hover:bg-gold/10", "border-gold/20");
           });
 
-          // Add active styles to clicked button
-          btn.classList.remove("bg-white", "text-maroon", "hover:bg-stone-100", "border-stone-200");
-          btn.classList.add("active", "bg-maroon", "text-white", "border-maroon");
+          btn.classList.remove("bg-obsidian", "text-gold", "hover:bg-gold/10", "border-gold/20");
+          btn.classList.add("active", "bg-gold", "text-obsidian", "border-gold");
 
           const filterVal = btn.getAttribute("data-filter");
 
-          // Toggle visibility of menu items with smooth fade transitions
           menuCards.forEach(card => {
             if (filterVal === "all") {
               card.style.display = "flex";
-              setTimeout(() => { card.style.opacity = "1"; card.style.transform = "scale(1)"; }, 50);
+              setTimeout(() => { card.style.opacity = "1"; card.style.transform = "scale(1) translateZ(0px)"; }, 50);
             } else {
               if (card.classList.contains(filterVal)) {
                 card.style.display = "flex";
-                setTimeout(() => { card.style.opacity = "1"; card.style.transform = "scale(1)"; }, 50);
+                setTimeout(() => { card.style.opacity = "1"; card.style.transform = "scale(1) translateZ(0px)"; }, 50);
               } else {
                 card.style.opacity = "0";
-                card.style.transform = "scale(0.95)";
+                card.style.transform = "scale(0.9) translateZ(-40px)";
                 setTimeout(() => { card.style.display = "none"; }, 200);
               }
             }
@@ -1100,7 +1302,7 @@
         });
       });
 
-      // 4. Quick View Modal Controller
+      // 7. Quick View & Add to WhatsApp Cart Modal Controller
       const modal = document.getElementById("quick-view-modal");
       const modalTitle = document.getElementById("modal-title");
       const modalPriceVal = document.getElementById("modal-price-val");
@@ -1121,7 +1323,6 @@
       let currentUnit = "kg";
       const storeName = "Kanpur Sweet Palace";
 
-      // Function to open Modal and populate details
       const openModal = (name, price, image, desc, unit) => {
         currentItemName = name;
         currentPrice = parseFloat(price);
@@ -1137,25 +1338,21 @@
         
         updateTotal();
 
-        // Show Modal
         modal.classList.remove("opacity-0", "pointer-events-none");
         modal.firstElementChild.classList.remove("scale-95");
         modal.firstElementChild.classList.add("scale-100");
       };
 
-      // Function to close Modal
       const closeModal = () => {
         modal.classList.add("opacity-0", "pointer-events-none");
         modal.firstElementChild.classList.remove("scale-100");
         modal.firstElementChild.classList.add("scale-95");
       };
 
-      // Update total price and WhatsApp link
       const updateTotal = () => {
         const total = currentPrice * currentQuantity;
         modalTotalVal.textContent = total;
 
-        // WhatsApp message generation
         const baseMessage = `Hello ${storeName}! I would like to order:
 - Product: *${currentItemName}*
 - Quantity: *${currentQuantity} ${currentUnit}*
@@ -1167,7 +1364,6 @@ Please confirm my order. Thank you!`;
         modalWhatsappCta.href = `https://wa.me/919876543210?text=${encodedMsg}`;
       };
 
-      // Attach event listeners to all Quick View buttons
       const quickViewBtns = document.querySelectorAll(".quick-view-btn");
       quickViewBtns.forEach(btn => {
         btn.addEventListener("click", () => {
@@ -1181,7 +1377,6 @@ Please confirm my order. Thank you!`;
         });
       });
 
-      // Quantity adjustments
       plusBtn.addEventListener("click", () => {
         currentQuantity++;
         counterValue.textContent = currentQuantity;
@@ -1196,20 +1391,142 @@ Please confirm my order. Thank you!`;
         }
       });
 
-      // Close modal events
       closeModalBtn.addEventListener("click", closeModal);
       modal.addEventListener("click", (e) => {
-        if (e.target === modal) {
-          closeModal();
-        }
+        if (e.target === modal) closeModal();
       });
 
-      // Close modal on Escape key
       document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape") {
-          closeModal();
-        }
+        if (e.key === "Escape") closeModal();
       });
+
+      // 8. Intersection Observer for Scroll-driven 3D Slide/Rotate entrance
+      const scrollReveals = document.querySelectorAll(".3d-scroll-reveal, .tilt-card");
+      
+      const revealCallback = (entries, observer) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.style.opacity = "1";
+            entry.target.style.transform = "translateY(0) rotateX(0deg) translateZ(0)";
+            observer.unobserve(entry.target);
+          }
+        });
+      };
+
+      const revealObserver = new IntersectionObserver(revealCallback, {
+        root: null,
+        threshold: 0.1,
+        rootMargin: "0px 0px -50px 0px"
+      });
+
+      scrollReveals.forEach(el => {
+        el.style.opacity = "0";
+        el.style.transform = "translateY(60px) rotateX(-20deg) translateZ(-50px)";
+        el.style.transition = "transform 0.8s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.8s ease";
+        revealObserver.observe(el);
+      });
+
+      // 9. Custom Golden Honey Particles Background Engine
+      const canvas = document.getElementById("particles-canvas");
+      const ctx = canvas.getContext("2d");
+      let particlesArray = [];
+      const numberOfParticles = 80;
+
+      // Handle resize
+      const setCanvasSize = () => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      };
+      setCanvasSize();
+      window.addEventListener("resize", setCanvasSize);
+
+      // Particle Constructor
+      class Particle {
+        constructor() {
+          this.x = Math.random() * canvas.width;
+          this.y = Math.random() * canvas.height;
+          this.size = Math.random() * 2 + 0.5;
+          this.speedX = Math.random() * 0.3 - 0.15;
+          this.speedY = Math.random() * 0.3 - 0.15;
+          this.opacity = Math.random() * 0.5 + 0.2;
+        }
+
+        update() {
+          // Floating motion
+          this.x += this.speedX;
+          this.y += this.speedY;
+
+          // Wrap boundaries
+          if (this.x < 0) this.x = canvas.width;
+          if (this.x > canvas.width) this.x = 0;
+          if (this.y < 0) this.y = canvas.height;
+          if (this.y > canvas.height) this.y = 0;
+
+          // Drag effect from mouse position
+          const dx = mouseX - this.x;
+          const dy = mouseY - this.y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+          if (distance < 180) {
+            const forceDirectionX = dx / distance;
+            const forceDirectionY = dy / distance;
+            const force = (180 - distance) / 180;
+            this.x += forceDirectionX * force * 1.5;
+            this.y += forceDirectionY * force * 1.5;
+          }
+        }
+
+        draw() {
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(212, 175, 55, ${this.opacity})`;
+          ctx.fill();
+        }
+      }
+
+      // Initialize particles list
+      const initParticles = () => {
+        particlesArray = [];
+        for (let i = 0; i < numberOfParticles; i++) {
+          particlesArray.push(new Particle());
+        }
+      };
+      initParticles();
+
+      // Connections drawer
+      const drawLines = () => {
+        for (let i = 0; i < particlesArray.length; i++) {
+          for (let j = i; j < particlesArray.length; j++) {
+            const dx = particlesArray[i].x - particlesArray[j].x;
+            const dy = particlesArray[i].y - particlesArray[j].y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            
+            // Draw connection line if particles are close
+            if (distance < 110) {
+              const opacity = (1 - (distance / 110)) * 0.08;
+              ctx.strokeStyle = `rgba(212, 175, 55, ${opacity})`;
+              ctx.lineWidth = 0.5;
+              ctx.beginPath();
+              ctx.moveTo(particlesArray[i].x, particlesArray[i].y);
+              ctx.lineTo(particlesArray[j].x, particlesArray[j].y);
+              ctx.stroke();
+            }
+          }
+        }
+      };
+
+      // Loop animation
+      const animateParticles = () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        particlesArray.forEach(p => {
+          p.update();
+          p.draw();
+        });
+        
+        drawLines();
+        requestAnimationFrame(animateParticles);
+      };
+      animateParticles();
 
     });
   </script>
