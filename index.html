@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title th:text="${pageTitle}">Kanpur Sweet Palace | Premium 3D Mithai Experience</title>
-  <meta name="description" content="Experience the ultimate luxury of Kanpur's legendary sweets. Pure cow ghee delicacies presented in interactive 3D." th:content="${pageDescription}">
+  <title th:text="${pageTitle}">Kanpur Sweet Palace | Imperial 3D Showcase</title>
+  <meta name="description" content="Experience the ultimate luxury of Kanpur's legendary sweets. Pure cow ghee delicacies presented in an award-winning interactive 3D space." th:content="${pageDescription}">
   
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800&family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Cinzel:wght@400;600;700;800;900&family=Inter:wght@200;300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
   
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -25,43 +25,48 @@
           colors: {
             maroon: {
               DEFAULT: '#800020',
-              dark: '#400010',
-              light: '#a61c3c',
-              gold: '#5c0018',
+              dark: '#30000a',
+              deep: '#1e0005',
+              light: '#b31c3f',
             },
             gold: {
               DEFAULT: '#D4AF37',
-              dark: '#aa8214',
-              light: '#f5d77f',
-            },
-            cream: {
-              DEFAULT: '#FDFBF7',
-              dark: '#eadeca',
+              dark: '#9d7b1a',
+              light: '#f9e29b',
+              glow: '#ffdf7a',
             },
             obsidian: {
-              DEFAULT: '#080204',
-              card: '#16080c',
-              border: '#38161d',
+              DEFAULT: '#050102',
+              card: '#0f0406',
+              cardHover: '#1c090c',
+              border: '#2a0c12',
             }
           },
           fontFamily: {
+            decorative: ['Cinzel Decorative', 'serif'],
             cinzel: ['Cinzel', 'serif'],
             serif: ['Playfair Display', 'serif'],
             sans: ['Inter', 'sans-serif'],
           },
           animation: {
-            'spin-slow': 'spin 20s linear infinite',
-            'pulse-glow': 'pulseGlow 2s ease-in-out infinite',
-            'float-3d': 'float3d 6s ease-in-out infinite',
+            'spin-slow': 'spin 30s linear infinite',
+            'float-3d': 'float3d 8s ease-in-out infinite',
+            'float-slow': 'floatSlow 10s ease-in-out infinite',
+            'border-flow': 'borderFlow 4s linear infinite',
           },
           keyframes: {
-            pulseGlow: {
-              '0%, 100%': { opacity: '0.6', transform: 'scale(1)' },
-              '50%': { opacity: '1', transform: 'scale(1.05)' },
-            },
             float3d: {
-              '0%, 100%': { transform: 'translateY(0) rotateX(5deg) rotateY(-5deg)' },
-              '50%': { transform: 'translateY(-20px) rotateX(-5deg) rotateY(5deg)' },
+              '0%, 100%': { transform: 'translateY(0) rotateX(10deg) rotateY(-5deg) translateZ(10px)' },
+              '50%': { transform: 'translateY(-25px) rotateX(-10deg) rotateY(5deg) translateZ(50px)' },
+            },
+            floatSlow: {
+              '0%, 100%': { transform: 'translateY(0) rotate(0deg) scale(1)' },
+              '50%': { transform: 'translateY(-15px) rotate(10deg) scale(1.05)' },
+            },
+            borderFlow: {
+              '0%': { 'border-color': '#D4AF37' },
+              '50%': { 'border-color': '#800020' },
+              '100%': { 'border-color': '#D4AF37' },
             }
           }
         }
@@ -71,43 +76,42 @@
 
   <style type="text/tailwindcss">
     @layer utilities {
-      /* Custom Cursor hiding on desktop */
+      /* Remove standard cursor on desktop to use premium trailing cursor */
       @media (min-width: 1024px) {
-        body, a, button, select, input, textarea {
+        body, a, button, select, input, textarea, [role="button"] {
           cursor: none !important;
         }
       }
-      .glass-premium {
-        background: rgba(22, 8, 12, 0.75);
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
-        border: 1px solid rgba(212, 175, 55, 0.15);
+      /* Premium mesh gradients and overlays */
+      .bg-mesh {
+        background: radial-gradient(circle at 10% 20%, rgba(128, 0, 32, 0.15) 0%, transparent 40%),
+                    radial-gradient(circle at 90% 80%, rgba(212, 175, 55, 0.08) 0%, transparent 40%),
+                    #050102;
       }
       .gold-text-glow {
-        text-shadow: 0 0 10px rgba(212, 175, 55, 0.4), 0 0 20px rgba(212, 175, 55, 0.2);
+        text-shadow: 0 0 15px rgba(212, 175, 55, 0.45), 0 0 30px rgba(212, 175, 55, 0.15);
       }
-      .gold-glow-border {
-        box-shadow: 0 0 15px rgba(212, 175, 55, 0.1);
-        border: 1px solid rgba(212, 175, 55, 0.25);
+      .text-outline {
+        -webkit-text-stroke: 1px rgba(212, 175, 55, 0.1);
+        color: transparent;
       }
-      .gold-glow-border:hover {
-        box-shadow: 0 0 25px rgba(212, 175, 55, 0.35);
-        border: 1px solid rgba(212, 175, 55, 0.6);
-      }
-      /* 3D Scene Perspective */
-      .perspective-3d {
-        perspective: 1200px;
+      /* Perspective Space */
+      .perspective-space {
+        perspective: 1600px;
         transform-style: preserve-3d;
       }
       .preserve-3d {
         transform-style: preserve-3d;
       }
       /* 3D Card Hover Physics */
+      .tilt-card-container {
+        perspective: 1000px;
+        transform-style: preserve-3d;
+      }
       .tilt-card {
         transform-style: preserve-3d;
-        transition: transform 0.15s ease-out, box-shadow 0.3s ease;
+        transition: transform 0.2s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.3s ease;
       }
-      /* Card Glare reflection */
       .card-glare {
         position: absolute;
         top: 0;
@@ -115,7 +119,7 @@
         width: 100%;
         height: 100%;
         pointer-events: none;
-        background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255,255,255,0.12) 0%, transparent 60%);
+        background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255,255,255,0.15) 0%, transparent 60%);
         z-index: 5;
         opacity: 0;
         transition: opacity 0.3s ease;
@@ -123,77 +127,118 @@
       .tilt-card:hover .card-glare {
         opacity: 1;
       }
-      /* 3D Carousel container */
-      .carousel-3d-container {
-        position: relative;
-        width: 320px;
-        height: 320px;
-        transform-style: preserve-3d;
-        transition: transform 1s cubic-bezier(0.23, 1, 0.32, 1);
+      /* 3D Double-Sided Flip Cards */
+      .flip-card-container {
+        perspective: 1200px;
+        height: 450px;
       }
-      .carousel-3d-item {
+      .flip-card-inner {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        transform-style: preserve-3d;
+      }
+      .flip-card-container:hover .flip-card-inner {
+        transform: rotateY(180deg);
+      }
+      .flip-card-front, .flip-card-back {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        backface-visibility: hidden;
+        border-radius: 2rem;
+        border: 1px solid rgba(212, 175, 55, 0.15);
+      }
+      .flip-card-front {
+        background: #0f0406;
+        transform: rotateY(0deg);
+      }
+      .flip-card-back {
+        background: linear-gradient(135deg, #1e0005 0%, #30000a 100%);
+        transform: rotateY(180deg);
+        border: 1px solid rgba(212, 175, 55, 0.35);
+        box-shadow: inset 0 0 30px rgba(212, 175, 55, 0.1);
+      }
+      /* Circular 3D Carousel */
+      .carousel-3d-scene {
+        width: 320px;
+        height: 380px;
+        position: relative;
+        transform-style: preserve-3d;
+        transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      .carousel-3d-card {
         position: absolute;
         width: 100%;
         height: 100%;
         left: 0;
         top: 0;
-        transform-style: preserve-3d;
         backface-visibility: hidden;
+        transform-style: preserve-3d;
       }
     }
   </style>
 </head>
-<body class="bg-obsidian text-stone-200 min-h-screen flex flex-col justify-between overflow-x-hidden relative selection:bg-gold selection:text-obsidian">
+<body class="bg-obsidian text-stone-200 min-h-screen flex flex-col justify-between overflow-x-hidden relative selection:bg-gold selection:text-obsidian bg-mesh">
 
-  <!-- ==================== BACKGROUND DUST CANVAS ==================== -->
+  <!-- ==================== INTERACTIVE BACKGROUND CANVAS ==================== -->
   <canvas id="particles-canvas" class="fixed inset-0 w-full h-full pointer-events-none z-0"></canvas>
+
+  <!-- ==================== PREMIUM SCROLL PROGRESS ==================== -->
+  <div class="fixed top-0 left-0 w-full h-[3px] bg-gradient-to-r from-maroon to-gold z-50 transform origin-left scale-x-0" id="scroll-progress"></div>
 
   <!-- ==================== CUSTOM 3D CURSOR ==================== -->
   <div id="custom-cursor-dot" class="fixed w-2 h-2 bg-gold rounded-full pointer-events-none z-50 transform -translate-x-1/2 -translate-y-1/2 hidden lg:block opacity-0 transition-opacity duration-300"></div>
-  <div id="custom-cursor-ring" class="fixed w-8 h-8 border border-gold/50 rounded-full pointer-events-none z-50 transform -translate-x-1/2 -translate-y-1/2 hidden lg:block opacity-0 transition-all duration-150 ease-out"></div>
+  <div id="custom-cursor-ring" class="fixed w-10 h-10 border border-gold/30 rounded-full pointer-events-none z-50 transform -translate-x-1/2 -translate-y-1/2 hidden lg:block opacity-0 transition-all duration-300 ease-out"></div>
 
   <!-- ==================== HEADER & NAVIGATION ==================== -->
-  <header class="sticky top-0 z-40 w-full border-b border-gold/15 glass-premium transition-all duration-300">
+  <header class="sticky top-0 z-40 w-full border-b border-gold/15 glass-premium transition-all duration-500">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex items-center justify-between h-20">
+      <div class="flex items-center justify-between h-24">
         
         <!-- Logo -->
         <a href="#" class="flex items-center space-x-3 group">
-          <div class="w-12 h-12 bg-gradient-to-br from-maroon to-maroon-dark rounded-full flex items-center justify-center border-2 border-gold shadow-[0_0_15px_rgba(212,175,55,0.2)] transform group-hover:rotate-12 transition-transform duration-300">
-            <span class="text-gold font-cinzel font-bold text-xl">K</span>
+          <div class="w-14 h-14 bg-gradient-to-br from-maroon to-maroon-dark rounded-full flex items-center justify-center border-2 border-gold shadow-[0_0_20px_rgba(212,175,55,0.25)] transform group-hover:rotate-12 transition-transform duration-300 relative">
+            <!-- Rotating outer mandala dots -->
+            <div class="absolute inset-0 border border-dotted border-gold/40 rounded-full animate-spin-slow scale-110"></div>
+            <span class="text-gold font-decorative font-bold text-2xl tracking-wide">K</span>
           </div>
           <div>
-            <h1 class="font-cinzel font-bold text-lg sm:text-2xl text-gold leading-tight tracking-wider flex items-center gap-1 gold-text-glow">
+            <h1 class="font-cinzel font-black text-xl sm:text-2xl text-gold leading-none tracking-widest flex items-center gap-1 gold-text-glow">
               <span th:text="${storeName}">Kanpur Sweet Palace</span>
             </h1>
-            <p class="text-[9px] uppercase tracking-widest text-gold/60 font-semibold -mt-1">Luxury Indian Heritage</p>
+            <p class="text-[8px] uppercase tracking-[0.3em] text-gold/60 font-bold mt-1">Authentic Royal Mithai</p>
           </div>
         </a>
 
         <!-- Desktop Navigation Links -->
-        <nav class="hidden md:flex space-x-8 items-center">
-          <a href="#about" class="text-stone-300 hover:text-gold font-medium transition-all hover:tracking-wide pb-1">Our Story</a>
-          <a href="#specialties" class="text-stone-300 hover:text-gold font-medium transition-all hover:tracking-wide pb-1">Specialties</a>
-          <a href="#menu" class="text-stone-300 hover:text-gold font-medium transition-all hover:tracking-wide pb-1">Menu</a>
-          <a href="#testimonials" class="text-stone-300 hover:text-gold font-medium transition-all hover:tracking-wide pb-1">Reviews</a>
-          <a href="#contact" class="text-stone-300 hover:text-gold font-medium transition-all hover:tracking-wide pb-1">Contact Us</a>
+        <nav class="hidden md:flex space-x-10 items-center">
+          <a href="#about" class="text-stone-300 hover:text-gold font-cinzel font-bold text-xs uppercase tracking-widest transition-all hover:tracking-[0.2em] pb-1">Heritage</a>
+          <a href="#specialties" class="text-stone-300 hover:text-gold font-cinzel font-bold text-xs uppercase tracking-widest transition-all hover:tracking-[0.2em] pb-1">Specialties</a>
+          <a href="#menu" class="text-stone-300 hover:text-gold font-cinzel font-bold text-xs uppercase tracking-widest transition-all hover:tracking-[0.2em] pb-1">Menu</a>
+          <a href="#testimonials" class="text-stone-300 hover:text-gold font-cinzel font-bold text-xs uppercase tracking-widest transition-all hover:tracking-[0.2em] pb-1">Reviews</a>
+          <a href="#contact" class="text-stone-300 hover:text-gold font-cinzel font-bold text-xs uppercase tracking-widest transition-all hover:tracking-[0.2em] pb-1">Reserve</a>
         </nav>
 
         <!-- CTAs -->
-        <div class="hidden lg:flex items-center space-x-4">
-          <a href="tel:+919876543210" class="text-stone-300 hover:text-gold flex items-center space-x-1.5 font-semibold transition-colors" th:href="${'tel:' + storePhone}">
+        <div class="hidden lg:flex items-center space-x-6">
+          <a href="tel:+919876543210" class="text-stone-300 hover:text-gold flex items-center space-x-2 font-bold text-xs tracking-widest transition-colors font-cinzel" th:href="${'tel:' + storePhone}">
             <i data-lucide="phone" class="w-4 h-4 text-gold"></i>
             <span th:text="${storePhone}">+91 98765 43210</span>
           </a>
-          <!-- Pulsing WhatsApp Order CTA -->
+          
+          <!-- Animated WhatsApp Order CTA -->
           <a href="https://wa.me/919876543210?text=Hello%20Kanpur%20Sweet%20Palace%2C%20I%20would%20like%20to%20view%20your%20menu%20and%20place%20an%20order." 
              target="_blank"
              th:href="${whatsappUrl}" 
-             class="bg-gold hover:bg-gold-light text-obsidian font-bold py-2.5 px-6 rounded-full flex items-center space-x-2 shadow-[0_0_15px_rgba(212,175,55,0.3)] hover:shadow-[0_0_25px_rgba(212,175,55,0.6)] transform hover:-translate-y-0.5 transition-all duration-300">
-            <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.335-1.662c1.746.953 3.71 1.458 5.704 1.459h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-            </svg>
-            <span>Order via WhatsApp</span>
+             class="relative group overflow-hidden bg-gradient-to-r from-gold to-gold-dark hover:from-gold-light hover:to-gold text-obsidian font-black text-xs uppercase tracking-wider py-3.5 px-8 rounded-full shadow-[0_0_25px_rgba(212,175,55,0.35)] transition-all duration-500">
+            <span class="relative z-10 flex items-center gap-2">
+              <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.335-1.662c1.746.953 3.71 1.458 5.704 1.459h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+              </svg>
+              Order via WhatsApp
+            </span>
           </a>
         </div>
 
@@ -209,11 +254,11 @@
 
     <!-- Mobile Menu Drawer -->
     <div id="mobile-menu" class="hidden md:hidden border-t border-gold/15 bg-obsidian py-4 px-6 space-y-4 shadow-xl">
-      <a href="#about" class="block text-stone-300 hover:text-gold font-medium text-lg border-b border-gold/5 pb-2">Our Story</a>
+      <a href="#about" class="block text-stone-300 hover:text-gold font-medium text-lg border-b border-gold/5 pb-2">Heritage</a>
       <a href="#specialties" class="block text-stone-300 hover:text-gold font-medium text-lg border-b border-gold/5 pb-2">Specialties</a>
       <a href="#menu" class="block text-stone-300 hover:text-gold font-medium text-lg border-b border-gold/5 pb-2">Menu</a>
       <a href="#testimonials" class="block text-stone-300 hover:text-gold font-medium text-lg border-b border-gold/5 pb-2">Reviews</a>
-      <a href="#contact" class="block text-stone-300 hover:text-gold font-medium text-lg pb-2">Contact Us</a>
+      <a href="#contact" class="block text-stone-300 hover:text-gold font-medium text-lg pb-2">Reserve</a>
       
       <div class="pt-4 flex flex-col space-y-3">
         <a href="tel:+919876543210" class="text-stone-300 flex items-center space-x-2 font-semibold justify-center py-2.5 rounded-full border border-gold/30 hover:bg-maroon-dark/20 transition-colors" th:href="${'tel:' + storePhone}">
@@ -236,122 +281,132 @@
   <main class="flex-grow z-10 relative">
     
     <!-- ==================== HERO SECTION ==================== -->
-    <section class="relative min-h-[calc(100vh-5rem)] flex items-center py-16 md:py-24 overflow-hidden border-b border-gold/15">
+    <section class="relative min-h-[calc(100vh-6rem)] flex items-center py-20 overflow-hidden border-b border-gold/10 perspective-space">
       
       <!-- Ambient Backlights -->
-      <div class="absolute -left-48 top-12 w-96 h-96 bg-maroon/20 rounded-full blur-[120px] pointer-events-none"></div>
-      <div class="absolute -right-48 bottom-12 w-96 h-96 bg-gold/10 rounded-full blur-[120px] pointer-events-none"></div>
+      <div class="absolute -left-64 top-12 w-[600px] h-[600px] bg-maroon/15 rounded-full blur-[140px] pointer-events-none"></div>
+      <div class="absolute -right-64 bottom-12 w-[600px] h-[600px] bg-gold/5 rounded-full blur-[140px] pointer-events-none"></div>
       
+      <!-- Huge outline background typography -->
+      <div class="absolute inset-x-0 top-1/2 -translate-y-1/2 select-none pointer-events-none text-center hidden lg:block">
+        <h2 class="text-outline font-decorative text-[18vw] font-black leading-none opacity-40 uppercase tracking-widest">MITHAI</h2>
+      </div>
+
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 items-center">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           
           <!-- Left Column: Typography -->
-          <div class="text-center lg:text-left space-y-8 max-w-2xl mx-auto lg:mx-0 3d-scroll-reveal" style="transform: translateZ(50px);">
-            <span class="inline-flex items-center px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider bg-gold/10 text-gold border border-gold/25 shadow-[0_0_15px_rgba(212,175,55,0.1)]">
-              👑 Kanpur's Royal Sweet Legacy
+          <div class="text-center lg:text-left space-y-8 max-w-2xl mx-auto lg:mx-0 3d-scroll-reveal preserve-3d" style="transform: translateZ(80px);">
+            <span class="inline-flex items-center px-5 py-2 rounded-full text-[10px] font-black uppercase tracking-[0.25em] bg-gradient-to-r from-gold/10 to-maroon/15 text-gold border border-gold/20 shadow-[0_0_20px_rgba(212,175,55,0.05)]">
+              ✨ Kanpur's Royal Culinary Crown
             </span>
-            <h1 class="font-cinzel text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-tight">
-              Savor the <span class="text-gold font-cinzel gold-text-glow">Legendary</span> Taste in Interactive 3D
+            <h1 class="font-cinzel text-5xl sm:text-6xl lg:text-7xl font-black text-white leading-[1.1] tracking-wide relative">
+              The Art of <br class="hidden sm:inline">
+              <span class="bg-clip-text text-transparent bg-gradient-to-r from-gold via-gold-light to-gold-dark gold-text-glow font-decorative">Pure Luxury</span>
             </h1>
-            <p class="text-stone-400 text-base sm:text-lg leading-relaxed font-light" th:text="${heroSubtitle}">
-              For half a century, we've crafted pure desi ghee delights for Kanpur's elite. Now, step into our modern digital gallery—pre-order fresh delicacies, customize gift suites, and order instantly.
+            <p class="text-stone-400 text-base sm:text-lg leading-relaxed font-light tracking-wide max-w-xl mx-auto lg:mx-0" th:text="${heroSubtitle}">
+              Step into an imperial sensory space. For fifty years, our master karigars have slow-cooked pure cow ghee delicacies for royalty. Today, we digitize the taste of heritage.
             </p>
             
             <!-- Button Group -->
-            <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-4">
-              <a href="#menu" class="w-full sm:w-auto text-center bg-gradient-to-r from-gold to-gold-dark hover:from-gold-light hover:to-gold text-obsidian font-bold py-4 px-10 rounded-full shadow-[0_0_20px_rgba(212,175,55,0.2)] hover:shadow-[0_0_30px_rgba(212,175,55,0.4)] transition-all duration-300 transform hover:-translate-y-0.5">
-                Explore The Gallery
+            <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-5 pt-4">
+              <a href="#menu" class="w-full sm:w-auto text-center bg-gradient-to-r from-gold via-gold-light to-gold-dark hover:shadow-[0_0_40px_rgba(212,175,55,0.55)] text-obsidian font-black text-xs uppercase tracking-[0.2em] py-4.5 px-10 rounded-full shadow-[0_0_25px_rgba(212,175,55,0.25)] transition-all duration-500 transform hover:-translate-y-1">
+                Enter The Vault
               </a>
               <a href="tel:+919876543210" 
                  th:href="${'tel:' + storePhone}" 
-                 class="w-full sm:w-auto text-center border-2 border-gold/40 hover:border-gold hover:bg-gold/5 text-gold font-bold py-3.5 px-8 rounded-full transition-all duration-300 flex items-center justify-center space-x-2">
-                <i data-lucide="phone" class="w-5 h-5"></i>
-                <span>Direct Hotline</span>
+                 class="w-full sm:w-auto text-center border border-gold/30 hover:border-gold hover:bg-gold/5 text-gold font-bold text-xs uppercase tracking-[0.15em] py-4 px-8 rounded-full transition-all duration-300 flex items-center justify-center space-x-2">
+                <i data-lucide="phone" class="w-4 h-4"></i>
+                <span>Direct Line</span>
               </a>
             </div>
             
             <!-- Quick stats -->
-            <div class="grid grid-cols-3 gap-4 pt-8 border-t border-gold/10">
+            <div class="grid grid-cols-3 gap-6 pt-10 border-t border-gold/10 max-w-md mx-auto lg:mx-0">
               <div>
-                <p class="text-3xl font-cinzel font-bold text-gold">50+</p>
-                <p class="text-[10px] text-stone-500 uppercase tracking-widest font-semibold mt-1">Heritage Years</p>
+                <p class="text-3xl font-cinzel font-black text-gold gold-text-glow">1972</p>
+                <p class="text-[8px] text-stone-500 uppercase tracking-[0.2em] font-bold mt-1">Foundation</p>
               </div>
               <div>
-                <p class="text-3xl font-cinzel font-bold text-gold">100%</p>
-                <p class="text-[10px] text-stone-500 uppercase tracking-widest font-semibold mt-1">Desi Ghee</p>
+                <p class="text-3xl font-cinzel font-black text-gold gold-text-glow">100%</p>
+                <p class="text-[8px] text-stone-500 uppercase tracking-[0.2em] font-bold mt-1">Cow Ghee</p>
               </div>
               <div>
-                <p class="text-3xl font-cinzel font-bold text-gold">30k+</p>
-                <p class="text-[10px] text-stone-500 uppercase tracking-widest font-semibold mt-1">Kanpur Loyalists</p>
+                <p class="text-3xl font-cinzel font-black text-gold gold-text-glow">50k+</p>
+                <p class="text-[8px] text-stone-500 uppercase tracking-[0.2em] font-bold mt-1">Patrons</p>
               </div>
             </div>
           </div>
           
           <!-- Right Column: Interactive 3D Revolving Showcase -->
-          <div class="relative flex flex-col justify-center items-center lg:pl-8 perspective-3d py-10">
+          <div class="relative flex flex-col justify-center items-center lg:pl-10 perspective-space py-10 preserve-3d">
             
-            <!-- Revolving Ring -->
-            <div id="carousel-3d-ring" class="carousel-3d-container animate-float-3d">
+            <!-- 3D Decorative Mandala Rings Background -->
+            <div class="absolute w-[450px] h-[450px] border border-gold/5 rounded-full pointer-events-none -z-10 animate-spin-slow scale-110 hidden md:block"></div>
+            <div class="absolute w-[360px] h-[360px] border border-dashed border-gold/15 rounded-full pointer-events-none -z-10 animate-float-slow hidden md:block"></div>
+
+            <!-- Rotating Ring -->
+            <div id="carousel-3d-ring" class="carousel-3d-scene animate-float-3d">
               
               <!-- Item 1: Sweet Box -->
-              <div class="carousel-3d-item bg-obsidian-card border border-gold/20 rounded-3xl overflow-hidden p-3 shadow-2xl flex flex-col justify-between" style="transform: rotateY(0deg) translateZ(280px);">
-                <div class="w-full h-4/5 rounded-2xl overflow-hidden bg-stone-900 border border-gold/10 relative">
+              <div class="carousel-3d-card bg-gradient-to-br from-obsidian-card to-maroon-deep border border-gold/20 rounded-[2.5rem] overflow-hidden p-4 shadow-3xl flex flex-col justify-between" style="transform: rotateY(0deg) translateZ(300px);">
+                <div class="w-full h-[78%] rounded-3xl overflow-hidden bg-stone-900 border border-gold/15 relative">
                   <img src="images/hero_sweets.png" th:src="@{/images/hero_sweets.png}" alt="Signature Selection" class="w-full h-full object-cover">
-                  <div class="absolute inset-0 bg-gradient-to-t from-obsidian via-transparent to-transparent flex items-end p-4">
+                  <div class="absolute inset-0 bg-gradient-to-t from-obsidian via-transparent to-transparent flex items-end p-5">
                     <div>
-                      <span class="text-[9px] uppercase font-bold text-gold tracking-widest">Masterpiece Selection</span>
-                      <h3 class="font-cinzel font-bold text-base text-white">Shahi Utsav Gift Suite</h3>
+                      <span class="text-[8px] uppercase font-bold text-gold tracking-[0.25em]">Masterpiece Suite</span>
+                      <h3 class="font-cinzel font-black text-lg text-white mt-1">Shahi Utsav Box</h3>
                     </div>
                   </div>
                 </div>
-                <div class="flex items-center justify-between text-xs px-2 pt-2">
-                  <span class="text-stone-400">Pure Ghee Assortment</span>
-                  <span class="text-gold font-bold font-serif">₹1,200</span>
+                <div class="flex items-center justify-between text-xs px-2 pt-1 font-cinzel">
+                  <span class="text-stone-400 font-bold uppercase tracking-wider text-[10px]">Pure Ghee Assortment</span>
+                  <span class="text-gold font-bold font-serif text-sm">₹1,200</span>
                 </div>
               </div>
 
               <!-- Item 2: Kaju Katli -->
-              <div class="carousel-3d-item bg-obsidian-card border border-gold/20 rounded-3xl overflow-hidden p-3 shadow-2xl flex flex-col justify-between" style="transform: rotateY(120deg) translateZ(280px);">
-                <div class="w-full h-4/5 rounded-2xl overflow-hidden bg-stone-900 border border-gold/10 relative">
+              <div class="carousel-3d-card bg-gradient-to-br from-obsidian-card to-maroon-deep border border-gold/20 rounded-[2.5rem] overflow-hidden p-4 shadow-3xl flex flex-col justify-between" style="transform: rotateY(120deg) translateZ(300px);">
+                <div class="w-full h-[78%] rounded-3xl overflow-hidden bg-stone-900 border border-gold/15 relative">
                   <img src="images/kaju_katli.png" th:src="@{/images/kaju_katli.png}" alt="Diamond Kaju Katli" class="w-full h-full object-cover">
-                  <div class="absolute inset-0 bg-gradient-to-t from-obsidian via-transparent to-transparent flex items-end p-4">
+                  <div class="absolute inset-0 bg-gradient-to-t from-obsidian via-transparent to-transparent flex items-end p-5">
                     <div>
-                      <span class="text-[9px] uppercase font-bold text-gold tracking-widest">Royal Classic</span>
-                      <h3 class="font-cinzel font-bold text-base text-white">Legendary Kaju Katli</h3>
+                      <span class="text-[8px] uppercase font-bold text-gold tracking-[0.25em]">Royal Classic</span>
+                      <h3 class="font-cinzel font-black text-lg text-white mt-1">Legendary Kaju Katli</h3>
                     </div>
                   </div>
                 </div>
-                <div class="flex items-center justify-between text-xs px-2 pt-2">
-                  <span class="text-stone-400">Silver Foiled Diamond</span>
-                  <span class="text-gold font-bold font-serif">₹900/kg</span>
+                <div class="flex items-center justify-between text-xs px-2 pt-1 font-cinzel">
+                  <span class="text-stone-400 font-bold uppercase tracking-wider text-[10px]">Cashew Diamond</span>
+                  <span class="text-gold font-bold font-serif text-sm">₹900/kg</span>
                 </div>
               </div>
 
               <!-- Item 3: Laddus -->
-              <div class="carousel-3d-item bg-obsidian-card border border-gold/20 rounded-3xl overflow-hidden p-3 shadow-2xl flex flex-col justify-between" style="transform: rotateY(240deg) translateZ(280px);">
-                <div class="w-full h-4/5 rounded-2xl overflow-hidden bg-stone-900 border border-gold/10 relative">
+              <div class="carousel-3d-card bg-gradient-to-br from-obsidian-card to-maroon-deep border border-gold/20 rounded-[2.5rem] overflow-hidden p-4 shadow-3xl flex flex-col justify-between" style="transform: rotateY(240deg) translateZ(300px);">
+                <div class="w-full h-[78%] rounded-3xl overflow-hidden bg-stone-900 border border-gold/15 relative">
                   <img src="images/desi_ghee_laddu.png" th:src="@{/images/desi_ghee_laddu.png}" alt="Desi Ghee Laddus" class="w-full h-full object-cover">
-                  <div class="absolute inset-0 bg-gradient-to-t from-obsidian via-transparent to-transparent flex items-end p-4">
+                  <div class="absolute inset-0 bg-gradient-to-t from-obsidian via-transparent to-transparent flex items-end p-5">
                     <div>
-                      <span class="text-[9px] uppercase font-bold text-gold tracking-widest">Hand Rolled Gold</span>
-                      <h3 class="font-cinzel font-bold text-base text-white">Desi Ghee Laddu</h3>
+                      <span class="text-[8px] uppercase font-bold text-gold tracking-[0.25em]">Hand Rolled Gold</span>
+                      <h3 class="font-cinzel font-black text-lg text-white mt-1">Desi Ghee Laddu</h3>
                     </div>
                   </div>
                 </div>
-                <div class="flex items-center justify-between text-xs px-2 pt-2">
-                  <span class="text-stone-400">Cardamom Infused</span>
-                  <span class="text-gold font-bold font-serif">₹450/kg</span>
+                <div class="flex items-center justify-between text-xs px-2 pt-1 font-cinzel">
+                  <span class="text-stone-400 font-bold uppercase tracking-wider text-[10px]">Aromatic Motichoor</span>
+                  <span class="text-gold font-bold font-serif text-sm">₹450/kg</span>
                 </div>
               </div>
 
             </div>
 
-            <!-- Carousel Rotators controls -->
-            <div class="flex space-x-6 mt-12 z-20">
-              <button id="carousel-prev" class="w-12 h-12 rounded-full border border-gold/30 hover:border-gold hover:bg-gold/10 text-gold flex items-center justify-center transition-all bg-obsidian-card/50 shadow" aria-label="Previous 3D Slide">
+            <!-- Rotating slider control triggers -->
+            <div class="flex space-x-8 mt-12 z-20">
+              <button id="carousel-prev" class="w-14 h-14 rounded-full border border-gold/30 hover:border-gold hover:bg-gold/10 text-gold flex items-center justify-center transition-all bg-obsidian-card shadow-2xl" aria-label="Previous Slide">
                 <i data-lucide="chevron-left" class="w-6 h-6"></i>
               </button>
-              <button id="carousel-next" class="w-12 h-12 rounded-full border border-gold/30 hover:border-gold hover:bg-gold/10 text-gold flex items-center justify-center transition-all bg-obsidian-card/50 shadow" aria-label="Next 3D Slide">
+              <button id="carousel-next" class="w-14 h-14 rounded-full border border-gold/30 hover:border-gold hover:bg-gold/10 text-gold flex items-center justify-center transition-all bg-obsidian-card shadow-2xl" aria-label="Next Slide">
                 <i data-lucide="chevron-right" class="w-6 h-6"></i>
               </button>
             </div>
@@ -362,61 +417,61 @@
       </div>
     </section>
 
-    <!-- ==================== ABOUT & STORY PITCH SECTION ==================== -->
-    <section id="about" class="py-24 border-b border-gold/15 relative">
+    <!-- ==================== ABOUT & HERITAGE SECTION ==================== -->
+    <section id="about" class="py-28 border-b border-gold/10 relative">
       <div class="absolute inset-0 bg-gradient-to-b from-transparent via-maroon-dark/5 to-transparent pointer-events-none"></div>
       
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
           
-          <!-- Left: 3D Layered Image Showcase -->
-          <div class="relative w-full h-[400px] perspective-3d 3d-scroll-reveal">
+          <!-- Left: 3D Layered Image Layout -->
+          <div class="relative w-full h-[450px] perspective-space 3d-scroll-reveal preserve-3d">
             <!-- Back Card -->
-            <div class="absolute left-6 top-6 w-[70%] h-[300px] rounded-3xl overflow-hidden border border-gold/20 shadow-2xl transform rotateY(15deg) rotateX(10deg) translateZ(-40px) bg-stone-900">
-              <img src="images/gift_box.png" th:src="@{/images/gift_box.png}" alt="Royal Packaging" class="w-full h-full object-cover opacity-80 hover:opacity-100 transition-opacity">
+            <div class="absolute left-4 top-4 w-[65%] h-[320px] rounded-[2rem] overflow-hidden border border-gold/15 shadow-2xl transform rotateY(20deg) rotateX(15deg) translateZ(-60px) bg-stone-900 transition-transform duration-500 hover:translateZ(-30px)">
+              <img src="images/gift_box.png" th:src="@{/images/gift_box.png}" alt="Royal Gift Wrapper" class="w-full h-full object-cover opacity-70 hover:opacity-100 transition-opacity">
             </div>
             <!-- Middle Card -->
-            <div class="absolute right-6 top-16 w-[65%] h-[280px] rounded-3xl overflow-hidden border border-gold/20 shadow-2xl transform rotateY(-20deg) rotateX(15deg) translateZ(0px) bg-stone-900">
-              <img src="images/special_samosa.png" th:src="@{/images/special_samosa.png}" alt="Hot Crispy Samosas" class="w-full h-full object-cover opacity-80 hover:opacity-100 transition-opacity">
+            <div class="absolute right-4 top-20 w-[60%] h-[300px] rounded-[2rem] overflow-hidden border border-gold/15 shadow-2xl transform rotateY(-25deg) rotateX(20deg) translateZ(0px) bg-stone-900 transition-transform duration-500 hover:translateZ(30px)">
+              <img src="images/special_samosa.png" th:src="@{/images/special_samosa.png}" alt="Kanpur Samosa" class="w-full h-full object-cover opacity-70 hover:opacity-100 transition-opacity">
             </div>
-            <!-- Front Focal Card (Tiltable) -->
-            <div class="tilt-card absolute left-20 bottom-0 w-[55%] h-[240px] rounded-3xl overflow-hidden border-2 border-gold shadow-3xl transform rotateY(5deg) rotateX(-5deg) translateZ(80px) bg-stone-950">
-              <img src="images/kaju_katli.png" th:src="@{/images/kaju_katli.png}" alt="Premium Kaju Katli" class="w-full h-full object-cover">
+            <!-- Front Focal Card (Interactive Tilt Card) -->
+            <div class="tilt-card absolute left-24 bottom-0 w-[55%] h-[260px] rounded-[2rem] overflow-hidden border-2 border-gold shadow-3xl transform rotateY(8deg) rotateX(-8deg) translateZ(100px) bg-stone-950">
+              <img src="images/kaju_katli.png" th:src="@{/images/kaju_katli.png}" alt="Legendary Kaju Katli" class="w-full h-full object-cover">
               <div class="card-glare"></div>
             </div>
           </div>
           
-          <!-- Right: Narrative -->
-          <div class="space-y-6 3d-scroll-reveal">
-            <span class="text-gold font-bold text-xs uppercase tracking-widest block">Legacy Restyled</span>
-            <h2 class="font-cinzel text-3xl sm:text-4xl font-extrabold text-white">Crafting Pure Emotion in Pure Cow Ghee</h2>
-            <div class="h-0.5 w-20 bg-gold my-4"></div>
+          <!-- Right: Heritage details -->
+          <div class="space-y-8 3d-scroll-reveal">
+            <span class="text-gold font-bold text-xs uppercase tracking-[0.35em] block">Our Heritage Story</span>
+            <h2 class="font-cinzel text-3xl sm:text-5xl font-black text-white leading-tight">50 Years of Sweetening Kanpur's Elite</h2>
+            <div class="h-0.5 w-24 bg-gold my-4"></div>
             
-            <p class="text-stone-400 leading-relaxed text-sm sm:text-base font-light">
-              Since 1972, we have served the royal flavors of traditional Kanpur sweets. Our master karigars (artisans) take pride in preserving age-old family recipes, utilizing only the most premium ingredients with zero adulteration.
+            <p class="text-stone-400 leading-relaxed text-sm sm:text-base font-light tracking-wide">
+              Established in 1972 in the cultural core of Kanpur, we started with a singular philosophy: to elevate traditional Indian sweets into high art. By combining milk solids, pure silver foil, and cow-ghee base, we established a legacy of taste.
             </p>
-            <p class="text-stone-400 leading-relaxed text-sm sm:text-base font-light">
-              This digital gallery is our new bridge to your celebrations—blending our rich heritage with modern, frictionless pre-orders to save your time during busy festivals.
+            <p class="text-stone-400 leading-relaxed text-sm sm:text-base font-light tracking-wide">
+              Every detail of our preparation remains faithful to ancestral hand-kneaded recipes, handled by master sweet artisans whose families have worked alongside ours for generations.
             </p>
             
-            <!-- Features List -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4">
+            <!-- Features list grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 pt-4">
               <div class="flex items-start space-x-3 group">
-                <div class="bg-gold/10 p-2.5 rounded-xl text-gold border border-gold/25 group-hover:bg-gold group-hover:text-obsidian transition-colors">
+                <div class="bg-gold/10 p-3 rounded-2xl text-gold border border-gold/25 group-hover:bg-gold group-hover:text-obsidian transition-colors duration-300">
                   <i data-lucide="check-circle" class="w-5 h-5"></i>
                 </div>
                 <div>
-                  <h4 class="font-cinzel font-bold text-white text-sm">Fresh Dawn Cooking</h4>
-                  <p class="text-xs text-stone-500 mt-1">Prepared fresh at dawn and packaged immediately.</p>
+                  <h4 class="font-cinzel font-bold text-white text-sm">Pure Craftsmanship</h4>
+                  <p class="text-xs text-stone-500 mt-1">No automated woks. Fully hand-formed in small batches.</p>
                 </div>
               </div>
               <div class="flex items-start space-x-3 group">
-                <div class="bg-gold/10 p-2.5 rounded-xl text-gold border border-gold/25 group-hover:bg-gold group-hover:text-obsidian transition-colors">
+                <div class="bg-gold/10 p-3 rounded-2xl text-gold border border-gold/25 group-hover:bg-gold group-hover:text-obsidian transition-colors duration-300">
                   <i data-lucide="shield" class="w-5 h-5"></i>
                 </div>
                 <div>
-                  <h4 class="font-cinzel font-bold text-white text-sm">Ultra-Hygienic Prep</h4>
-                  <p class="text-xs text-stone-500 mt-1">100% untouched cooking in clean kitchens.</p>
+                  <h4 class="font-cinzel font-bold text-white text-sm">Sealed Security</h4>
+                  <p class="text-xs text-stone-500 mt-1">Double food-grade vacuum sealing for all products.</p>
                 </div>
               </div>
             </div>
@@ -426,106 +481,201 @@
       </div>
     </section>
 
-    <!-- ==================== FEATURED SPECIALTIES GRID ==================== -->
-    <section id="specialties" class="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-b border-gold/15">
+    <!-- ==================== 3D DOUBLE-SIDED FEATURED GRID ==================== -->
+    <section id="specialties" class="py-28 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-b border-gold/10">
       <div class="text-center max-w-3xl mx-auto mb-20 space-y-4 3d-scroll-reveal">
-        <span class="text-gold font-bold text-xs uppercase tracking-widest block">Imperial Choices</span>
-        <h2 class="font-cinzel text-3xl sm:text-4xl font-extrabold text-white">Our Legendary Specialties</h2>
-        <div class="h-0.5 w-20 bg-gold mx-auto"></div>
-        <p class="text-stone-400 font-light">Beloved by generations, hand-rolled with cow ghee, and presented with a luxury experience.</p>
+        <span class="text-gold font-bold text-xs uppercase tracking-[0.3em] block">Signature Vault</span>
+        <h2 class="font-cinzel text-3xl sm:text-5xl font-black text-white">Our Legendary Specialties</h2>
+        <div class="h-0.5 w-24 bg-gold mx-auto"></div>
+        <p class="text-stone-400 font-light tracking-wide">Hover over the card to reveal its composition, pure ghee certification, and nutritional metrics.</p>
       </div>
 
-      <!-- Specialties 3D Tilt Grid -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 p-2 perspective-3d" th:remove="all-but-first">
+      <!-- Specialties 3D Flip Card Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-10 p-2" th:remove="all-but-first">
         
         <!-- Specialty Card 1 -->
-        <div class="tilt-card bg-obsidian-card rounded-3xl overflow-hidden border border-gold/15 hover:border-gold/50 flex flex-col justify-between h-[450px] shadow-2xl relative"
-             th:each="item : ${featuredItems}">
-          <!-- Card glare element -->
-          <div class="card-glare"></div>
-          
-          <div class="relative h-56 overflow-hidden bg-stone-900 border-b border-gold/10">
-            <img src="images/kaju_katli.png" th:src="${item.imageUrl}" th:alt="${item.name}" alt="Legendary Kaju Katli" class="w-full h-full object-cover transform scale-100 hover:scale-105 transition-transform duration-700">
-            <div class="absolute top-4 right-4 bg-obsidian/85 text-gold border border-gold/40 font-bold px-4 py-1.5 rounded-full text-xs shadow-lg backdrop-blur">
-              <span th:text="${'₹' + item.price + '/' + item.unit}">₹900/kg</span>
-            </div>
-          </div>
-          <div class="p-6 flex-grow flex flex-col justify-between space-y-4 relative z-10">
-            <div class="space-y-2">
-              <h3 class="font-cinzel text-lg font-bold text-white tracking-wide" th:text="${item.name}">Kaju Katli (Royal Cashew Fudge)</h3>
-              <p class="text-stone-400 text-xs leading-relaxed line-clamp-3 font-light" th:text="${item.description}">
-                Premium double-refined cashews slow cooked, glazed in sugar syrup, and garnished with delicate edible silver foil. Smooth and melt-in-mouth.
-              </p>
+        <div class="flip-card-container 3d-scroll-reveal" th:each="item : ${featuredItems}">
+          <div class="flip-card-inner">
+            
+            <!-- Front of Card -->
+            <div class="flip-card-front overflow-hidden flex flex-col justify-between p-4 bg-obsidian-card">
+              <div class="relative h-[65%] rounded-[1.5rem] overflow-hidden bg-stone-900 border border-gold/10">
+                <img src="images/kaju_katli.png" th:src="${item.imageUrl}" th:alt="${item.name}" alt="Kaju Katli" class="w-full h-full object-cover">
+                <div class="absolute top-4 right-4 bg-obsidian/90 text-gold border border-gold/45 font-bold px-4 py-1 rounded-full text-xs shadow-lg backdrop-blur">
+                  <span th:text="${'₹' + item.price + '/' + item.unit}">₹900/kg</span>
+                </div>
+              </div>
+              <div class="p-4 space-y-2">
+                <span class="text-[9px] font-bold text-gold uppercase tracking-[0.25em]">Traditional Diamond</span>
+                <h3 class="font-cinzel text-lg font-bold text-white tracking-wide" th:text="${item.name}">Kaju Katli (Royal Cashew)</h3>
+              </div>
+              <!-- Flip indicator icon badge -->
+              <div class="absolute bottom-4 right-4 text-gold/40 hover:text-gold flex items-center gap-1.5 text-[10px] uppercase font-bold tracking-widest pointer-events-none">
+                <span>Hover to Flip</span>
+                <i data-lucide="rotate-3d" class="w-3.5 h-3.5"></i>
+              </div>
             </div>
             
-            <button class="quick-view-btn w-full bg-gradient-to-r from-gold/10 to-gold/20 hover:from-gold hover:to-gold-dark text-gold hover:text-obsidian py-3 rounded-xl font-bold transition-all duration-300 flex items-center justify-center space-x-2 border border-gold/30 hover:border-gold shadow-lg"
-                    data-name="Kaju Katli"
-                    data-price="900"
-                    data-image="images/kaju_katli.png"
-                    data-desc="Our signature Kaju Katli is prepared using top-tier cashews with zero adulterants, slow-cooked to perfection, and garnished with premium edible silver foil. A timeless traditional indulgence."
-                    data-unit="kg"
-                    th:attr="data-name=${item.name},data-price=${item.price},data-image=${item.imageUrl},data-desc=${item.description},data-unit=${item.unit}">
-              <i data-lucide="shopping-cart" class="w-4 h-4"></i>
-              <span>Quick View & Order</span>
-            </button>
+            <!-- Back of Card -->
+            <div class="flip-card-back p-8 flex flex-col justify-between text-left">
+              <div class="space-y-4">
+                <div class="flex items-center justify-between border-b border-gold/25 pb-3">
+                  <h3 class="font-cinzel text-lg font-bold text-gold tracking-wide" th:text="${item.name}">Kaju Katli (Royal Cashew)</h3>
+                  <i data-lucide="award" class="w-5 h-5 text-gold"></i>
+                </div>
+                <p class="text-stone-300 text-xs leading-relaxed font-light font-sans" th:text="${item.description}">
+                  Our signature Kaju Katli is prepared using top-tier cashews with zero adulterants, slow-cooked to perfection, and garnished with premium edible silver foil. A timeless traditional indulgence.
+                </p>
+                <!-- Detail matrix list -->
+                <div class="grid grid-cols-2 gap-3 text-[10px] font-cinzel pt-2">
+                  <div class="border border-gold/15 p-2 rounded-xl bg-obsidian-card">
+                    <span class="text-stone-500 uppercase block tracking-wider">Base Material</span>
+                    <span class="text-white font-bold block mt-0.5">Premium Cashews</span>
+                  </div>
+                  <div class="border border-gold/15 p-2 rounded-xl bg-obsidian-card">
+                    <span class="text-stone-500 uppercase block tracking-wider">Fat Content</span>
+                    <span class="text-white font-bold block mt-0.5">100% Cow Ghee</span>
+                  </div>
+                  <div class="border border-gold/15 p-2 rounded-xl bg-obsidian-card">
+                    <span class="text-stone-500 uppercase block tracking-wider">Shelf Life</span>
+                    <span class="text-white font-bold block mt-0.5">20 Days (Sealed)</span>
+                  </div>
+                  <div class="border border-gold/15 p-2 rounded-xl bg-obsidian-card">
+                    <span class="text-stone-500 uppercase block tracking-wider">Certification</span>
+                    <span class="text-white font-bold block mt-0.5">FSSAI Gold Level</span>
+                  </div>
+                </div>
+              </div>
+              
+              <button class="quick-view-btn w-full bg-gold hover:bg-gold-light text-obsidian py-3 rounded-xl font-bold text-xs uppercase tracking-wider transition-colors"
+                      data-name="Kaju Katli"
+                      data-price="900"
+                      data-image="images/kaju_katli.png"
+                      data-desc="Our signature Kaju Katli is prepared using top-tier cashews with zero adulterants, slow-cooked to perfection, and garnished with premium edible silver foil. A timeless traditional indulgence."
+                      data-unit="kg"
+                      th:attr="data-name=${item.name},data-price=${item.price},data-image=${item.imageUrl},data-desc=${item.description},data-unit=${item.unit}">
+                Quick View & Order
+              </button>
+            </div>
+            
           </div>
         </div>
 
         <!-- Specialty Card 2 (Static Fallback) -->
-        <div class="tilt-card bg-obsidian-card rounded-3xl overflow-hidden border border-gold/15 hover:border-gold/50 flex flex-col justify-between h-[450px] shadow-2xl relative">
-          <div class="card-glare"></div>
-          <div class="relative h-56 overflow-hidden bg-stone-900 border-b border-gold/10">
-            <img src="images/desi_ghee_laddu.png" alt="Desi Ghee Laddu" class="w-full h-full object-cover transform scale-100 hover:scale-105 transition-transform duration-700">
-            <div class="absolute top-4 right-4 bg-obsidian/85 text-gold border border-gold/40 font-bold px-4 py-1.5 rounded-full text-xs shadow-lg backdrop-blur">
-              <span>₹450/kg</span>
+        <div class="flip-card-container 3d-scroll-reveal">
+          <div class="flip-card-inner">
+            <div class="flip-card-front overflow-hidden flex flex-col justify-between p-4 bg-obsidian-card">
+              <div class="relative h-[65%] rounded-[1.5rem] overflow-hidden bg-stone-900 border border-gold/10">
+                <img src="images/desi_ghee_laddu.png" alt="Desi Ghee Laddu" class="w-full h-full object-cover">
+                <div class="absolute top-4 right-4 bg-obsidian/90 text-gold border border-gold/45 font-bold px-4 py-1 rounded-full text-xs shadow-lg backdrop-blur">
+                  <span>₹450/kg</span>
+                </div>
+              </div>
+              <div class="p-4 space-y-2">
+                <span class="text-[9px] font-bold text-gold uppercase tracking-[0.25em]">Pure Cow Ghee</span>
+                <h3 class="font-cinzel text-lg font-bold text-white tracking-wide">Motichoor Laddu</h3>
+              </div>
+              <div class="absolute bottom-4 right-4 text-gold/40 hover:text-gold flex items-center gap-1.5 text-[10px] uppercase font-bold tracking-widest pointer-events-none">
+                <span>Hover to Flip</span>
+                <i data-lucide="rotate-3d" class="w-3.5 h-3.5"></i>
+              </div>
             </div>
-          </div>
-          <div class="p-6 flex-grow flex flex-col justify-between space-y-4 relative z-10">
-            <div class="space-y-2">
-              <h3 class="font-cinzel text-lg font-bold text-white tracking-wide">Motichoor Laddu (Desi Ghee)</h3>
-              <p class="text-stone-400 text-xs leading-relaxed line-clamp-3 font-light">
-                Glistening round laddus formed with micro gram-flour boondi fried in pure cow ghee and infused with cardamom and roasted seeds.
-              </p>
+            <div class="flip-card-back p-8 flex flex-col justify-between text-left">
+              <div class="space-y-4">
+                <div class="flex items-center justify-between border-b border-gold/25 pb-3">
+                  <h3 class="font-cinzel text-lg font-bold text-gold tracking-wide">Motichoor Laddu</h3>
+                  <i data-lucide="award" class="w-5 h-5 text-gold"></i>
+                </div>
+                <p class="text-stone-300 text-xs leading-relaxed font-light font-sans">
+                  Prepared in 100% pure cow ghee, these Motichoor Laddus are sweet, aromatic, and loaded with roasted nuts. An essential sweet for Kanpur rituals and celebrations.
+                </p>
+                <div class="grid grid-cols-2 gap-3 text-[10px] font-cinzel pt-2">
+                  <div class="border border-gold/15 p-2 rounded-xl bg-obsidian-card">
+                    <span class="text-stone-500 uppercase block tracking-wider">Base Material</span>
+                    <span class="text-white font-bold block mt-0.5">Gram Flour Boondi</span>
+                  </div>
+                  <div class="border border-gold/15 p-2 rounded-xl bg-obsidian-card">
+                    <span class="text-stone-500 uppercase block tracking-wider">Fat Content</span>
+                    <span class="text-white font-bold block mt-0.5">100% Cow Ghee</span>
+                  </div>
+                  <div class="border border-gold/15 p-2 rounded-xl bg-obsidian-card">
+                    <span class="text-stone-500 uppercase block tracking-wider">Shelf Life</span>
+                    <span class="text-white font-bold block mt-0.5">10 Days (Sealed)</span>
+                  </div>
+                  <div class="border border-gold/15 p-2 rounded-xl bg-obsidian-card">
+                    <span class="text-stone-500 uppercase block tracking-wider">Certification</span>
+                    <span class="text-white font-bold block mt-0.5">FSSAI Certified</span>
+                  </div>
+                </div>
+              </div>
+              <button class="quick-view-btn w-full bg-gold hover:bg-gold-light text-obsidian py-3 rounded-xl font-bold text-xs uppercase tracking-wider transition-colors"
+                      data-name="Motichoor Laddu (Desi Ghee)"
+                      data-price="450"
+                      data-image="images/desi_ghee_laddu.png"
+                      data-desc="Prepared in 100% pure desi ghee, these melt-in-mouth Motichoor Laddus are sweet, aromatic, and loaded with roasted nuts. An essential sweet for poojas, festivals, and celebrations in Kanpur."
+                      data-unit="kg">
+                Quick View & Order
+              </button>
             </div>
-            
-            <button class="quick-view-btn w-full bg-gradient-to-r from-gold/10 to-gold/20 hover:from-gold hover:to-gold-dark text-gold hover:text-obsidian py-3 rounded-xl font-bold transition-all duration-300 flex items-center justify-center space-x-2 border border-gold/30 hover:border-gold shadow-lg"
-                    data-name="Motichoor Laddu (Desi Ghee)"
-                    data-price="450"
-                    data-image="images/desi_ghee_laddu.png"
-                    data-desc="Prepared in 100% pure desi ghee, these melt-in-mouth Motichoor Laddus are sweet, aromatic, and loaded with roasted nuts. An essential sweet for poojas, festivals, and celebrations in Kanpur."
-                    data-unit="kg">
-              <i data-lucide="shopping-cart" class="w-4 h-4"></i>
-              <span>Quick View & Order</span>
-            </button>
           </div>
         </div>
 
         <!-- Specialty Card 3 (Static Fallback) -->
-        <div class="tilt-card bg-obsidian-card rounded-3xl overflow-hidden border border-gold/15 hover:border-gold/50 flex flex-col justify-between h-[450px] shadow-2xl relative">
-          <div class="card-glare"></div>
-          <div class="relative h-56 overflow-hidden bg-stone-900 border-b border-gold/10">
-            <img src="images/special_samosa.png" alt="Crispy Special Samosa" class="w-full h-full object-cover transform scale-100 hover:scale-105 transition-transform duration-700">
-            <div class="absolute top-4 right-4 bg-obsidian/85 text-gold border border-gold/40 font-bold px-4 py-1.5 rounded-full text-xs shadow-lg backdrop-blur">
-              <span>₹20/pc</span>
+        <div class="flip-card-container 3d-scroll-reveal">
+          <div class="flip-card-inner">
+            <div class="flip-card-front overflow-hidden flex flex-col justify-between p-4 bg-obsidian-card">
+              <div class="relative h-[65%] rounded-[1.5rem] overflow-hidden bg-stone-900 border border-gold/10">
+                <img src="images/special_samosa.png" alt="Crispy Samosa" class="w-full h-full object-cover">
+                <div class="absolute top-4 right-4 bg-obsidian/90 text-gold border border-gold/45 font-bold px-4 py-1 rounded-full text-xs shadow-lg backdrop-blur">
+                  <span>₹20/pc</span>
+                </div>
+              </div>
+              <div class="p-4 space-y-2">
+                <span class="text-[9px] font-bold text-gold uppercase tracking-[0.25em]">Savory Spiced</span>
+                <h3 class="font-cinzel text-lg font-bold text-white tracking-wide">Kanpur Samosa</h3>
+              </div>
+              <div class="absolute bottom-4 right-4 text-gold/40 hover:text-gold flex items-center gap-1.5 text-[10px] uppercase font-bold tracking-widest pointer-events-none">
+                <span>Hover to Flip</span>
+                <i data-lucide="rotate-3d" class="w-3.5 h-3.5"></i>
+              </div>
             </div>
-          </div>
-          <div class="p-6 flex-grow flex flex-col justify-between space-y-4 relative z-10">
-            <div class="space-y-2">
-              <h3 class="font-cinzel text-lg font-bold text-white tracking-wide">Special Kanpur Samosa</h3>
-              <p class="text-stone-400 text-xs leading-relaxed line-clamp-3 font-light">
-                Extra-crispy golden shell stuffed with a rich filling of spiced potatoes, green peas, cashews, and soft paneer cubes.
-              </p>
+            <div class="flip-card-back p-8 flex flex-col justify-between text-left">
+              <div class="space-y-4">
+                <div class="flex items-center justify-between border-b border-gold/25 pb-3">
+                  <h3 class="font-cinzel text-lg font-bold text-gold tracking-wide">Kanpur Samosa</h3>
+                  <i data-lucide="award" class="w-5 h-5 text-gold"></i>
+                </div>
+                <p class="text-stone-300 text-xs leading-relaxed font-light font-sans">
+                  Extra-crispy golden shell stuffed with spiced potatoes, green peas, crushed Paneer blocks, and roasted cashew halves. Served hot with dual chutneys.
+                </p>
+                <div class="grid grid-cols-2 gap-3 text-[10px] font-cinzel pt-2">
+                  <div class="border border-gold/15 p-2 rounded-xl bg-obsidian-card">
+                    <span class="text-stone-500 uppercase block tracking-wider">Base Material</span>
+                    <span class="text-white font-bold block mt-0.5">Spiced Potato & Paneer</span>
+                  </div>
+                  <div class="border border-gold/15 p-2 rounded-xl bg-obsidian-card">
+                    <span class="text-stone-500 uppercase block tracking-wider">Crisp Factor</span>
+                    <span class="text-white font-bold block mt-0.5">Double Fried Paste</span>
+                  </div>
+                  <div class="border border-gold/15 p-2 rounded-xl bg-obsidian-card">
+                    <span class="text-stone-500 uppercase block tracking-wider">Serving Temp</span>
+                    <span class="text-white font-bold block mt-0.5">Piping Hot (75°C)</span>
+                  </div>
+                  <div class="border border-gold/15 p-2 rounded-xl bg-obsidian-card">
+                    <span class="text-stone-500 uppercase block tracking-wider">Certification</span>
+                    <span class="text-white font-bold block mt-0.5">Fresh Cooked</span>
+                  </div>
+                </div>
+              </div>
+              <button class="quick-view-btn w-full bg-gold hover:bg-gold-light text-obsidian py-3 rounded-xl font-bold text-xs uppercase tracking-wider transition-colors"
+                      data-name="Special Kanpur Samosa"
+                      data-price="20"
+                      data-image="images/special_samosa.png"
+                      data-desc="Our special samosas are locally famous for their crispy shell and rich paneer-cashew spiced potato filling. Served piping hot with our special tangy mint and tamarind chutneys."
+                      data-unit="pc">
+                Quick View & Order
+              </button>
             </div>
-            
-            <button class="quick-view-btn w-full bg-gradient-to-r from-gold/10 to-gold/20 hover:from-gold hover:to-gold-dark text-gold hover:text-obsidian py-3 rounded-xl font-bold transition-all duration-300 flex items-center justify-center space-x-2 border border-gold/30 hover:border-gold shadow-lg"
-                    data-name="Special Kanpur Samosa"
-                    data-price="20"
-                    data-image="images/special_samosa.png"
-                    data-desc="Our special samosas are locally famous for their crispy shell and rich paneer-cashew spiced potato filling. Served piping hot with our special tangy mint and tamarind chutneys."
-                    data-unit="pc">
-              <i data-lucide="shopping-cart" class="w-4 h-4"></i>
-              <span>Quick View & Order</span>
-            </button>
           </div>
         </div>
 
@@ -533,69 +683,69 @@
     </section>
 
     <!-- ==================== PREMIUM BRAND STORY BANNER ==================== -->
-    <section class="relative bg-gradient-to-br from-obsidian via-maroon-dark/60 to-obsidian text-white py-24 overflow-hidden border-b border-gold/15">
-      <div class="absolute inset-0 bg-[radial-gradient(#D4AF37_1px,transparent_1px)] opacity-5 bg-[size:16px_16px]"></div>
+    <section class="relative bg-gradient-to-br from-obsidian via-maroon-deep to-obsidian text-white py-28 overflow-hidden border-b border-gold/10">
+      <div class="absolute inset-0 bg-[radial-gradient(#D4AF37_1.5px,transparent_1.5px)] opacity-5 bg-[size:20px_20px] pointer-events-none"></div>
       
       <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 space-y-8 3d-scroll-reveal">
-        <span class="text-gold font-bold uppercase tracking-widest text-xs sm:text-sm">Exquisite Convenience</span>
-        <h2 class="font-cinzel text-3xl sm:text-4xl lg:text-5xl font-extrabold leading-tight">
-          Redefining Your Mithai Experience
+        <span class="text-gold font-bold uppercase tracking-[0.3em] text-xs">Exquisite Services</span>
+        <h2 class="font-cinzel text-3xl sm:text-5xl font-black leading-tight tracking-wide text-white">
+          A Shahi Digital Experience
         </h2>
         <div class="h-0.5 w-24 bg-gold mx-auto"></div>
-        <p class="text-stone-400 max-w-3xl mx-auto leading-relaxed text-sm sm:text-base font-light">
-          Say goodbye to long queues and chaotic crowds during festival rushes. Pre-order your customized luxury gift box online, select an exact pick-up slot, and check out instantly on WhatsApp.
+        <p class="text-stone-400 max-w-3xl mx-auto leading-relaxed text-sm sm:text-base font-light tracking-wide">
+          We bring the luxury catalog directly to your device. Avoid festival queues, customize royal boxes for corporate distribution, and receive premium vacuum sealed packages.
         </p>
         
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8 pt-8">
-          <div class="p-8 bg-obsidian-card/80 rounded-3xl border border-gold/15 shadow-inner hover:border-gold/40 transition-colors">
+          <div class="p-8 bg-obsidian-card rounded-[2rem] border border-gold/15 shadow-2xl hover:border-gold/45 transition-colors">
             <div class="w-12 h-12 bg-gold/10 text-gold rounded-full flex items-center justify-center mx-auto mb-4 border border-gold/25">
               <i data-lucide="clock" class="w-6 h-6"></i>
             </div>
-            <h3 class="font-cinzel font-bold text-gold text-base mb-2">Zero Wait Pickups</h3>
-            <p class="text-xs text-stone-500 leading-relaxed font-light">Select your festival boxes on WhatsApp, retrieve them from our digital counter instantly, and bypass the holiday rush.</p>
+            <h3 class="font-cinzel font-bold text-gold text-base mb-2">Instant Pickup</h3>
+            <p class="text-xs text-stone-500 leading-relaxed font-light">Confirm your checkout on WhatsApp, show your reservation code at the counter, and take your box in seconds.</p>
           </div>
           
-          <div class="p-8 bg-obsidian-card/80 rounded-3xl border border-gold/15 shadow-inner hover:border-gold/40 transition-colors">
+          <div class="p-8 bg-obsidian-card rounded-[2rem] border border-gold/15 shadow-2xl hover:border-gold/45 transition-colors">
             <div class="w-12 h-12 bg-gold/10 text-gold rounded-full flex items-center justify-center mx-auto mb-4 border border-gold/25">
               <i data-lucide="shield" class="w-6 h-6"></i>
             </div>
-            <h3 class="font-cinzel font-bold text-gold text-base mb-2">Nitrogen Fresh Seal</h3>
-            <p class="text-xs text-stone-500 leading-relaxed font-light">Our boxes are nitrogen-sealed to lock in aroma and freshness. Ensuring sweets arrive exactly as they left the wok.</p>
+            <h3 class="font-cinzel font-bold text-gold text-base mb-2">Nitrogen Packaged</h3>
+            <p class="text-xs text-stone-500 leading-relaxed font-light">Sealed in double secured food grade vacuum packaging. Retaining the rich aroma of pure cow ghee longer.</p>
           </div>
           
-          <div class="p-8 bg-obsidian-card/80 rounded-3xl border border-gold/15 shadow-inner hover:border-gold/40 transition-colors">
+          <div class="p-8 bg-obsidian-card rounded-[2rem] border border-gold/15 shadow-2xl hover:border-gold/45 transition-colors">
             <div class="w-12 h-12 bg-gold/10 text-gold rounded-full flex items-center justify-center mx-auto mb-4 border border-gold/25">
               <i data-lucide="award" class="w-6 h-6"></i>
             </div>
-            <h3 class="font-cinzel font-bold text-gold text-base mb-2">Shahi Gift Customizer</h3>
-            <p class="text-xs text-stone-500 leading-relaxed font-light">Create custom configurations of dry fruits, silver sweets, and savories inside royal velvet-coated packaging.</p>
+            <h3 class="font-cinzel font-bold text-gold text-base mb-2">Bespoke Gifting</h3>
+            <p class="text-xs text-stone-500 leading-relaxed font-light">Design customized sweet boxes with greetings, logos, and custom cards for Diwali, Rakhi, and corporate events.</p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ==================== INTERACTIVE FILTERABLE MENU ==================== -->
-    <section id="menu" class="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-b border-gold/15">
-      <div class="text-center max-w-3xl mx-auto mb-16 space-y-4 3d-scroll-reveal">
-        <span class="text-gold font-bold text-xs uppercase tracking-widest block">Taste Catalog</span>
-        <h2 class="font-cinzel text-3xl sm:text-4xl font-extrabold text-white">Explore Our Premium Menu</h2>
+    <!-- ==================== FILTERABLE CATALOG ==================== -->
+    <section id="menu" class="py-28 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-b border-gold/10">
+      <div class="text-center max-w-3xl mx-auto mb-20 space-y-4 3d-scroll-reveal">
+        <span class="text-gold font-bold text-xs uppercase tracking-[0.3em] block">Full Menu</span>
+        <h2 class="font-cinzel text-3xl sm:text-5xl font-black text-white">The Mithai Catalog</h2>
         <div class="h-0.5 w-20 bg-gold mx-auto"></div>
-        <p class="text-stone-400 font-light">Filter by category and select item options for quick pricing calculations and direct ordering.</p>
+        <p class="text-stone-400 font-light tracking-wide">Filter by category. Hover over items to experience holographic glares and click View to customize your order.</p>
       </div>
 
       <!-- Filter Tabs -->
-      <div class="flex justify-center space-x-2 sm:space-x-4 mb-16 border-b border-gold/10 max-w-md mx-auto pb-4 z-20 relative">
-        <button class="menu-tab-btn active px-6 py-2.5 rounded-full font-bold text-xs uppercase tracking-wider transition-all bg-gold text-obsidian border border-gold" data-filter="all">All</button>
-        <button class="menu-tab-btn px-6 py-2.5 rounded-full font-bold text-xs uppercase tracking-wider transition-all bg-obsidian text-gold hover:bg-gold/10 border border-gold/20" data-filter="sweets">Sweets</button>
-        <button class="menu-tab-btn px-6 py-2.5 rounded-full font-bold text-xs uppercase tracking-wider transition-all bg-obsidian text-gold hover:bg-gold/10 border border-gold/20" data-filter="snacks">Snacks</button>
-        <button class="menu-tab-btn px-6 py-2.5 rounded-full font-bold text-xs uppercase tracking-wider transition-all bg-obsidian text-gold hover:bg-gold/10 border border-gold/20" data-filter="gifts">Gift Suites</button>
+      <div class="flex justify-center space-x-2 sm:space-x-4 mb-20 border-b border-gold/10 max-w-md mx-auto pb-4 z-20 relative">
+        <button class="menu-tab-btn active px-6 py-2.5 rounded-full font-bold text-xs uppercase tracking-widest transition-all bg-gold text-obsidian border border-gold" data-filter="all">All</button>
+        <button class="menu-tab-btn px-6 py-2.5 rounded-full font-bold text-xs uppercase tracking-widest transition-all bg-obsidian text-gold hover:bg-gold/10 border border-gold/20" data-filter="sweets">Sweets</button>
+        <button class="menu-tab-btn px-6 py-2.5 rounded-full font-bold text-xs uppercase tracking-widest transition-all bg-obsidian text-gold hover:bg-gold/10 border border-gold/20" data-filter="snacks">Snacks</button>
+        <button class="menu-tab-btn px-6 py-2.5 rounded-full font-bold text-xs uppercase tracking-widest transition-all bg-obsidian text-gold hover:bg-gold/10 border border-gold/20" data-filter="gifts">Gift Suites</button>
       </div>
 
       <!-- Filterable Items Grid -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 perspective-3d" id="menu-items-grid" th:remove="all-but-first">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 p-2 perspective-space" id="menu-items-grid" th:remove="all-but-first">
         
         <!-- Menu Item 1: Sweets -->
-        <div class="menu-card sweets bg-obsidian-card p-4 rounded-3xl border border-gold/10 hover:border-gold/45 shadow-lg hover:shadow-2xl transition-all duration-300 flex space-x-4 tilt-card relative">
+        <div class="menu-card sweets bg-obsidian-card p-4 rounded-[2rem] border border-gold/10 hover:border-gold/45 shadow-lg hover:shadow-2xl transition-all duration-300 flex space-x-4 tilt-card relative">
           <div class="card-glare"></div>
           <div class="w-24 h-24 rounded-2xl overflow-hidden shrink-0 bg-stone-900 border border-gold/10 relative z-10">
             <img src="images/kaju_katli.png" alt="Kaju Katli" class="w-full h-full object-cover">
@@ -603,17 +753,17 @@
           <div class="flex-grow flex flex-col justify-between relative z-10">
             <div>
               <h4 class="font-cinzel font-bold text-white text-sm tracking-wide">Classic Kaju Katli</h4>
-              <p class="text-stone-500 text-[11px] mt-1 line-clamp-2 font-light">Diamond cut cashew fudge with high grade cashew content.</p>
+              <p class="text-stone-500 text-[10px] mt-1 line-clamp-2 font-light">Diamond cut cashew fudge with high grade cashew content.</p>
             </div>
-            <div class="flex items-center justify-between mt-2">
+            <div class="flex items-center justify-between mt-2 font-cinzel">
               <span class="font-bold text-gold text-sm font-serif">₹900/kg</span>
-              <button class="quick-view-btn text-gold hover:text-white font-bold text-xs flex items-center space-x-1"
+              <button class="quick-view-btn text-gold hover:text-white font-bold text-[10px] tracking-widest uppercase flex items-center space-x-1"
                       data-name="Classic Kaju Katli"
                       data-price="900"
                       data-image="images/kaju_katli.png"
                       data-desc="Genuinely prepared by master artisans. It stands as a crown jewel of Indian traditional sweet heritage."
                       data-unit="kg">
-                <span>View & Order</span>
+                <span>Customize</span>
                 <i data-lucide="plus" class="w-3.5 h-3.5"></i>
               </button>
             </div>
@@ -621,7 +771,7 @@
         </div>
 
         <!-- Menu Item 2: Sweets -->
-        <div class="menu-card sweets bg-obsidian-card p-4 rounded-3xl border border-gold/10 hover:border-gold/45 shadow-lg hover:shadow-2xl transition-all duration-300 flex space-x-4 tilt-card relative">
+        <div class="menu-card sweets bg-obsidian-card p-4 rounded-[2rem] border border-gold/10 hover:border-gold/45 shadow-lg hover:shadow-2xl transition-all duration-300 flex space-x-4 tilt-card relative">
           <div class="card-glare"></div>
           <div class="w-24 h-24 rounded-2xl overflow-hidden shrink-0 bg-stone-900 border border-gold/10 relative z-10">
             <img src="images/desi_ghee_laddu.png" alt="Motichoor Laddu" class="w-full h-full object-cover">
@@ -629,17 +779,17 @@
           <div class="flex-grow flex flex-col justify-between relative z-10">
             <div>
               <h4 class="font-cinzel font-bold text-white text-sm tracking-wide">Shahi Motichoor Laddu</h4>
-              <p class="text-stone-500 text-[11px] mt-1 line-clamp-2 font-light">Golden boondi fried in pure cow ghee and hand shaped.</p>
+              <p class="text-stone-500 text-[10px] mt-1 line-clamp-2 font-light">Golden boondi fried in pure cow ghee and hand shaped.</p>
             </div>
-            <div class="flex items-center justify-between mt-2">
+            <div class="flex items-center justify-between mt-2 font-cinzel">
               <span class="font-bold text-gold text-sm font-serif">₹450/kg</span>
-              <button class="quick-view-btn text-gold hover:text-white font-bold text-xs flex items-center space-x-1"
+              <button class="quick-view-btn text-gold hover:text-white font-bold text-[10px] tracking-widest uppercase flex items-center space-x-1"
                       data-name="Shahi Motichoor Laddu"
                       data-price="450"
                       data-image="images/desi_ghee_laddu.png"
                       data-desc="Juicy, soft, and richly flavored, made using top quality gram flour, cardamom, and cow ghee."
                       data-unit="kg">
-                <span>View & Order</span>
+                <span>Customize</span>
                 <i data-lucide="plus" class="w-3.5 h-3.5"></i>
               </button>
             </div>
@@ -647,7 +797,7 @@
         </div>
 
         <!-- Menu Item 3: Sweets -->
-        <div class="menu-card sweets bg-obsidian-card p-4 rounded-3xl border border-gold/10 hover:border-gold/45 shadow-lg hover:shadow-2xl transition-all duration-300 flex space-x-4 tilt-card relative">
+        <div class="menu-card sweets bg-obsidian-card p-4 rounded-[2rem] border border-gold/10 hover:border-gold/45 shadow-lg hover:shadow-2xl transition-all duration-300 flex space-x-4 tilt-card relative">
           <div class="card-glare"></div>
           <div class="w-24 h-24 rounded-2xl overflow-hidden shrink-0 bg-stone-900 border border-gold/10 relative z-10">
             <img src="images/desi_ghee_laddu.png" alt="Kesar Peda" class="w-full h-full object-cover filter sepia-[15%]">
@@ -655,17 +805,17 @@
           <div class="flex-grow flex flex-col justify-between relative z-10">
             <div>
               <h4 class="font-cinzel font-bold text-white text-sm tracking-wide">Kesari Mathura Peda</h4>
-              <p class="text-stone-500 text-[11px] mt-1 line-clamp-2 font-light">Traditional condensed milk sweet blended with saffron strands.</p>
+              <p class="text-stone-500 text-[10px] mt-1 line-clamp-2 font-light">Traditional condensed milk sweet blended with saffron strands.</p>
             </div>
-            <div class="flex items-center justify-between mt-2">
+            <div class="flex items-center justify-between mt-2 font-cinzel">
               <span class="font-bold text-gold text-sm font-serif">₹600/kg</span>
-              <button class="quick-view-btn text-gold hover:text-white font-bold text-xs flex items-center space-x-1"
+              <button class="quick-view-btn text-gold hover:text-white font-bold text-[10px] tracking-widest uppercase flex items-center space-x-1"
                       data-name="Kesari Mathura Peda"
                       data-price="600"
                       data-image="images/desi_ghee_laddu.png"
                       data-desc="Saffron flavored milk solid circles, traditional recipe bringing Mathura sweetness directly to Kanpur."
                       data-unit="kg">
-                <span>View & Order</span>
+                <span>Customize</span>
                 <i data-lucide="plus" class="w-3.5 h-3.5"></i>
               </button>
             </div>
@@ -673,7 +823,7 @@
         </div>
 
         <!-- Menu Item 4: Snacks -->
-        <div class="menu-card snacks bg-obsidian-card p-4 rounded-3xl border border-gold/10 hover:border-gold/45 shadow-lg hover:shadow-2xl transition-all duration-300 flex space-x-4 tilt-card relative">
+        <div class="menu-card snacks bg-obsidian-card p-4 rounded-[2rem] border border-gold/10 hover:border-gold/45 shadow-lg hover:shadow-2xl transition-all duration-300 flex space-x-4 tilt-card relative">
           <div class="card-glare"></div>
           <div class="w-24 h-24 rounded-2xl overflow-hidden shrink-0 bg-stone-900 border border-gold/10 relative z-10">
             <img src="images/special_samosa.png" alt="Samosa" class="w-full h-full object-cover">
@@ -681,17 +831,17 @@
           <div class="flex-grow flex flex-col justify-between relative z-10">
             <div>
               <h4 class="font-cinzel font-bold text-white text-sm tracking-wide">Kanpur Spiced Samosa</h4>
-              <p class="text-stone-500 text-[11px] mt-1 line-clamp-2 font-light">Crispy pyramid shell with cashew and paneer potato filling.</p>
+              <p class="text-stone-500 text-[10px] mt-1 line-clamp-2 font-light">Crispy pyramid shell with cashew and paneer potato filling.</p>
             </div>
-            <div class="flex items-center justify-between mt-2">
+            <div class="flex items-center justify-between mt-2 font-cinzel">
               <span class="font-bold text-gold text-sm font-serif">₹20/pc</span>
-              <button class="quick-view-btn text-gold hover:text-white font-bold text-xs flex items-center space-x-1"
+              <button class="quick-view-btn text-gold hover:text-white font-bold text-[10px] tracking-widest uppercase flex items-center space-x-1"
                       data-name="Kanpur Spiced Samosa"
                       data-price="20"
                       data-image="images/special_samosa.png"
                       data-desc="Fried to a flawless gold, stuffed with perfectly spiced potatoes, paneer, and cashew bits."
                       data-unit="pc">
-                <span>View & Order</span>
+                <span>Customize</span>
                 <i data-lucide="plus" class="w-3.5 h-3.5"></i>
               </button>
             </div>
@@ -699,7 +849,7 @@
         </div>
 
         <!-- Menu Item 5: Snacks -->
-        <div class="menu-card snacks bg-obsidian-card p-4 rounded-3xl border border-gold/10 hover:border-gold/45 shadow-lg hover:shadow-2xl transition-all duration-300 flex space-x-4 tilt-card relative">
+        <div class="menu-card snacks bg-obsidian-card p-4 rounded-[2rem] border border-gold/10 hover:border-gold/45 shadow-lg hover:shadow-2xl transition-all duration-300 flex space-x-4 tilt-card relative">
           <div class="card-glare"></div>
           <div class="w-24 h-24 rounded-2xl overflow-hidden shrink-0 bg-stone-900 border border-gold/10 relative z-10">
             <img src="images/special_samosa.png" alt="Pyaz Kachori" class="w-full h-full object-cover filter hue-rotate-15">
@@ -707,17 +857,17 @@
           <div class="flex-grow flex flex-col justify-between relative z-10">
             <div>
               <h4 class="font-cinzel font-bold text-white text-sm tracking-wide">Crispy Pyaz Kachori</h4>
-              <p class="text-stone-500 text-[11px] mt-1 line-clamp-2 font-light">Flaky hot pastry filled with spiced onions and dal paste.</p>
+              <p class="text-stone-500 text-[10px] mt-1 line-clamp-2 font-light">Flaky hot pastry filled with spiced onions and dal paste.</p>
             </div>
-            <div class="flex items-center justify-between mt-2">
+            <div class="flex items-center justify-between mt-2 font-cinzel">
               <span class="font-bold text-gold text-sm font-serif">₹30/pc</span>
-              <button class="quick-view-btn text-gold hover:text-white font-bold text-xs flex items-center space-x-1"
+              <button class="quick-view-btn text-gold hover:text-white font-bold text-[10px] tracking-widest uppercase flex items-center space-x-1"
                       data-name="Crispy Pyaz Kachori"
                       data-price="30"
                       data-image="images/special_samosa.png"
                       data-desc="Rich, flaky, crispy kachori with standard spicy Rajasthani-Kanpuri onion fillings. Served with dry ginger sweet chutney."
                       data-unit="pc">
-                <span>View & Order</span>
+                <span>Customize</span>
                 <i data-lucide="plus" class="w-3.5 h-3.5"></i>
               </button>
             </div>
@@ -725,7 +875,7 @@
         </div>
 
         <!-- Menu Item 6: Gift Boxes -->
-        <div class="menu-card gifts bg-obsidian-card p-4 rounded-3xl border border-gold/10 hover:border-gold/45 shadow-lg hover:shadow-2xl transition-all duration-300 flex space-x-4 tilt-card relative">
+        <div class="menu-card gifts bg-obsidian-card p-4 rounded-[2rem] border border-gold/10 hover:border-gold/45 shadow-lg hover:shadow-2xl transition-all duration-300 flex space-x-4 tilt-card relative">
           <div class="card-glare"></div>
           <div class="w-24 h-24 rounded-2xl overflow-hidden shrink-0 bg-stone-900 border border-gold/10 relative z-10">
             <img src="images/gift_box.png" alt="Shahi Gift Box" class="w-full h-full object-cover">
@@ -733,17 +883,17 @@
           <div class="flex-grow flex flex-col justify-between relative z-10">
             <div>
               <h4 class="font-cinzel font-bold text-white text-sm tracking-wide">Shahi Utsav Gift Suite</h4>
-              <p class="text-stone-500 text-[11px] mt-1 line-clamp-2 font-light">Royal crimson packaging with mixed premium sweets.</p>
+              <p class="text-stone-500 text-[10px] mt-1 line-clamp-2 font-light">Royal crimson packaging with mixed premium sweets.</p>
             </div>
-            <div class="flex items-center justify-between mt-2">
+            <div class="flex items-center justify-between mt-2 font-cinzel">
               <span class="font-bold text-gold text-sm font-serif">₹1200/box</span>
-              <button class="quick-view-btn text-gold hover:text-white font-bold text-xs flex items-center space-x-1"
+              <button class="quick-view-btn text-gold hover:text-white font-bold text-[10px] tracking-widest uppercase flex items-center space-x-1"
                       data-name="Shahi Utsav Gift Suite"
                       data-price="1200"
                       data-image="images/gift_box.png"
                       data-desc="Includes 250g Kaju Katli, 250g Motichoor Laddus, 250g Peda, and 250g Premium Salted Dryfruits."
                       data-unit="box">
-                <span>View & Order</span>
+                <span>Customize</span>
                 <i data-lucide="plus" class="w-3.5 h-3.5"></i>
               </button>
             </div>
@@ -754,22 +904,22 @@
     </section>
 
     <!-- ==================== TESTIMONIALS SECTION ==================== -->
-    <section id="testimonials" class="py-24 border-b border-gold/15 relative">
+    <section id="testimonials" class="py-28 border-b border-gold/10 relative">
       <div class="absolute inset-0 bg-gradient-to-t from-transparent via-maroon-dark/5 to-transparent pointer-events-none"></div>
       
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <div class="text-center max-w-3xl mx-auto mb-20 space-y-4 3d-scroll-reveal">
-          <span class="text-gold font-bold text-xs uppercase tracking-widest block">Patron Reviews</span>
-          <h2 class="font-cinzel text-3xl sm:text-4xl font-extrabold text-white">What Kanpurites Say About Us</h2>
+          <span class="text-gold font-bold text-xs uppercase tracking-[0.3em] block">Patron Chronicles</span>
+          <h2 class="font-cinzel text-3xl sm:text-5xl font-black text-white">What Kanpurites Say About Us</h2>
           <div class="h-0.5 w-20 bg-gold mx-auto"></div>
-          <p class="text-stone-400 font-light">Authentic taste builds generations of relationships.</p>
+          <p class="text-stone-400 font-light tracking-wide">Authentic taste builds generations of relationships.</p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 perspective-3d" th:remove="all-but-first">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 perspective-space" th:remove="all-but-first">
           
           <!-- Testimonial 1 -->
-          <div class="bg-obsidian-card p-8 rounded-3xl border border-gold/15 hover:border-gold/45 shadow-lg flex flex-col justify-between space-y-6 tilt-card relative" th:each="review : ${reviews}">
+          <div class="bg-obsidian-card p-8 rounded-[2rem] border border-gold/15 hover:border-gold/45 shadow-lg flex flex-col justify-between space-y-6 tilt-card relative" th:each="review : ${reviews}">
             <div class="card-glare"></div>
             <div class="space-y-4 relative z-10">
               <div class="flex text-gold">
@@ -779,7 +929,7 @@
                 <i data-lucide="star" class="w-4 h-4 fill-current"></i>
                 <i data-lucide="star" class="w-4 h-4 fill-current"></i>
               </div>
-              <p class="text-stone-400 italic text-xs sm:text-sm leading-relaxed font-light" th:text="${review.content}">
+              <p class="text-stone-400 italic text-xs sm:text-sm leading-relaxed font-light tracking-wide" th:text="${review.content}">
                 "For three generations, my family has bought sweets from here for every festival. Their Kaju Katli has the most authentic texture and flavor. The pure desi ghee aroma in their Motichoor Laddus is unmistakable!"
               </p>
             </div>
@@ -795,7 +945,7 @@
           </div>
 
           <!-- Testimonial 2 (Static Fallback) -->
-          <div class="bg-obsidian-card p-8 rounded-3xl border border-gold/15 hover:border-gold/45 shadow-lg flex flex-col justify-between space-y-6 tilt-card relative">
+          <div class="bg-obsidian-card p-8 rounded-[2rem] border border-gold/15 hover:border-gold/45 shadow-lg flex flex-col justify-between space-y-6 tilt-card relative">
             <div class="card-glare"></div>
             <div class="space-y-4 relative z-10">
               <div class="flex text-gold">
@@ -805,7 +955,7 @@
                 <i data-lucide="star" class="w-4 h-4 fill-current"></i>
                 <i data-lucide="star" class="w-4 h-4 fill-current"></i>
               </div>
-              <p class="text-stone-400 italic text-xs sm:text-sm leading-relaxed font-light">
+              <p class="text-stone-400 italic text-xs sm:text-sm leading-relaxed font-light tracking-wide">
                 "Their samosas are legendary! Whenever relatives visit us in Kanpur, our first evening snack stop is always here. Crispy outer crust with heavily paneer-stuffed potato core. Highly recommended!"
               </p>
             </div>
@@ -821,7 +971,7 @@
           </div>
 
           <!-- Testimonial 3 (Static Fallback) -->
-          <div class="bg-obsidian-card p-8 rounded-3xl border border-gold/15 hover:border-gold/45 shadow-lg flex flex-col justify-between space-y-6 tilt-card relative">
+          <div class="bg-obsidian-card p-8 rounded-[2rem] border border-gold/15 hover:border-gold/45 shadow-lg flex flex-col justify-between space-y-6 tilt-card relative">
             <div class="card-glare"></div>
             <div class="space-y-4 relative z-10">
               <div class="flex text-gold">
@@ -831,7 +981,7 @@
                 <i data-lucide="star" class="w-4 h-4 fill-current"></i>
                 <i data-lucide="star" class="w-4 h-4 fill-current"></i>
               </div>
-              <p class="text-stone-400 italic text-xs sm:text-sm leading-relaxed font-light">
+              <p class="text-stone-400 italic text-xs sm:text-sm leading-relaxed font-light tracking-wide">
                 "Absolutely loved the online pre-ordering! Stood zero minutes in queue on Diwali night. Checked out in seconds. The gift boxes packaging is extremely royal and clean. Perfect visual aesthetics."
               </p>
             </div>
@@ -852,33 +1002,32 @@
 
     <!-- ==================== LEAD CAPTURE & CONTACT ==================== -->
     <section id="contact" class="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="bg-obsidian-card rounded-[40px] border border-gold/20 shadow-3xl overflow-hidden relative">
-        
+      <div class="bg-obsidian-card rounded-[3rem] border border-gold/20 shadow-3xl overflow-hidden relative">
         <div class="grid grid-cols-1 lg:grid-cols-2">
           
           <!-- Left Side: Form -->
           <div class="p-8 sm:p-16 space-y-8 relative z-10">
             <div class="space-y-2">
-              <span class="text-gold font-bold text-xs uppercase tracking-widest block">Get in Touch</span>
+              <span class="text-gold font-bold text-xs uppercase tracking-[0.3em] block">Get in Touch</span>
               <h2 class="font-cinzel text-3xl font-extrabold text-white">Place an Inquiry / Pre-order</h2>
-              <p class="text-stone-500 text-xs font-light">Submit your bulk orders or festival bookings below. Our manager will connect instantly.</p>
+              <p class="text-stone-500 text-xs font-light tracking-wide">Submit your bulk orders or festival bookings below. Our manager will connect instantly.</p>
             </div>
             
             <form action="#" method="POST" th:action="@{/submit-inquiry}" class="space-y-6">
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div>
-                  <label class="block text-[10px] font-bold text-gold uppercase tracking-widest mb-1.5">Your Name</label>
-                  <input type="text" name="name" required placeholder="E.g., Rajesh Kumar" class="w-full bg-obsidian border border-gold/15 focus:border-gold rounded-xl px-4 py-3.5 text-sm focus:outline-none transition-colors text-white">
+                  <label class="block text-[9px] font-bold text-gold uppercase tracking-[0.2em] mb-1.5">Your Name</label>
+                  <input type="text" name="name" required placeholder="E.g., Rajesh Kumar" class="w-full bg-obsidian border border-gold/15 focus:border-gold rounded-xl px-4 py-4 text-sm focus:outline-none transition-colors text-white font-light">
                 </div>
                 <div>
-                  <label class="block text-[10px] font-bold text-gold uppercase tracking-widest mb-1.5">Phone Number</label>
-                  <input type="tel" name="phone" required placeholder="E.g., +91 98765 43210" class="w-full bg-obsidian border border-gold/15 focus:border-gold rounded-xl px-4 py-3.5 text-sm focus:outline-none transition-colors text-white">
+                  <label class="block text-[9px] font-bold text-gold uppercase tracking-[0.2em] mb-1.5">Phone Number</label>
+                  <input type="tel" name="phone" required placeholder="E.g., +91 98765 43210" class="w-full bg-obsidian border border-gold/15 focus:border-gold rounded-xl px-4 py-4 text-sm focus:outline-none transition-colors text-white font-light">
                 </div>
               </div>
               
               <div>
-                <label class="block text-[10px] font-bold text-gold uppercase tracking-widest mb-1.5">Inquiry Type</label>
-                <select name="type" class="w-full bg-obsidian border border-gold/15 focus:border-gold rounded-xl px-4 py-3.5 text-sm focus:outline-none transition-colors text-stone-400">
+                <label class="block text-[9px] font-bold text-gold uppercase tracking-[0.2em] mb-1.5">Inquiry Type</label>
+                <select name="type" class="w-full bg-obsidian border border-gold/15 focus:border-gold rounded-xl px-4 py-4 text-sm focus:outline-none transition-colors text-stone-400">
                   <option value="festival">Festival Pre-ordering</option>
                   <option value="wedding">Wedding / Bulk Catering</option>
                   <option value="corporate">Corporate Gifting</option>
@@ -887,19 +1036,19 @@
               </div>
               
               <div>
-                <label class="block text-[10px] font-bold text-gold uppercase tracking-widest mb-1.5">Your Message</label>
-                <textarea name="message" rows="4" required placeholder="Describe your request..." class="w-full bg-obsidian border border-gold/15 focus:border-gold rounded-xl px-4 py-3.5 text-sm focus:outline-none transition-colors text-white resize-none"></textarea>
+                <label class="block text-[9px] font-bold text-gold uppercase tracking-[0.2em] mb-1.5">Your Message</label>
+                <textarea name="message" rows="4" required placeholder="Describe your request..." class="w-full bg-obsidian border border-gold/15 focus:border-gold rounded-xl px-4 py-4 text-sm focus:outline-none transition-colors text-white resize-none font-light"></textarea>
               </div>
 
               <!-- Button -->
-              <button type="submit" class="w-full bg-gold hover:bg-gold-light text-obsidian font-bold py-4 rounded-xl shadow-[0_0_15px_rgba(212,175,55,0.2)] hover:shadow-[0_0_25px_rgba(212,175,55,0.5)] transition-all text-center uppercase tracking-wider text-xs">
+              <button type="submit" class="w-full bg-gold hover:bg-gold-light text-obsidian font-black py-4 rounded-xl shadow-[0_0_20px_rgba(212,175,55,0.2)] hover:shadow-[0_0_30px_rgba(212,175,55,0.5)] transition-all text-center uppercase tracking-[0.2em] text-xs">
                 Submit Inquiry / Pre-order
               </button>
             </form>
           </div>
           
-          <!-- Right Side: Store Details & Google Map -->
-          <div class="bg-gradient-to-br from-maroon-dark via-maroon/90 to-obsidian p-8 sm:p-16 flex flex-col justify-between border-t lg:border-t-0 lg:border-l border-gold/25 relative">
+          <!-- Right Side: Details & Google Map -->
+          <div class="bg-gradient-to-br from-maroon-dark via-maroon-deep to-obsidian p-8 sm:p-16 flex flex-col justify-between border-t lg:border-t-0 lg:border-l border-gold/20 relative">
             <div class="absolute inset-0 bg-[radial-gradient(#D4AF37_1px,transparent_1px)] opacity-5 bg-[size:10px_10px] pointer-events-none"></div>
             
             <div class="space-y-8 relative z-10">
@@ -912,7 +1061,7 @@
                   <i data-lucide="map-pin" class="w-5 h-5 text-gold shrink-0 mt-0.5"></i>
                   <div>
                     <h4 class="font-cinzel font-bold text-white text-sm">Our Flagship Store</h4>
-                    <p class="text-xs text-stone-400 mt-1 leading-relaxed" th:text="${storeAddress}">
+                    <p class="text-xs text-stone-400 mt-1 leading-relaxed font-light" th:text="${storeAddress}">
                       112/45, Swaroop Nagar Main Road, opposite Moti Jheel, Kanpur, Uttar Pradesh 208002
                     </p>
                   </div>
@@ -923,7 +1072,7 @@
                   <i data-lucide="clock" class="w-5 h-5 text-gold shrink-0 mt-0.5"></i>
                   <div>
                     <h4 class="font-cinzel font-bold text-white text-sm">Operating Hours</h4>
-                    <p class="text-xs text-stone-400 mt-1 leading-relaxed" th:text="${storeHours}">
+                    <p class="text-xs text-stone-400 mt-1 leading-relaxed font-light" th:text="${storeHours}">
                       Monday - Sunday: 8:00 AM - 10:00 PM (Active on all major holidays)
                     </p>
                   </div>
@@ -934,7 +1083,7 @@
                   <i data-lucide="phone" class="w-5 h-5 text-gold shrink-0 mt-0.5"></i>
                   <div>
                     <h4 class="font-cinzel font-bold text-white text-sm">Manager Contact</h4>
-                    <p class="text-xs text-stone-400 mt-1 leading-relaxed" th:text="${storePhone}">
+                    <p class="text-xs text-stone-400 mt-1 leading-relaxed font-light" th:text="${storePhone}">
                       +91 98765 43210
                     </p>
                   </div>
@@ -944,10 +1093,10 @@
             </div>
 
             <!-- Map Mockup Container -->
-            <div class="mt-8 relative z-10 w-full rounded-2xl overflow-hidden border border-gold/30 shadow-2xl h-48 sm:h-56 bg-obsidian flex items-center justify-center">
+            <div class="mt-8 relative z-10 w-full rounded-[2rem] overflow-hidden border border-gold/30 shadow-2xl h-48 sm:h-56 bg-obsidian flex items-center justify-center">
               <iframe 
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14285.498450165507!2d80.31557008107693!3d26.47585098939634!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x399c388d55555555%3A0x7d0a2830ad288efd!2sSwaroop%20Nagar%20Kanpur!5e0!3m2!1sen!2sin!4v1717462000000!5m2!1sen!2sin" 
-                class="w-full h-full border-0 grayscale opacity-70 hover:grayscale-0 hover:opacity-100 transition-all duration-700" 
+                class="w-full h-full border-0 grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-700" 
                 allowfullscreen="" 
                 loading="lazy" 
                 referrerpolicy="no-referrer-when-downgrade">
@@ -1015,7 +1164,7 @@
           </ul>
         </div>
 
-        <!-- Social Media links -->
+        <!-- Social Column -->
         <div class="space-y-4">
           <h4 class="font-cinzel font-bold text-gold text-xs tracking-wider uppercase">Follow Us</h4>
           <div class="flex space-x-3">
@@ -1041,7 +1190,7 @@
   </footer>
 
   <!-- ==================== INTERACTIVE QUICK VIEW MODAL ==================== -->
-  <div id="quick-view-modal" class="fixed inset-0 z-50 overflow-y-auto flex items-center justify-center p-4 opacity-0 pointer-events-none transition-all duration-300 bg-obsidian/80 backdrop-blur-md">
+  <div id="quick-view-modal" class="fixed inset-0 z-50 overflow-y-auto flex items-center justify-center p-4 opacity-0 pointer-events-none transition-all duration-300 bg-obsidian/85 backdrop-blur-md">
     
     <!-- Modal Content Card -->
     <div class="bg-obsidian-card rounded-[35px] border border-gold/30 shadow-3xl w-full max-w-2xl overflow-hidden transform scale-95 transition-all duration-300 flex flex-col md:flex-row relative">
@@ -1055,7 +1204,7 @@
       <div class="w-full md:w-1/2 h-64 md:h-auto bg-stone-900 relative shrink-0">
         <img id="modal-img" src="images/kaju_katli.png" alt="Mithai" class="w-full h-full object-cover">
         <!-- Floating category badge -->
-        <span class="absolute top-4 left-4 bg-obsidian/85 text-gold text-xs font-bold py-1 px-3 border border-gold/40 rounded-full shadow-lg">
+        <span class="absolute top-4 left-4 bg-obsidian/90 text-gold text-xs font-bold py-1 px-3 border border-gold/40 rounded-full shadow-lg font-cinzel">
           Imperial Choice
         </span>
       </div>
@@ -1067,8 +1216,8 @@
           <h3 id="modal-title" class="font-cinzel text-xl font-bold text-white tracking-wide">Kaju Katli (Cashew Fudge)</h3>
           
           <!-- Price display -->
-          <div class="flex items-baseline space-x-1.5">
-            <span class="text-stone-500 text-xs font-semibold uppercase tracking-wider">Unit Price:</span>
+          <div class="flex items-baseline space-x-1.5 font-cinzel">
+            <span class="text-stone-500 text-[10px] font-bold uppercase tracking-wider">Unit Price:</span>
             <span class="text-gold font-bold text-xl font-serif">₹</span>
             <span id="modal-price-val" class="text-gold font-bold text-xl font-serif">900</span>
             <span class="text-stone-500 text-sm font-semibold">/</span>
@@ -1108,7 +1257,7 @@
           <a id="modal-whatsapp-cta" 
              href="#" 
              target="_blank" 
-             class="w-full bg-gold hover:bg-gold-light text-obsidian font-bold py-3.5 rounded-xl flex items-center justify-center space-x-2 shadow-lg shadow-gold/20 transition-all border border-gold/30 text-xs uppercase tracking-wider">
+             class="w-full bg-gold hover:bg-gold-light text-obsidian font-bold py-4 rounded-xl flex items-center justify-center space-x-2 shadow-lg shadow-gold/20 transition-all border border-gold/30 text-xs uppercase tracking-wider">
             <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
               <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.335-1.662c1.746.953 3.71 1.458 5.704 1.459h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
             </svg>
@@ -1148,7 +1297,17 @@
         lucide.createIcons();
       });
 
-      // 3. 3D Revolving Showcase Carousel
+      // 3. Scroll Progress Indicator
+      const scrollBar = document.getElementById("scroll-progress");
+      window.addEventListener("scroll", () => {
+        const totalScroll = document.documentElement.scrollHeight - window.innerHeight;
+        if (totalScroll > 0) {
+          const progress = window.scrollY / totalScroll;
+          scrollBar.style.transform = `scaleX(${progress})`;
+        }
+      });
+
+      // 4. 3D Revolving Showcase Carousel
       const carouselRing = document.getElementById("carousel-3d-ring");
       const nextBtn = document.getElementById("carousel-next");
       const prevBtn = document.getElementById("carousel-prev");
@@ -1162,7 +1321,7 @@
       nextBtn.addEventListener("click", () => rotateCarousel(-1));
       prevBtn.addEventListener("click", () => rotateCarousel(1));
 
-      // Optional mouse drag rotation on the 3D ring
+      // Drag mechanics for the 3D ring
       let isDragging = false;
       let startX = 0;
       let previousRotation = 0;
@@ -1184,14 +1343,14 @@
       window.addEventListener("mouseup", (e) => {
         if (!isDragging) return;
         isDragging = false;
-        carouselRing.style.transition = "transform 1s cubic-bezier(0.23, 1, 0.32, 1)";
+        carouselRing.style.transition = "transform 1.2s cubic-bezier(0.16, 1, 0.3, 1)";
         const deltaX = e.clientX - startX;
         const relativeMove = Math.round((deltaX * 0.3) / 120);
         currentRotation = previousRotation + (relativeMove * 120);
         carouselRing.style.transform = `rotateY(${currentRotation}deg)`;
       });
 
-      // 4. Custom Trailing Cursor Controller
+      // 5. Custom Trailing Cursor Controller (LERP)
       const cursorDot = document.getElementById("custom-cursor-dot");
       const cursorRing = document.getElementById("custom-cursor-ring");
       
@@ -1204,7 +1363,6 @@
         mouseX = e.clientX;
         mouseY = e.clientY;
         
-        // Show cursor elements
         cursorDot.style.opacity = "1";
         cursorRing.style.opacity = "1";
 
@@ -1212,7 +1370,6 @@
         cursorDot.style.top = `${mouseY}px`;
       });
 
-      // Physics delay (lerp) loop for the outer trailing cursor ring
       const animateCursor = () => {
         ringX += (mouseX - ringX) * 0.15;
         ringY += (mouseY - ringY) * 0.15;
@@ -1224,51 +1381,52 @@
       };
       animateCursor();
 
-      // Expand custom cursor when hovering links/buttons
-      const interactiveElements = document.querySelectorAll("a, button, select, input, textarea, .tilt-card");
+      const interactiveElements = document.querySelectorAll("a, button, select, input, textarea, .flip-card-container");
       interactiveElements.forEach(el => {
         el.addEventListener("mouseenter", () => {
-          cursorRing.classList.add("w-12", "h-12", "border-gold", "bg-gold/10");
-          cursorRing.classList.remove("w-8", "h-8", "border-gold/50");
+          cursorRing.classList.add("w-14", "h-14", "border-gold", "bg-gold/15");
+          cursorRing.classList.remove("w-10", "h-10", "border-gold/30");
         });
         el.addEventListener("mouseleave", () => {
-          cursorRing.classList.add("w-8", "h-8", "border-gold/50");
-          cursorRing.classList.remove("w-12", "h-12", "border-gold", "bg-gold/10");
+          cursorRing.classList.add("w-10", "h-10", "border-gold/30");
+          cursorRing.classList.remove("w-14", "h-14", "border-gold", "bg-gold/15");
         });
       });
 
-      // 5. Holographic 3D Card Tilt Glare Effect
-      const tiltCards = document.querySelectorAll(".tilt-card");
+      // 6. Holographic Tilt Glare Effect (front and back of tilt elements)
+      const tiltElements = document.querySelectorAll(".tilt-card, .flip-card-front, .flip-card-back");
       
-      tiltCards.forEach(card => {
+      tiltElements.forEach(card => {
         card.addEventListener("mousemove", (e) => {
           const rect = card.getBoundingClientRect();
-          const x = e.clientX - rect.left; // x coordinate relative to card
-          const y = e.clientY - rect.top;  // y coordinate relative to card
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
           
           const centerX = rect.width / 2;
           const centerY = rect.height / 2;
           
-          // Calculate angle relative to coordinates (-15 to 15 degrees max)
           const rotateX = ((centerY - y) / centerY) * 15;
           const rotateY = ((x - centerX) / centerX) * 15;
           
-          card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02) translateZ(10px)`;
-          card.style.boxShadow = "0 25px 50px -12px rgba(212,175,55,0.25)";
+          // Apply rotation only for elements that aren't inside the flipping structure
+          if (card.classList.contains("tilt-card")) {
+            card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02) translateZ(15px)`;
+            card.style.boxShadow = "0 35px 60px -15px rgba(212,175,55,0.25)";
+          }
           
-          // Set custom glare position variables
           card.style.setProperty('--mouse-x', `${(x / rect.width) * 100}%`);
           card.style.setProperty('--mouse-y', `${(y / rect.height) * 100}%`);
         });
 
         card.addEventListener("mouseleave", () => {
-          // Smoothly reset transformations on leave
-          card.style.transform = "rotateX(0deg) rotateY(0deg) scale(1) translateZ(0px)";
-          card.style.boxShadow = "none";
+          if (card.classList.contains("tilt-card")) {
+            card.style.transform = "rotateX(0deg) rotateY(0deg) scale(1) translateZ(0px)";
+            card.style.boxShadow = "none";
+          }
         });
       });
 
-      // 6. Interactive Filterable Menu Categories
+      // 7. Interactive Menu Categories Filters
       const tabButtons = document.querySelectorAll(".menu-tab-btn");
       const menuCards = document.querySelectorAll(".menu-card");
 
@@ -1294,7 +1452,7 @@
                 setTimeout(() => { card.style.opacity = "1"; card.style.transform = "scale(1) translateZ(0px)"; }, 50);
               } else {
                 card.style.opacity = "0";
-                card.style.transform = "scale(0.9) translateZ(-40px)";
+                card.style.transform = "scale(0.9) translateZ(-50px)";
                 setTimeout(() => { card.style.display = "none"; }, 200);
               }
             }
@@ -1302,7 +1460,7 @@
         });
       });
 
-      // 7. Quick View & Add to WhatsApp Cart Modal Controller
+      // 8. Modal & Counter
       const modal = document.getElementById("quick-view-modal");
       const modalTitle = document.getElementById("modal-title");
       const modalPriceVal = document.getElementById("modal-price-val");
@@ -1364,18 +1522,23 @@ Please confirm my order. Thank you!`;
         modalWhatsappCta.href = `https://wa.me/919876543210?text=${encodedMsg}`;
       };
 
-      const quickViewBtns = document.querySelectorAll(".quick-view-btn");
-      quickViewBtns.forEach(btn => {
-        btn.addEventListener("click", () => {
-          const name = btn.getAttribute("data-name");
-          const price = btn.getAttribute("data-price");
-          const image = btn.getAttribute("data-image");
-          const desc = btn.getAttribute("data-desc");
-          const unit = btn.getAttribute("data-unit") || "kg";
-          
-          openModal(name, price, image, desc, unit);
+      // Attaching listeners to quick view buttons
+      const attachQuickViewListeners = () => {
+        const quickViewBtns = document.querySelectorAll(".quick-view-btn");
+        quickViewBtns.forEach(btn => {
+          btn.addEventListener("click", (e) => {
+            e.stopPropagation(); // Avoid triggering card flips
+            const name = btn.getAttribute("data-name");
+            const price = btn.getAttribute("data-price");
+            const image = btn.getAttribute("data-image");
+            const desc = btn.getAttribute("data-desc");
+            const unit = btn.getAttribute("data-unit") || "kg";
+            
+            openModal(name, price, image, desc, unit);
+          });
         });
-      });
+      };
+      attachQuickViewListeners();
 
       plusBtn.addEventListener("click", () => {
         currentQuantity++;
@@ -1400,8 +1563,8 @@ Please confirm my order. Thank you!`;
         if (e.key === "Escape") closeModal();
       });
 
-      // 8. Intersection Observer for Scroll-driven 3D Slide/Rotate entrance
-      const scrollReveals = document.querySelectorAll(".3d-scroll-reveal, .tilt-card");
+      // 9. Intersection Observer (Scroll 3D Slide In)
+      const scrollReveals = document.querySelectorAll(".3d-scroll-reveal, .tilt-card-container, .flip-card-container");
       
       const revealCallback = (entries, observer) => {
         entries.forEach(entry => {
@@ -1415,24 +1578,23 @@ Please confirm my order. Thank you!`;
 
       const revealObserver = new IntersectionObserver(revealCallback, {
         root: null,
-        threshold: 0.1,
+        threshold: 0.05,
         rootMargin: "0px 0px -50px 0px"
       });
 
       scrollReveals.forEach(el => {
         el.style.opacity = "0";
-        el.style.transform = "translateY(60px) rotateX(-20deg) translateZ(-50px)";
-        el.style.transition = "transform 0.8s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.8s ease";
+        el.style.transform = "translateY(80px) rotateX(-25deg) translateZ(-40px)";
+        el.style.transition = "transform 1.2s cubic-bezier(0.16, 1, 0.3, 1), opacity 1.2s ease";
         revealObserver.observe(el);
       });
 
-      // 9. Custom Golden Honey Particles Background Engine
+      // 10. Background Honey/Gold Dust Particle Canvas
       const canvas = document.getElementById("particles-canvas");
       const ctx = canvas.getContext("2d");
       let particlesArray = [];
-      const numberOfParticles = 80;
+      const numberOfParticles = 75;
 
-      // Handle resize
       const setCanvasSize = () => {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
@@ -1440,38 +1602,35 @@ Please confirm my order. Thank you!`;
       setCanvasSize();
       window.addEventListener("resize", setCanvasSize);
 
-      // Particle Constructor
       class Particle {
         constructor() {
           this.x = Math.random() * canvas.width;
           this.y = Math.random() * canvas.height;
           this.size = Math.random() * 2 + 0.5;
-          this.speedX = Math.random() * 0.3 - 0.15;
-          this.speedY = Math.random() * 0.3 - 0.15;
-          this.opacity = Math.random() * 0.5 + 0.2;
+          this.speedX = Math.random() * 0.2 - 0.1;
+          this.speedY = Math.random() * 0.2 - 0.1;
+          this.opacity = Math.random() * 0.4 + 0.2;
         }
 
         update() {
-          // Floating motion
           this.x += this.speedX;
           this.y += this.speedY;
 
-          // Wrap boundaries
           if (this.x < 0) this.x = canvas.width;
           if (this.x > canvas.width) this.x = 0;
           if (this.y < 0) this.y = canvas.height;
           if (this.y > canvas.height) this.y = 0;
 
-          // Drag effect from mouse position
+          // Push pull logic
           const dx = mouseX - this.x;
           const dy = mouseY - this.y;
           const distance = Math.sqrt(dx * dx + dy * dy);
-          if (distance < 180) {
+          if (distance < 150) {
             const forceDirectionX = dx / distance;
             const forceDirectionY = dy / distance;
-            const force = (180 - distance) / 180;
-            this.x += forceDirectionX * force * 1.5;
-            this.y += forceDirectionY * force * 1.5;
+            const force = (150 - distance) / 150;
+            this.x += forceDirectionX * force * 1.2;
+            this.y += forceDirectionY * force * 1.2;
           }
         }
 
@@ -1483,7 +1642,6 @@ Please confirm my order. Thank you!`;
         }
       }
 
-      // Initialize particles list
       const initParticles = () => {
         particlesArray = [];
         for (let i = 0; i < numberOfParticles; i++) {
@@ -1492,7 +1650,6 @@ Please confirm my order. Thank you!`;
       };
       initParticles();
 
-      // Connections drawer
       const drawLines = () => {
         for (let i = 0; i < particlesArray.length; i++) {
           for (let j = i; j < particlesArray.length; j++) {
@@ -1500,9 +1657,8 @@ Please confirm my order. Thank you!`;
             const dy = particlesArray[i].y - particlesArray[j].y;
             const distance = Math.sqrt(dx * dx + dy * dy);
             
-            // Draw connection line if particles are close
             if (distance < 110) {
-              const opacity = (1 - (distance / 110)) * 0.08;
+              const opacity = (1 - (distance / 110)) * 0.07;
               ctx.strokeStyle = `rgba(212, 175, 55, ${opacity})`;
               ctx.lineWidth = 0.5;
               ctx.beginPath();
@@ -1514,7 +1670,6 @@ Please confirm my order. Thank you!`;
         }
       };
 
-      // Loop animation
       const animateParticles = () => {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         
