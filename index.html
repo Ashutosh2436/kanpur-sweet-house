@@ -3,19 +3,29 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title th:text="${pageTitle}">Kanpur Sweet Palace | Imperial 3D Showcase</title>
-  <meta name="description" content="Experience the ultimate luxury of Kanpur's legendary sweets. Pure cow ghee delicacies presented in an award-winning interactive 3D space." th:content="${pageDescription}">
+  <title th:text="${pageTitle}">Kanpur Sweet Palace | Imperial WebGL Showcase</title>
+  <meta name="description" content="Savor the taste of royalty. Kanpur's legendary sweets presented in an award-winning WebGL 3D luxury gallery." th:content="${pageDescription}">
   
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Cinzel:wght@400;600;700;800;900&family=Inter:wght@200;300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Cinzel:wght@300;400;600;700;900&family=Inter:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
   
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   
   <!-- Lucide Icons CDN -->
   <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Three.js CDN for Real 3D WebGL Rendering -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+  <!-- GSAP for Smooth Awwwards-style Animations -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+  <!-- Lenis for Smooth Inertial Scrolling -->
+  <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.19/bundled/lenis.min.js"></script>
   
   <!-- Custom Tailwind Configuration -->
   <script>
@@ -25,8 +35,8 @@
           colors: {
             maroon: {
               DEFAULT: '#800020',
-              dark: '#30000a',
-              deep: '#1e0005',
+              dark: '#2d000a',
+              deep: '#120004',
               light: '#b31c3f',
             },
             gold: {
@@ -37,36 +47,29 @@
             },
             obsidian: {
               DEFAULT: '#050102',
-              card: '#0f0406',
-              cardHover: '#1c090c',
-              border: '#2a0c12',
+              card: '#0c0305',
+              cardHover: '#18070b',
+              border: '#240a0e',
             }
           },
           fontFamily: {
             decorative: ['Cinzel Decorative', 'serif'],
             cinzel: ['Cinzel', 'serif'],
-            serif: ['Playfair Display', 'serif'],
             sans: ['Inter', 'sans-serif'],
           },
           animation: {
-            'spin-slow': 'spin 30s linear infinite',
+            'spin-slow': 'spin 40s linear infinite',
             'float-3d': 'float3d 8s ease-in-out infinite',
-            'float-slow': 'floatSlow 10s ease-in-out infinite',
-            'border-flow': 'borderFlow 4s linear infinite',
+            'pulse-glow': 'pulseGlow 3s ease-in-out infinite',
           },
           keyframes: {
             float3d: {
               '0%, 100%': { transform: 'translateY(0) rotateX(10deg) rotateY(-5deg) translateZ(10px)' },
-              '50%': { transform: 'translateY(-25px) rotateX(-10deg) rotateY(5deg) translateZ(50px)' },
+              '50%': { transform: 'translateY(-20px) rotateX(-10deg) rotateY(5deg) translateZ(40px)' },
             },
-            floatSlow: {
-              '0%, 100%': { transform: 'translateY(0) rotate(0deg) scale(1)' },
-              '50%': { transform: 'translateY(-15px) rotate(10deg) scale(1.05)' },
-            },
-            borderFlow: {
-              '0%': { 'border-color': '#D4AF37' },
-              '50%': { 'border-color': '#800020' },
-              '100%': { 'border-color': '#D4AF37' },
+            pulseGlow: {
+              '0%, 100%': { opacity: '0.4' },
+              '50%': { opacity: '0.8' }
             }
           }
         }
@@ -76,67 +79,43 @@
 
   <style type="text/tailwindcss">
     @layer utilities {
-      /* Remove standard cursor on desktop to use premium trailing cursor */
+      /* Hiding system cursor on desktop for custom smooth cursor */
       @media (min-width: 1024px) {
-        body, a, button, select, input, textarea, [role="button"] {
+        body, a, button, select, input, textarea, [role="button"], .quick-view-btn {
           cursor: none !important;
         }
       }
-      /* Premium mesh gradients and overlays */
+      /* Premium Dark Velvet Mesh Background */
       .bg-mesh {
-        background: radial-gradient(circle at 10% 20%, rgba(128, 0, 32, 0.15) 0%, transparent 40%),
-                    radial-gradient(circle at 90% 80%, rgba(212, 175, 55, 0.08) 0%, transparent 40%),
+        background: radial-gradient(circle at 10% 20%, rgba(128, 0, 32, 0.18) 0%, transparent 45%),
+                    radial-gradient(circle at 90% 80%, rgba(212, 175, 55, 0.08) 0%, transparent 45%),
                     #050102;
       }
       .gold-text-glow {
-        text-shadow: 0 0 15px rgba(212, 175, 55, 0.45), 0 0 30px rgba(212, 175, 55, 0.15);
+        text-shadow: 0 0 15px rgba(212, 175, 55, 0.4), 0 0 35px rgba(212, 175, 55, 0.15);
       }
       .text-outline {
-        -webkit-text-stroke: 1px rgba(212, 175, 55, 0.1);
+        -webkit-text-stroke: 1px rgba(212, 175, 55, 0.08);
         color: transparent;
       }
-      /* Perspective Space */
-      .perspective-space {
-        perspective: 1600px;
-        transform-style: preserve-3d;
-      }
-      .preserve-3d {
-        transform-style: preserve-3d;
-      }
-      /* 3D Card Hover Physics */
-      .tilt-card-container {
-        perspective: 1000px;
-        transform-style: preserve-3d;
-      }
-      .tilt-card {
-        transform-style: preserve-3d;
-        transition: transform 0.2s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.3s ease;
-      }
-      .card-glare {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        pointer-events: none;
-        background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255,255,255,0.15) 0%, transparent 60%);
-        z-index: 5;
-        opacity: 0;
-        transition: opacity 0.3s ease;
-      }
-      .tilt-card:hover .card-glare {
-        opacity: 1;
+      /* Glassmorphism details */
+      .glass-premium {
+        background: rgba(12, 3, 5, 0.85);
+        backdrop-filter: blur(25px);
+        -webkit-backdrop-filter: blur(25px);
+        border-bottom: 1px solid rgba(212, 175, 55, 0.15);
       }
       /* 3D Double-Sided Flip Cards */
       .flip-card-container {
-        perspective: 1200px;
+        perspective: 1500px;
         height: 450px;
+        transform-style: preserve-3d;
       }
       .flip-card-inner {
         position: relative;
         width: 100%;
         height: 100%;
-        transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         transform-style: preserve-3d;
       }
       .flip-card-container:hover .flip-card-inner {
@@ -149,48 +128,90 @@
         backface-visibility: hidden;
         border-radius: 2rem;
         border: 1px solid rgba(212, 175, 55, 0.15);
+        transform-style: preserve-3d;
       }
       .flip-card-front {
-        background: #0f0406;
+        background: #0c0305;
         transform: rotateY(0deg);
       }
       .flip-card-back {
-        background: linear-gradient(135deg, #1e0005 0%, #30000a 100%);
+        background: linear-gradient(135deg, #120004 0%, #2d000a 100%);
         transform: rotateY(180deg);
         border: 1px solid rgba(212, 175, 55, 0.35);
-        box-shadow: inset 0 0 30px rgba(212, 175, 55, 0.1);
+        box-shadow: inset 0 0 35px rgba(212, 175, 55, 0.12);
       }
-      /* Circular 3D Carousel */
-      .carousel-3d-scene {
-        width: 320px;
-        height: 380px;
-        position: relative;
-        transform-style: preserve-3d;
-        transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
-      }
-      .carousel-3d-card {
+      /* Interactive Glare Overlay for Cards */
+      .card-glare {
         position: absolute;
+        top: 0;
+        left: 0;
         width: 100%;
         height: 100%;
-        left: 0;
-        top: 0;
-        backface-visibility: hidden;
-        transform-style: preserve-3d;
+        pointer-events: none;
+        background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255,255,255,0.15) 0%, transparent 60%);
+        z-index: 5;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        border-radius: 2rem;
+      }
+      .flip-card-front:hover .card-glare, .flip-card-back:hover .card-glare {
+        opacity: 1;
+      }
+      /* Shimmer Glow Border Effect for Premium Feel */
+      .premium-border-glow {
+        position: relative;
+      }
+      .premium-border-glow::after {
+        content: '';
+        position: absolute;
+        inset: -1px;
+        background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.4), transparent);
+        border-radius: inherit;
+        z-index: 0;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        pointer-events: none;
+      }
+      .premium-border-glow:hover::after {
+        opacity: 1;
       }
     }
   </style>
 </head>
-<body class="bg-obsidian text-stone-200 min-h-screen flex flex-col justify-between overflow-x-hidden relative selection:bg-gold selection:text-obsidian bg-mesh">
+<body class="bg-obsidian text-stone-300 min-h-screen flex flex-col justify-between overflow-x-hidden relative selection:bg-gold selection:text-obsidian bg-mesh">
 
-  <!-- ==================== INTERACTIVE BACKGROUND CANVAS ==================== -->
+  <!-- ==================== PREMIUM PRELOADER SCREEN ==================== -->
+  <div id="preloader" class="fixed inset-0 bg-obsidian z-50 flex flex-col items-center justify-center transition-all duration-1000 ease-out">
+    <div class="text-center space-y-6">
+      <div class="relative w-24 h-24 bg-gradient-to-br from-maroon to-maroon-dark rounded-full flex items-center justify-center border-2 border-gold shadow-[0_0_40px_rgba(212,175,55,0.4)] mx-auto animate-pulse">
+        <span class="text-gold font-decorative font-bold text-4xl">K</span>
+      </div>
+      <div class="space-y-2">
+        <h2 class="font-cinzel text-xl text-gold tracking-[0.2em] font-black uppercase">Kanpur Sweet Palace</h2>
+        <p class="text-[9px] text-stone-500 uppercase tracking-[0.3em] font-bold">Imperial Indian Taste</p>
+      </div>
+      <div class="w-48 h-1 bg-obsidian-border rounded-full mx-auto overflow-hidden relative">
+        <div id="loader-bar" class="absolute left-0 top-0 h-full bg-gradient-to-r from-gold to-gold-light w-0 transition-all duration-500"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ambient Glowing Orbs -->
+  <div class="fixed top-[-10%] left-[-10%] w-[50vw] h-[50vw] bg-maroon/10 rounded-full blur-[120px] pointer-events-none z-0 orb-1"></div>
+  <div class="fixed bottom-[10%] right-[-10%] w-[45vw] h-[45vw] bg-gold/5 rounded-full blur-[120px] pointer-events-none z-0 orb-2"></div>
+  <div class="fixed top-[40%] left-[60%] w-[35vw] h-[35vw] bg-maroon/5 rounded-full blur-[100px] pointer-events-none z-0 orb-3"></div>
+
+  <!-- ==================== BACKGROUND SPARKLES CANVAS ==================== -->
   <canvas id="particles-canvas" class="fixed inset-0 w-full h-full pointer-events-none z-0"></canvas>
 
   <!-- ==================== PREMIUM SCROLL PROGRESS ==================== -->
-  <div class="fixed top-0 left-0 w-full h-[3px] bg-gradient-to-r from-maroon to-gold z-50 transform origin-left scale-x-0" id="scroll-progress"></div>
+  <div class="fixed top-0 left-0 w-full h-[3px] bg-gradient-to-r from-maroon via-gold to-gold-light z-50 transform origin-left scale-x-0" id="scroll-progress"></div>
 
-  <!-- ==================== CUSTOM 3D CURSOR ==================== -->
+  <!-- ==================== CUSTOM PHYSICS CURSOR ==================== -->
   <div id="custom-cursor-dot" class="fixed w-2 h-2 bg-gold rounded-full pointer-events-none z-50 transform -translate-x-1/2 -translate-y-1/2 hidden lg:block opacity-0 transition-opacity duration-300"></div>
-  <div id="custom-cursor-ring" class="fixed w-10 h-10 border border-gold/30 rounded-full pointer-events-none z-50 transform -translate-x-1/2 -translate-y-1/2 hidden lg:block opacity-0 transition-all duration-300 ease-out"></div>
+  <div id="custom-cursor-ring" class="fixed w-10 h-10 border border-gold/40 rounded-full pointer-events-none z-50 transform -translate-x-1/2 -translate-y-1/2 hidden lg:flex items-center justify-center opacity-0 transition-all duration-300 ease-out">
+    <span class="cursor-text text-[7px] font-black uppercase tracking-[0.2em] text-gold opacity-0 scale-50 transition-all duration-300">Drag</span>
+  </div>
 
   <!-- ==================== HEADER & NAVIGATION ==================== -->
   <header class="sticky top-0 z-40 w-full border-b border-gold/15 glass-premium transition-all duration-500">
@@ -199,8 +220,7 @@
         
         <!-- Logo -->
         <a href="#" class="flex items-center space-x-3 group">
-          <div class="w-14 h-14 bg-gradient-to-br from-maroon to-maroon-dark rounded-full flex items-center justify-center border-2 border-gold shadow-[0_0_20px_rgba(212,175,55,0.25)] transform group-hover:rotate-12 transition-transform duration-300 relative">
-            <!-- Rotating outer mandala dots -->
+          <div class="w-14 h-14 bg-gradient-to-br from-maroon to-maroon-dark rounded-full flex items-center justify-center border-2 border-gold shadow-[0_0_20px_rgba(212,175,55,0.3)] transform group-hover:rotate-12 transition-transform duration-300 relative">
             <div class="absolute inset-0 border border-dotted border-gold/40 rounded-full animate-spin-slow scale-110"></div>
             <span class="text-gold font-decorative font-bold text-2xl tracking-wide">K</span>
           </div>
@@ -208,7 +228,7 @@
             <h1 class="font-cinzel font-black text-xl sm:text-2xl text-gold leading-none tracking-widest flex items-center gap-1 gold-text-glow">
               <span th:text="${storeName}">Kanpur Sweet Palace</span>
             </h1>
-            <p class="text-[8px] uppercase tracking-[0.3em] text-gold/60 font-bold mt-1">Authentic Royal Mithai</p>
+            <p class="text-[8px] uppercase tracking-[0.3em] text-gold/60 font-bold mt-1">Imperial Indian Taste</p>
           </div>
         </a>
 
@@ -216,9 +236,9 @@
         <nav class="hidden md:flex space-x-10 items-center">
           <a href="#about" class="text-stone-300 hover:text-gold font-cinzel font-bold text-xs uppercase tracking-widest transition-all hover:tracking-[0.2em] pb-1">Heritage</a>
           <a href="#specialties" class="text-stone-300 hover:text-gold font-cinzel font-bold text-xs uppercase tracking-widest transition-all hover:tracking-[0.2em] pb-1">Specialties</a>
-          <a href="#menu" class="text-stone-300 hover:text-gold font-cinzel font-bold text-xs uppercase tracking-widest transition-all hover:tracking-[0.2em] pb-1">Menu</a>
+          <a href="#menu" class="text-stone-300 hover:text-gold font-cinzel font-bold text-xs uppercase tracking-widest transition-all hover:tracking-[0.2em] pb-1">Catalog</a>
           <a href="#testimonials" class="text-stone-300 hover:text-gold font-cinzel font-bold text-xs uppercase tracking-widest transition-all hover:tracking-[0.2em] pb-1">Reviews</a>
-          <a href="#contact" class="text-stone-300 hover:text-gold font-cinzel font-bold text-xs uppercase tracking-widest transition-all hover:tracking-[0.2em] pb-1">Reserve</a>
+          <a href="#contact" class="text-stone-300 hover:text-gold font-cinzel font-bold text-xs uppercase tracking-widest transition-all hover:tracking-[0.2em] pb-1">Contact</a>
         </nav>
 
         <!-- CTAs -->
@@ -232,7 +252,7 @@
           <a href="https://wa.me/919876543210?text=Hello%20Kanpur%20Sweet%20Palace%2C%20I%20would%20like%20to%20view%20your%20menu%20and%20place%20an%20order." 
              target="_blank"
              th:href="${whatsappUrl}" 
-             class="relative group overflow-hidden bg-gradient-to-r from-gold to-gold-dark hover:from-gold-light hover:to-gold text-obsidian font-black text-xs uppercase tracking-wider py-3.5 px-8 rounded-full shadow-[0_0_25px_rgba(212,175,55,0.35)] transition-all duration-500">
+             class="relative group overflow-hidden bg-gradient-to-r from-gold to-gold-dark hover:from-gold-light hover:to-gold text-obsidian font-black text-xs uppercase tracking-[0.2em] py-4 px-8 rounded-full shadow-[0_0_25px_rgba(212,175,55,0.3)] transition-all duration-500">
             <span class="relative z-10 flex items-center gap-2">
               <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.335-1.662c1.746.953 3.71 1.458 5.704 1.459h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
@@ -258,7 +278,7 @@
       <a href="#specialties" class="block text-stone-300 hover:text-gold font-medium text-lg border-b border-gold/5 pb-2">Specialties</a>
       <a href="#menu" class="block text-stone-300 hover:text-gold font-medium text-lg border-b border-gold/5 pb-2">Menu</a>
       <a href="#testimonials" class="block text-stone-300 hover:text-gold font-medium text-lg border-b border-gold/5 pb-2">Reviews</a>
-      <a href="#contact" class="block text-stone-300 hover:text-gold font-medium text-lg pb-2">Reserve</a>
+      <a href="#contact" class="block text-stone-300 hover:text-gold font-medium text-lg pb-2">Contact Us</a>
       
       <div class="pt-4 flex flex-col space-y-3">
         <a href="tel:+919876543210" class="text-stone-300 flex items-center space-x-2 font-semibold justify-center py-2.5 rounded-full border border-gold/30 hover:bg-maroon-dark/20 transition-colors" th:href="${'tel:' + storePhone}">
@@ -281,15 +301,15 @@
   <main class="flex-grow z-10 relative">
     
     <!-- ==================== HERO SECTION ==================== -->
-    <section class="relative min-h-[calc(100vh-6rem)] flex items-center py-20 overflow-hidden border-b border-gold/10 perspective-space">
+    <section class="relative min-h-[calc(100vh-6rem)] flex items-center py-24 overflow-hidden border-b border-gold/10 perspective-space">
       
       <!-- Ambient Backlights -->
-      <div class="absolute -left-64 top-12 w-[600px] h-[600px] bg-maroon/15 rounded-full blur-[140px] pointer-events-none"></div>
-      <div class="absolute -right-64 bottom-12 w-[600px] h-[600px] bg-gold/5 rounded-full blur-[140px] pointer-events-none"></div>
+      <div class="absolute -left-64 top-12 w-[600px] h-[600px] bg-maroon/20 rounded-full blur-[150px] pointer-events-none"></div>
+      <div class="absolute -right-64 bottom-12 w-[600px] h-[600px] bg-gold/5 rounded-full blur-[150px] pointer-events-none"></div>
       
       <!-- Huge outline background typography -->
-      <div class="absolute inset-x-0 top-1/2 -translate-y-1/2 select-none pointer-events-none text-center hidden lg:block">
-        <h2 class="text-outline font-decorative text-[18vw] font-black leading-none opacity-40 uppercase tracking-widest">MITHAI</h2>
+      <div class="absolute inset-x-0 top-1/2 -translate-y-1/2 select-none pointer-events-none text-center hidden lg:block z-0">
+        <h2 class="text-outline font-decorative text-[19vw] font-black leading-none opacity-40 uppercase tracking-widest">SHAHI</h2>
       </div>
 
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10">
@@ -297,20 +317,20 @@
           
           <!-- Left Column: Typography -->
           <div class="text-center lg:text-left space-y-8 max-w-2xl mx-auto lg:mx-0 3d-scroll-reveal preserve-3d" style="transform: translateZ(80px);">
-            <span class="inline-flex items-center px-5 py-2 rounded-full text-[10px] font-black uppercase tracking-[0.25em] bg-gradient-to-r from-gold/10 to-maroon/15 text-gold border border-gold/20 shadow-[0_0_20px_rgba(212,175,55,0.05)]">
+            <span class="hero-badge inline-flex items-center px-5 py-2 rounded-full text-[10px] font-black uppercase tracking-[0.25em] bg-gradient-to-r from-gold/15 to-maroon/20 text-gold border border-gold/25 shadow-[0_0_20px_rgba(212,175,55,0.05)]">
               ✨ Kanpur's Royal Culinary Crown
             </span>
-            <h1 class="font-cinzel text-5xl sm:text-6xl lg:text-7xl font-black text-white leading-[1.1] tracking-wide relative">
+            <h1 class="hero-title font-cinzel text-5xl sm:text-6xl lg:text-7xl font-black text-white leading-[1.1] tracking-wide relative">
               The Art of <br class="hidden sm:inline">
               <span class="bg-clip-text text-transparent bg-gradient-to-r from-gold via-gold-light to-gold-dark gold-text-glow font-decorative">Pure Luxury</span>
             </h1>
-            <p class="text-stone-400 text-base sm:text-lg leading-relaxed font-light tracking-wide max-w-xl mx-auto lg:mx-0" th:text="${heroSubtitle}">
+            <p class="hero-subtitle text-stone-400 text-base sm:text-lg leading-relaxed font-light tracking-wide max-w-xl mx-auto lg:mx-0" th:text="${heroSubtitle}">
               Step into an imperial sensory space. For fifty years, our master karigars have slow-cooked pure cow ghee delicacies for royalty. Today, we digitize the taste of heritage.
             </p>
             
             <!-- Button Group -->
-            <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-5 pt-4">
-              <a href="#menu" class="w-full sm:w-auto text-center bg-gradient-to-r from-gold via-gold-light to-gold-dark hover:shadow-[0_0_40px_rgba(212,175,55,0.55)] text-obsidian font-black text-xs uppercase tracking-[0.2em] py-4.5 px-10 rounded-full shadow-[0_0_25px_rgba(212,175,55,0.25)] transition-all duration-500 transform hover:-translate-y-1">
+            <div class="hero-ctas flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-5 pt-4">
+              <a href="#menu" class="w-full sm:w-auto text-center bg-gradient-to-r from-gold via-gold-light to-gold-dark hover:shadow-[0_0_40px_rgba(212,175,55,0.55)] text-obsidian font-black text-xs uppercase tracking-[0.2em] py-4 px-10 rounded-full shadow-[0_0_25px_rgba(212,175,55,0.25)] transition-all duration-500 transform hover:-translate-y-1">
                 Enter The Vault
               </a>
               <a href="tel:+919876543210" 
@@ -322,7 +342,7 @@
             </div>
             
             <!-- Quick stats -->
-            <div class="grid grid-cols-3 gap-6 pt-10 border-t border-gold/10 max-w-md mx-auto lg:mx-0">
+            <div class="hero-stats grid grid-cols-3 gap-6 pt-10 border-t border-gold/10 max-w-md mx-auto lg:mx-0">
               <div>
                 <p class="text-3xl font-cinzel font-black text-gold gold-text-glow">1972</p>
                 <p class="text-[8px] text-stone-500 uppercase tracking-[0.2em] font-bold mt-1">Foundation</p>
@@ -338,79 +358,24 @@
             </div>
           </div>
           
-          <!-- Right Column: Interactive 3D Revolving Showcase -->
-          <div class="relative flex flex-col justify-center items-center lg:pl-10 perspective-space py-10 preserve-3d">
+          <!-- Right Column: REAL Three.js WebGL Interactive 3D Canvas -->
+          <div class="relative flex flex-col justify-center items-center lg:pl-10 h-[450px] w-full max-w-lg mx-auto preserve-3d lg:h-[550px]">
             
-            <!-- 3D Decorative Mandala Rings Background -->
-            <div class="absolute w-[450px] h-[450px] border border-gold/5 rounded-full pointer-events-none -z-10 animate-spin-slow scale-110 hidden md:block"></div>
-            <div class="absolute w-[360px] h-[360px] border border-dashed border-gold/15 rounded-full pointer-events-none -z-10 animate-float-slow hidden md:block"></div>
-
-            <!-- Rotating Ring -->
-            <div id="carousel-3d-ring" class="carousel-3d-scene animate-float-3d">
+            <!-- Real WebGL 3D Canvas container -->
+            <div id="three-js-container" class="w-full h-full min-h-[400px] relative z-10 cursor-grab active:cursor-grabbing border border-gold/10 rounded-[3rem] bg-obsidian-card/45 shadow-3xl">
+              <!-- Overlay stats indicator to prove it is a real 3D Canvas -->
+              <div class="absolute top-4 left-6 bg-obsidian/75 border border-gold/30 text-gold text-[9px] font-bold py-1 px-3 rounded-full pointer-events-none uppercase tracking-widest flex items-center gap-1.5 backdrop-blur z-20 shadow-md">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                Real-Time WebGL Render
+              </div>
               
-              <!-- Item 1: Sweet Box -->
-              <div class="carousel-3d-card bg-gradient-to-br from-obsidian-card to-maroon-deep border border-gold/20 rounded-[2.5rem] overflow-hidden p-4 shadow-3xl flex flex-col justify-between" style="transform: rotateY(0deg) translateZ(300px);">
-                <div class="w-full h-[78%] rounded-3xl overflow-hidden bg-stone-900 border border-gold/15 relative">
-                  <img src="images/hero_sweets.png" th:src="@{/images/hero_sweets.png}" alt="Signature Selection" class="w-full h-full object-cover">
-                  <div class="absolute inset-0 bg-gradient-to-t from-obsidian via-transparent to-transparent flex items-end p-5">
-                    <div>
-                      <span class="text-[8px] uppercase font-bold text-gold tracking-[0.25em]">Masterpiece Suite</span>
-                      <h3 class="font-cinzel font-black text-lg text-white mt-1">Shahi Utsav Box</h3>
-                    </div>
-                  </div>
-                </div>
-                <div class="flex items-center justify-between text-xs px-2 pt-1 font-cinzel">
-                  <span class="text-stone-400 font-bold uppercase tracking-wider text-[10px]">Pure Ghee Assortment</span>
-                  <span class="text-gold font-bold font-serif text-sm">₹1,200</span>
-                </div>
+              <div class="absolute bottom-4 right-6 bg-obsidian/75 border border-gold/30 text-[9px] text-stone-400 font-bold py-1 px-3 rounded-full pointer-events-none uppercase tracking-widest z-20 shadow-md">
+                Move Mouse / Drag To Rotate
               </div>
-
-              <!-- Item 2: Kaju Katli -->
-              <div class="carousel-3d-card bg-gradient-to-br from-obsidian-card to-maroon-deep border border-gold/20 rounded-[2.5rem] overflow-hidden p-4 shadow-3xl flex flex-col justify-between" style="transform: rotateY(120deg) translateZ(300px);">
-                <div class="w-full h-[78%] rounded-3xl overflow-hidden bg-stone-900 border border-gold/15 relative">
-                  <img src="images/kaju_katli.png" th:src="@{/images/kaju_katli.png}" alt="Diamond Kaju Katli" class="w-full h-full object-cover">
-                  <div class="absolute inset-0 bg-gradient-to-t from-obsidian via-transparent to-transparent flex items-end p-5">
-                    <div>
-                      <span class="text-[8px] uppercase font-bold text-gold tracking-[0.25em]">Royal Classic</span>
-                      <h3 class="font-cinzel font-black text-lg text-white mt-1">Legendary Kaju Katli</h3>
-                    </div>
-                  </div>
-                </div>
-                <div class="flex items-center justify-between text-xs px-2 pt-1 font-cinzel">
-                  <span class="text-stone-400 font-bold uppercase tracking-wider text-[10px]">Cashew Diamond</span>
-                  <span class="text-gold font-bold font-serif text-sm">₹900/kg</span>
-                </div>
-              </div>
-
-              <!-- Item 3: Laddus -->
-              <div class="carousel-3d-card bg-gradient-to-br from-obsidian-card to-maroon-deep border border-gold/20 rounded-[2.5rem] overflow-hidden p-4 shadow-3xl flex flex-col justify-between" style="transform: rotateY(240deg) translateZ(300px);">
-                <div class="w-full h-[78%] rounded-3xl overflow-hidden bg-stone-900 border border-gold/15 relative">
-                  <img src="images/desi_ghee_laddu.png" th:src="@{/images/desi_ghee_laddu.png}" alt="Desi Ghee Laddus" class="w-full h-full object-cover">
-                  <div class="absolute inset-0 bg-gradient-to-t from-obsidian via-transparent to-transparent flex items-end p-5">
-                    <div>
-                      <span class="text-[8px] uppercase font-bold text-gold tracking-[0.25em]">Hand Rolled Gold</span>
-                      <h3 class="font-cinzel font-black text-lg text-white mt-1">Desi Ghee Laddu</h3>
-                    </div>
-                  </div>
-                </div>
-                <div class="flex items-center justify-between text-xs px-2 pt-1 font-cinzel">
-                  <span class="text-stone-400 font-bold uppercase tracking-wider text-[10px]">Aromatic Motichoor</span>
-                  <span class="text-gold font-bold font-serif text-sm">₹450/kg</span>
-                </div>
-              </div>
-
             </div>
 
-            <!-- Rotating slider control triggers -->
-            <div class="flex space-x-8 mt-12 z-20">
-              <button id="carousel-prev" class="w-14 h-14 rounded-full border border-gold/30 hover:border-gold hover:bg-gold/10 text-gold flex items-center justify-center transition-all bg-obsidian-card shadow-2xl" aria-label="Previous Slide">
-                <i data-lucide="chevron-left" class="w-6 h-6"></i>
-              </button>
-              <button id="carousel-next" class="w-14 h-14 rounded-full border border-gold/30 hover:border-gold hover:bg-gold/10 text-gold flex items-center justify-center transition-all bg-obsidian-card shadow-2xl" aria-label="Next Slide">
-                <i data-lucide="chevron-right" class="w-6 h-6"></i>
-              </button>
-            </div>
-            
+            <!-- Glowing ring backdrop -->
+            <div class="absolute w-[360px] h-[360px] border border-dashed border-gold/10 rounded-full pointer-events-none z-0 animate-spin-slow scale-110"></div>
           </div>
           
         </div>
@@ -1273,14 +1238,45 @@
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       
-      // 1. Initialize Lucide Icons
+      // 1. Simulating Loader Progress
+      let progress = 0;
+      const loaderBar = document.getElementById("loader-bar");
+      const preloader = document.getElementById("preloader");
+      
+      // GSAP Timeline setup for Hero Section (starts paused)
+      const tl = gsap.timeline({ paused: true, defaults: { ease: "power4.out" } });
+      tl.from(".hero-badge", { y: -30, opacity: 0, duration: 1.2 })
+        .from(".hero-title", { y: 50, opacity: 0, duration: 1.5, delay: -0.9 })
+        .from(".hero-subtitle", { y: 30, opacity: 0, duration: 1.2, delay: -0.9 })
+        .from(".hero-ctas a", { scale: 0.85, opacity: 0, stagger: 0.15, duration: 1.0, delay: -0.8 })
+        .from(".hero-stats div", { y: 25, opacity: 0, stagger: 0.15, duration: 1.0, delay: -0.8 })
+        .from("#three-js-container", { scale: 0.8, opacity: 0, duration: 1.8, ease: "elastic.out(1, 0.75)", delay: -1.2 });
+
+      const interval = setInterval(() => {
+        progress += Math.floor(Math.random() * 15) + 5;
+        if (progress >= 100) {
+          progress = 100;
+          clearInterval(interval);
+          loaderBar.style.width = "100%";
+          setTimeout(() => {
+            preloader.classList.add("opacity-0", "pointer-events-none");
+            preloader.style.transform = "translateY(-100vh)";
+            // Play GSAP intro timeline
+            tl.play();
+          }, 500);
+        } else {
+          loaderBar.style.width = `${progress}%`;
+        }
+      }, 40);
+
+      // 2. Initialize Lucide Icons
       lucide.createIcons();
 
-      // Set current year
+      // Set current year in footer
       const yearEl = document.getElementById("year");
       if (yearEl) yearEl.textContent = new Date().getFullYear();
 
-      // 2. Mobile Menu Controller
+      // 3. Mobile Menu Controller
       const mobileMenuBtn = document.getElementById("mobile-menu-btn");
       const mobileMenu = document.getElementById("mobile-menu");
       const menuIcon = document.getElementById("menu-icon");
@@ -1297,7 +1293,36 @@
         lucide.createIcons();
       });
 
-      // 3. Scroll Progress Indicator
+      // 4. Lenis Smooth Scrolling Engine
+      const lenis = new Lenis({
+        duration: 1.3,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        direction: 'vertical',
+        gestureDirection: 'vertical',
+        smooth: true,
+        mouseMultiplier: 1,
+        smoothTouch: false,
+      });
+
+      function raf(time) {
+        lenis.raf(time);
+        requestAnimationFrame(raf);
+      }
+      requestAnimationFrame(raf);
+
+      // Link clicks lenis scroll integration
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+          e.preventDefault();
+          const targetId = this.getAttribute('href');
+          const target = document.querySelector(targetId);
+          if (target) {
+            lenis.scrollTo(target, { offset: -80 });
+          }
+        });
+      });
+
+      // 5. Scroll Progress Indicator
       const scrollBar = document.getElementById("scroll-progress");
       window.addEventListener("scroll", () => {
         const totalScroll = document.documentElement.scrollHeight - window.innerHeight;
@@ -1307,95 +1332,117 @@
         }
       });
 
-      // 4. 3D Revolving Showcase Carousel
-      const carouselRing = document.getElementById("carousel-3d-ring");
-      const nextBtn = document.getElementById("carousel-next");
-      const prevBtn = document.getElementById("carousel-prev");
-      let currentRotation = 0;
-
-      const rotateCarousel = (direction) => {
-        currentRotation += direction * 120;
-        carouselRing.style.transform = `rotateY(${currentRotation}deg)`;
-      };
-
-      nextBtn.addEventListener("click", () => rotateCarousel(-1));
-      prevBtn.addEventListener("click", () => rotateCarousel(1));
-
-      // Drag mechanics for the 3D ring
-      let isDragging = false;
-      let startX = 0;
-      let previousRotation = 0;
-
-      carouselRing.addEventListener("mousedown", (e) => {
-        isDragging = true;
-        startX = e.clientX;
-        previousRotation = currentRotation;
-        carouselRing.style.transition = "none";
-      });
-
-      window.addEventListener("mousemove", (e) => {
-        if (!isDragging) return;
-        const deltaX = e.clientX - startX;
-        const dragRotation = previousRotation + (deltaX * 0.3);
-        carouselRing.style.transform = `rotateY(${dragRotation}deg)`;
-      });
-
-      window.addEventListener("mouseup", (e) => {
-        if (!isDragging) return;
-        isDragging = false;
-        carouselRing.style.transition = "transform 1.2s cubic-bezier(0.16, 1, 0.3, 1)";
-        const deltaX = e.clientX - startX;
-        const relativeMove = Math.round((deltaX * 0.3) / 120);
-        currentRotation = previousRotation + (relativeMove * 120);
-        carouselRing.style.transform = `rotateY(${currentRotation}deg)`;
-      });
-
-      // 5. Custom Trailing Cursor Controller (LERP)
+      // 6. Custom Trailing Magnetic Cursor
       const cursorDot = document.getElementById("custom-cursor-dot");
       const cursorRing = document.getElementById("custom-cursor-ring");
+      const cursorText = cursorRing.querySelector(".cursor-text");
       
       let mouseX = 0;
       let mouseY = 0;
       let ringX = 0;
       let ringY = 0;
 
-      window.addEventListener("mousemove", (e) => {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
-        
-        cursorDot.style.opacity = "1";
-        cursorRing.style.opacity = "1";
+      if (window.innerWidth >= 1024) {
+        window.addEventListener("mousemove", (e) => {
+          mouseX = e.clientX;
+          mouseY = e.clientY;
+          
+          cursorDot.style.opacity = "1";
+          cursorRing.style.opacity = "1";
 
-        cursorDot.style.left = `${mouseX}px`;
-        cursorDot.style.top = `${mouseY}px`;
+          cursorDot.style.left = `${mouseX}px`;
+          cursorDot.style.top = `${mouseY}px`;
+        });
+
+        const animateCursor = () => {
+          ringX += (mouseX - ringX) * 0.15;
+          ringY += (mouseY - ringY) * 0.15;
+          
+          cursorRing.style.left = `${ringX}px`;
+          cursorRing.style.top = `${ringY}px`;
+          
+          requestAnimationFrame(animateCursor);
+        };
+        animateCursor();
+
+        // Magnetic hover snaps
+        const snapElements = document.querySelectorAll("a, button, select, input, textarea, .menu-tab-btn");
+        snapElements.forEach(el => {
+          el.addEventListener("mouseenter", () => {
+            cursorRing.classList.add("w-14", "h-14", "border-gold", "bg-gold/15");
+            cursorRing.classList.remove("w-10", "h-10", "border-gold/40");
+            cursorDot.classList.add("scale-150", "bg-gold-light");
+          });
+          el.addEventListener("mouseleave", () => {
+            cursorRing.classList.add("w-10", "h-10", "border-gold/40");
+            cursorRing.classList.remove("w-14", "h-14", "border-gold", "bg-gold/15");
+            cursorDot.classList.remove("scale-150", "bg-gold-light");
+          });
+        });
+
+        // 3D Canvas hover labels
+        const threeContainerEl = document.getElementById("three-js-container");
+        threeContainerEl.addEventListener("mouseenter", () => {
+          cursorRing.classList.add("w-20", "h-20", "border-gold", "bg-gold/10");
+          cursorRing.classList.remove("w-10", "h-10", "border-gold/40");
+          cursorText.classList.remove("opacity-0", "scale-50");
+          cursorText.classList.add("opacity-100", "scale-100");
+          cursorText.textContent = "Drag";
+        });
+        threeContainerEl.addEventListener("mouseleave", () => {
+          cursorRing.classList.add("w-10", "h-10", "border-gold/40");
+          cursorRing.classList.remove("w-20", "h-20", "border-gold", "bg-gold/10");
+          cursorText.classList.add("opacity-0", "scale-50");
+          cursorText.classList.remove("opacity-100", "scale-100");
+        });
+
+        // Flip Card hover cursor
+        const flipCardContainers = document.querySelectorAll(".flip-card-container");
+        flipCardContainers.forEach(card => {
+          card.addEventListener("mouseenter", () => {
+            cursorRing.classList.add("w-16", "h-16", "border-gold", "bg-gold/10");
+            cursorRing.classList.remove("w-10", "h-10", "border-gold/40");
+            cursorText.classList.remove("opacity-0", "scale-50");
+            cursorText.classList.add("opacity-100", "scale-100");
+            cursorText.textContent = "Flip";
+          });
+          card.addEventListener("mouseleave", () => {
+            cursorRing.classList.add("w-10", "h-10", "border-gold/40");
+            cursorRing.classList.remove("w-16", "h-16", "border-gold", "bg-gold/10");
+            cursorText.classList.add("opacity-0", "scale-50");
+            cursorText.classList.remove("opacity-100", "scale-100");
+          });
+        });
+      }
+
+      // 7. Ambient Floating Background Orbs Animations
+      gsap.to(".orb-1", {
+        x: '12vw',
+        y: '8vh',
+        duration: 25,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut"
+      });
+      gsap.to(".orb-2", {
+        x: '-10vw',
+        y: '-14vh',
+        duration: 32,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut"
+      });
+      gsap.to(".orb-3", {
+        x: '-15vw',
+        y: '10vh',
+        duration: 22,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut"
       });
 
-      const animateCursor = () => {
-        ringX += (mouseX - ringX) * 0.15;
-        ringY += (mouseY - ringY) * 0.15;
-        
-        cursorRing.style.left = `${ringX}px`;
-        cursorRing.style.top = `${ringY}px`;
-        
-        requestAnimationFrame(animateCursor);
-      };
-      animateCursor();
-
-      const interactiveElements = document.querySelectorAll("a, button, select, input, textarea, .flip-card-container");
-      interactiveElements.forEach(el => {
-        el.addEventListener("mouseenter", () => {
-          cursorRing.classList.add("w-14", "h-14", "border-gold", "bg-gold/15");
-          cursorRing.classList.remove("w-10", "h-10", "border-gold/30");
-        });
-        el.addEventListener("mouseleave", () => {
-          cursorRing.classList.add("w-10", "h-10", "border-gold/30");
-          cursorRing.classList.remove("w-14", "h-14", "border-gold", "bg-gold/15");
-        });
-      });
-
-      // 6. Holographic Tilt Glare Effect (front and back of tilt elements)
+      // 8. Holographic Tilt Glare Effect (front and back of tilt elements)
       const tiltElements = document.querySelectorAll(".tilt-card, .flip-card-front, .flip-card-back");
-      
       tiltElements.forEach(card => {
         card.addEventListener("mousemove", (e) => {
           const rect = card.getBoundingClientRect();
@@ -1405,13 +1452,12 @@
           const centerX = rect.width / 2;
           const centerY = rect.height / 2;
           
-          const rotateX = ((centerY - y) / centerY) * 15;
-          const rotateY = ((x - centerX) / centerX) * 15;
+          const rotateX = ((centerY - y) / centerY) * 12;
+          const rotateY = ((x - centerX) / centerX) * 12;
           
-          // Apply rotation only for elements that aren't inside the flipping structure
           if (card.classList.contains("tilt-card")) {
-            card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02) translateZ(15px)`;
-            card.style.boxShadow = "0 35px 60px -15px rgba(212,175,55,0.25)";
+            card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02) translateZ(20px)`;
+            card.style.boxShadow = "0 30px 50px -15px rgba(212,175,55,0.25)";
           }
           
           card.style.setProperty('--mouse-x', `${(x / rect.width) * 100}%`);
@@ -1426,7 +1472,43 @@
         });
       });
 
-      // 7. Interactive Menu Categories Filters
+      // 9. GSAP Section Header & Scroll Animations
+      gsap.registerPlugin(ScrollTrigger);
+
+      // Section Titles Animations
+      const sections = document.querySelectorAll("section");
+      sections.forEach(sec => {
+        const header = sec.querySelector("h2");
+        const line = sec.querySelector(".h-0.5");
+        if (header) {
+          gsap.from(header, {
+            scrollTrigger: {
+              trigger: sec,
+              start: "top 80%",
+              toggleActions: "play none none none"
+            },
+            y: 35,
+            opacity: 0,
+            duration: 1.2,
+            ease: "power3.out"
+          });
+        }
+        if (line) {
+          gsap.from(line, {
+            scrollTrigger: {
+              trigger: sec,
+              start: "top 85%",
+              toggleActions: "play none none none"
+            },
+            scaleX: 0,
+            transformOrigin: "center center",
+            duration: 1.5,
+            ease: "power2.out"
+          });
+        }
+      });
+
+      // 10. Interactive Menu Categories Filters
       const tabButtons = document.querySelectorAll(".menu-tab-btn");
       const menuCards = document.querySelectorAll(".menu-card");
 
@@ -1445,14 +1527,14 @@
           menuCards.forEach(card => {
             if (filterVal === "all") {
               card.style.display = "flex";
-              setTimeout(() => { card.style.opacity = "1"; card.style.transform = "scale(1) translateZ(0px)"; }, 50);
+              setTimeout(() => { card.style.opacity = "1"; card.style.transform = "scale(1)"; }, 50);
             } else {
               if (card.classList.contains(filterVal)) {
                 card.style.display = "flex";
-                setTimeout(() => { card.style.opacity = "1"; card.style.transform = "scale(1) translateZ(0px)"; }, 50);
+                setTimeout(() => { card.style.opacity = "1"; card.style.transform = "scale(1)"; }, 50);
               } else {
                 card.style.opacity = "0";
-                card.style.transform = "scale(0.9) translateZ(-50px)";
+                card.style.transform = "scale(0.9)";
                 setTimeout(() => { card.style.display = "none"; }, 200);
               }
             }
@@ -1460,7 +1542,7 @@
         });
       });
 
-      // 8. Modal & Counter
+      // 11. Modal & Counter Controls
       const modal = document.getElementById("quick-view-modal");
       const modalTitle = document.getElementById("modal-title");
       const modalPriceVal = document.getElementById("modal-price-val");
@@ -1522,12 +1604,11 @@ Please confirm my order. Thank you!`;
         modalWhatsappCta.href = `https://wa.me/919876543210?text=${encodedMsg}`;
       };
 
-      // Attaching listeners to quick view buttons
       const attachQuickViewListeners = () => {
         const quickViewBtns = document.querySelectorAll(".quick-view-btn");
         quickViewBtns.forEach(btn => {
           btn.addEventListener("click", (e) => {
-            e.stopPropagation(); // Avoid triggering card flips
+            e.stopPropagation(); 
             const name = btn.getAttribute("data-name");
             const price = btn.getAttribute("data-price");
             const image = btn.getAttribute("data-image");
@@ -1563,7 +1644,7 @@ Please confirm my order. Thank you!`;
         if (e.key === "Escape") closeModal();
       });
 
-      // 9. Intersection Observer (Scroll 3D Slide In)
+      // 12. Intersection Observer (Scroll 3D Slide In)
       const scrollReveals = document.querySelectorAll(".3d-scroll-reveal, .tilt-card-container, .flip-card-container");
       
       const revealCallback = (entries, observer) => {
@@ -1589,11 +1670,11 @@ Please confirm my order. Thank you!`;
         revealObserver.observe(el);
       });
 
-      // 10. Background Honey/Gold Dust Particle Canvas
+      // 13. Custom Golden Sparkles Background Canvas
       const canvas = document.getElementById("particles-canvas");
       const ctx = canvas.getContext("2d");
       let particlesArray = [];
-      const numberOfParticles = 75;
+      const numberOfParticles = 80;
 
       const setCanvasSize = () => {
         canvas.width = window.innerWidth;
@@ -1621,7 +1702,7 @@ Please confirm my order. Thank you!`;
           if (this.y < 0) this.y = canvas.height;
           if (this.y > canvas.height) this.y = 0;
 
-          // Push pull logic
+          // Push pull from mouse
           const dx = mouseX - this.x;
           const dy = mouseY - this.y;
           const distance = Math.sqrt(dx * dx + dy * dy);
@@ -1682,6 +1763,262 @@ Please confirm my order. Thank you!`;
         requestAnimationFrame(animateParticles);
       };
       animateParticles();
+
+      // ====================================================================
+      // 14. THREE.JS REAL 3D BESPOKE WEBGL SWEETS SHOWCASE
+      // ====================================================================
+      const threeContainer = document.getElementById("three-js-container");
+      
+      // Setup Scene, Camera, Renderer
+      const scene = new THREE.Scene();
+      
+      const camera = new THREE.PerspectiveCamera(45, threeContainer.clientWidth / threeContainer.clientHeight, 0.1, 100);
+      camera.position.z = 6.2;
+
+      const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.setSize(threeContainer.clientWidth, threeContainer.clientHeight);
+      renderer.shadowMap.enabled = true;
+      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+      renderer.setClearColor(0x000000, 0); 
+      threeContainer.appendChild(renderer.domElement);
+
+      // Thali Group
+      const thaliGroup = new THREE.Group();
+      scene.add(thaliGroup);
+
+      // Ornate Brass Platter
+      const plateBaseGeo = new THREE.CylinderGeometry(2.0, 2.0, 0.08, 64);
+      const brassMaterial = new THREE.MeshStandardMaterial({
+        color: 0xD4AF37,
+        metalness: 0.95,
+        roughness: 0.18,
+        bumpScale: 0.02
+      });
+      const plateBase = new THREE.Mesh(plateBaseGeo, brassMaterial);
+      plateBase.position.y = -0.04;
+      plateBase.receiveShadow = true;
+      thaliGroup.add(plateBase);
+
+      const plateLipGeo = new THREE.TorusGeometry(2.0, 0.08, 16, 100);
+      const plateLip = new THREE.Mesh(plateLipGeo, brassMaterial);
+      plateLip.rotation.x = Math.PI / 2;
+      plateLip.position.y = 0.02;
+      plateLip.castShadow = true;
+      thaliGroup.add(plateLip);
+
+      // Materials for sweets
+      const silverFoilMaterial = new THREE.MeshStandardMaterial({
+        color: 0xffffff,
+        metalness: 0.98,
+        roughness: 0.05
+      });
+
+      const cashewPasteMaterial = new THREE.MeshStandardMaterial({
+        color: 0xf3ecd8,
+        roughness: 0.8,
+        metalness: 0.0
+      });
+
+      // 1. Kaju Katli (Diamond Rhombus Extruded)
+      const katliShape = new THREE.Shape();
+      katliShape.moveTo(0, 0.55);
+      katliShape.lineTo(0.9, 0);
+      katliShape.lineTo(0, -0.55);
+      katliShape.lineTo(-0.9, 0);
+      katliShape.closePath();
+
+      const extrudeSettings = {
+        depth: 0.16,
+        bevelEnabled: true,
+        bevelSegments: 4,
+        steps: 1,
+        bevelSize: 0.03,
+        bevelThickness: 0.03
+      };
+      const katliGeo = new THREE.ExtrudeGeometry(katliShape, extrudeSettings);
+      const katli = new THREE.Mesh(katliGeo, [silverFoilMaterial, cashewPasteMaterial]);
+      katli.rotation.x = -Math.PI / 2;
+      katli.position.set(-0.6, 0.06, 0.3);
+      katli.scale.set(0.8, 0.8, 0.8);
+      katli.castShadow = true;
+      katli.receiveShadow = true;
+      thaliGroup.add(katli);
+
+      // 2. Motichoor Laddu (Procedural Orange Grain Sphere)
+      const bumpCanvas = document.createElement('canvas');
+      bumpCanvas.width = 128;
+      bumpCanvas.height = 128;
+      const bCtx = bumpCanvas.getContext('2d');
+      bCtx.fillStyle = '#808080';
+      bCtx.fillRect(0, 0, 128, 128);
+      for (let i = 0; i < 1500; i++) {
+        const x = Math.random() * 128;
+        const y = Math.random() * 128;
+        const r = Math.random() * 2 + 1;
+        const val = Math.floor(Math.random() * 255);
+        bCtx.fillStyle = `rgb(${val},${val},${val})`;
+        bCtx.beginPath();
+        bCtx.arc(x, y, r, 0, Math.PI*2);
+        bCtx.fill();
+      }
+      const ladduBumpMap = new THREE.CanvasTexture(bumpCanvas);
+      ladduBumpMap.wrapS = THREE.RepeatWrapping;
+      ladduBumpMap.wrapT = THREE.RepeatWrapping;
+      ladduBumpMap.repeat.set(4, 4);
+
+      const ladduGeo = new THREE.SphereGeometry(0.42, 32, 32);
+      const ladduMaterial = new THREE.MeshStandardMaterial({
+        color: 0xff7700,
+        roughness: 0.75,
+        metalness: 0.1,
+        bumpMap: ladduBumpMap,
+        bumpScale: 0.05
+      });
+      const laddu = new THREE.Mesh(ladduGeo, ladduMaterial);
+      laddu.position.set(0.6, 0.42, -0.2);
+      laddu.castShadow = true;
+      laddu.receiveShadow = true;
+      thaliGroup.add(laddu);
+
+      // Tiny vark foil flakes on Laddu
+      for (let i = 0; i < 8; i++) {
+        const flakeGeo = new THREE.BoxGeometry(0.04, 0.04, 0.005);
+        const flake = new THREE.Mesh(flakeGeo, silverFoilMaterial);
+        const phi = Math.acos(2 * Math.random() - 1);
+        const theta = Math.random() * Math.PI * 2;
+        const radius = 0.415;
+        flake.position.x = 0.6 + radius * Math.sin(phi) * Math.cos(theta);
+        flake.position.y = 0.42 + radius * Math.sin(phi) * Math.sin(theta);
+        flake.position.z = -0.2 + radius * Math.cos(phi);
+        flake.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, 0);
+        thaliGroup.add(flake);
+      }
+
+      // 3. Cardamom Peda
+      const pedaGeo = new THREE.SphereGeometry(0.45, 32, 16);
+      const pedaMaterial = new THREE.MeshStandardMaterial({
+        color: 0xeedca5, 
+        roughness: 0.85,
+        metalness: 0.05
+      });
+      const peda = new THREE.Mesh(pedaGeo, pedaMaterial);
+      peda.scale.set(1.0, 0.55, 1.0);
+      peda.position.set(-0.3, 0.23, -0.5);
+      peda.castShadow = true;
+      peda.receiveShadow = true;
+      thaliGroup.add(peda);
+
+      // Pistachio sliver
+      const pistGeo = new THREE.BoxGeometry(0.12, 0.02, 0.06);
+      const pistMaterial = new THREE.MeshStandardMaterial({
+        color: 0x5a8f35, 
+        roughness: 0.8
+      });
+      const pist = new THREE.Mesh(pistGeo, pistMaterial);
+      pist.position.set(-0.3, 0.42, -0.5);
+      pist.rotation.set(0.1, Math.random(), 0.1);
+      pist.castShadow = true;
+      thaliGroup.add(pist);
+
+      // Lights configuration
+      const ambientLight = new THREE.AmbientLight(0xffffff, 0.15);
+      scene.add(ambientLight);
+
+      const mainWarmLight = new THREE.DirectionalLight(0xfff3d1, 2.2);
+      mainWarmLight.position.set(5, 8, 5);
+      mainWarmLight.castShadow = true;
+      mainWarmLight.shadow.mapSize.width = 1024;
+      mainWarmLight.shadow.mapSize.height = 1024;
+      mainWarmLight.shadow.bias = -0.001;
+      scene.add(mainWarmLight);
+
+      const crimsonFillLight = new THREE.DirectionalLight(0x800020, 1.5);
+      crimsonFillLight.position.set(-5, -3, 2);
+      scene.add(crimsonFillLight);
+
+      const mouseSpotlight = new THREE.PointLight(0xffffff, 2.5, 12);
+      mouseSpotlight.position.set(0, 0, 4);
+      scene.add(mouseSpotlight);
+
+      thaliGroup.rotation.x = 0.52; 
+      thaliGroup.rotation.y = -0.4;
+
+      let isThreeDragging = false;
+      let prevMouseX = 0;
+      let prevMouseY = 0;
+      let mouseRelativeX = 0;
+      let mouseRelativeY = 0;
+
+      threeContainer.addEventListener("mousedown", (e) => {
+        isThreeDragging = true;
+        prevMouseX = e.clientX;
+        prevMouseY = e.clientY;
+      });
+
+      window.addEventListener("mousemove", (e) => {
+        const rect = threeContainer.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const threeX = ((x / threeContainer.clientWidth) * 2 - 1) * 3.5;
+        const threeY = -((y / threeContainer.clientHeight) * 2 - 1) * 3.5;
+        mouseSpotlight.position.set(threeX, threeY, 3.0);
+
+        if (isThreeDragging) {
+          const deltaX = e.clientX - prevMouseX;
+          const deltaY = e.clientY - prevMouseY;
+          thaliGroup.rotation.y += deltaX * 0.008;
+          thaliGroup.rotation.x += deltaY * 0.008;
+          prevMouseX = e.clientX;
+          prevMouseY = e.clientY;
+        } else {
+          mouseRelativeX = (e.clientX - window.innerWidth / 2) * 0.0004;
+          mouseRelativeY = (e.clientY - window.innerHeight / 2) * 0.0004;
+        }
+      });
+
+      window.addEventListener("mouseup", () => {
+        isThreeDragging = false;
+      });
+
+      threeContainer.addEventListener("touchmove", (e) => {
+        if (e.touches.length === 1) {
+          const touch = e.touches[0];
+          const rect = threeContainer.getBoundingClientRect();
+          const x = touch.clientX - rect.left;
+          const y = touch.clientY - rect.top;
+          const threeX = ((x / threeContainer.clientWidth) * 2 - 1) * 3.5;
+          const threeY = -((y / threeContainer.clientHeight) * 2 - 1) * 3.5;
+          mouseSpotlight.position.set(threeX, threeY, 3.0);
+
+          thaliGroup.rotation.y += 0.015;
+          thaliGroup.rotation.x += 0.008;
+        }
+      });
+
+      const clock = new THREE.Clock();
+      const tick = () => {
+        const elapsedTime = clock.getElapsedTime();
+
+        if (!isThreeDragging) {
+          thaliGroup.rotation.y = -0.4 + elapsedTime * 0.12;
+          thaliGroup.rotation.y += (mouseRelativeX * 0.5);
+          thaliGroup.rotation.x = 0.52 + (mouseRelativeY * 0.5);
+        }
+
+        thaliGroup.position.y = Math.sin(elapsedTime * 1.5) * 0.1;
+
+        renderer.render(scene, camera);
+        requestAnimationFrame(tick);
+      };
+      tick();
+
+      const handleResize = () => {
+        camera.aspect = threeContainer.clientWidth / threeContainer.clientHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(threeContainer.clientWidth, threeContainer.clientHeight);
+      };
+      window.addEventListener("resize", handleResize);
 
     });
   </script>
