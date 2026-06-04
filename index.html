@@ -1,0 +1,1217 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title th:text="${pageTitle}">Kanpur Sweet Palace | Authentic Mithai & Snacks Since 1972</title>
+  <meta name="description" content="Savor the legendary taste of Kanpur's authentic sweets made with pure desi ghee. Order premium Kaju Katli, Motichoor Laddus, and samosas online." th:content="${pageDescription}">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <!-- Custom Tailwind Configuration -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            maroon: {
+              DEFAULT: '#800020',
+              dark: '#5a0016',
+              light: '#a61c3c',
+            },
+            gold: {
+              DEFAULT: '#D4AF37',
+              dark: '#b39028',
+              light: '#e5c358',
+            },
+            cream: {
+              DEFAULT: '#FDFBF7',
+              dark: '#f3ece0',
+            }
+          },
+          fontFamily: {
+            serif: ['Playfair Display', 'serif'],
+            sans: ['Inter', 'sans-serif'],
+          },
+          animation: {
+            'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            'float': 'float 6s ease-in-out infinite',
+          },
+          keyframes: {
+            float: {
+              '0%, 100%': { transform: 'translateY(0)' },
+              '50%': { transform: 'translateY(-15px)' },
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .glassmorphism {
+        background: rgba(253, 251, 247, 0.85);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+      }
+      .bg-pattern {
+        background-color: #FDFBF7;
+        background-image: radial-gradient(rgba(212, 175, 55, 0.08) 1px, transparent 0);
+        background-size: 24px 24px;
+      }
+      .gold-gradient-border {
+        border-image: linear-gradient(to right, #D4AF37, #800020, #D4AF37) 1;
+      }
+    }
+  </style>
+</head>
+<body class="bg-cream font-sans text-stone-800 bg-pattern min-h-screen flex flex-col justify-between overflow-x-hidden">
+
+  <!-- ==================== HEADER & NAVIGATION ==================== -->
+  <header class="sticky top-0 z-40 w-full border-b border-gold/15 glassmorphism transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-20">
+        
+        <!-- Logo -->
+        <a href="#" class="flex items-center space-x-3 group">
+          <div class="w-12 h-12 bg-maroon rounded-full flex items-center justify-center border-2 border-gold shadow-md transform group-hover:rotate-12 transition-transform duration-300">
+            <span class="text-gold font-serif font-bold text-xl">K</span>
+          </div>
+          <div>
+            <h1 class="font-serif font-bold text-xl sm:text-2xl text-maroon leading-tight tracking-wide flex items-center gap-1">
+              <span th:text="${storeName}">Kanpur Sweet Palace</span>
+            </h1>
+            <p class="text-[10px] uppercase tracking-widest text-gold font-semibold -mt-1">Legacy of Pure Taste</p>
+          </div>
+        </a>
+
+        <!-- Desktop Navigation Links -->
+        <nav class="hidden md:flex space-x-8 items-center">
+          <a href="#about" class="text-maroon/90 hover:text-maroon font-medium transition-colors hover:border-b-2 hover:border-gold pb-1">Our Story</a>
+          <a href="#specialties" class="text-maroon/90 hover:text-maroon font-medium transition-colors hover:border-b-2 hover:border-gold pb-1">Specialties</a>
+          <a href="#menu" class="text-maroon/90 hover:text-maroon font-medium transition-colors hover:border-b-2 hover:border-gold pb-1">Menu</a>
+          <a href="#testimonials" class="text-maroon/90 hover:text-maroon font-medium transition-colors hover:border-b-2 hover:border-gold pb-1">Reviews</a>
+          <a href="#contact" class="text-maroon/90 hover:text-maroon font-medium transition-colors hover:border-b-2 hover:border-gold pb-1">Contact Us</a>
+        </nav>
+
+        <!-- CTAs -->
+        <div class="hidden lg:flex items-center space-x-4">
+          <a href="tel:+919876543210" class="text-maroon hover:text-maroon-light flex items-center space-x-1 font-semibold transition-colors" th:href="${'tel:' + storePhone}">
+            <i data-lucide="phone" class="w-4 h-4 text-gold"></i>
+            <span th:text="${storePhone}">+91 98765 43210</span>
+          </a>
+          <!-- Pulsing WhatsApp Order CTA -->
+          <a href="https://wa.me/919876543210?text=Hello%20Kanpur%20Sweet%20Palace%2C%20I%20would%20like%20to%20view%20your%20menu%20and%20place%20an%20order." 
+             target="_blank"
+             th:href="${whatsappUrl}" 
+             class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-5 rounded-full flex items-center space-x-2 shadow-lg shadow-emerald-600/20 transform hover:-translate-y-0.5 transition-all duration-300 animate-pulse-slow">
+            <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.335-1.662c1.746.953 3.71 1.458 5.704 1.459h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+            </svg>
+            <span>Order via WhatsApp</span>
+          </a>
+        </div>
+
+        <!-- Mobile menu button -->
+        <div class="md:hidden flex items-center">
+          <button id="mobile-menu-btn" type="button" class="text-maroon hover:text-maroon-light focus:outline-none p-2 rounded-lg border border-maroon/20 hover:bg-cream-dark transition-colors" aria-label="Toggle menu">
+            <i data-lucide="menu" id="menu-icon" class="w-6 h-6"></i>
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Mobile Menu Drawer (Hidden by default) -->
+    <div id="mobile-menu" class="hidden md:hidden border-t border-gold/10 bg-cream py-4 px-6 space-y-4 shadow-xl">
+      <a href="#about" class="block text-maroon font-medium text-lg border-b border-stone-200 pb-2">Our Story</a>
+      <a href="#specialties" class="block text-maroon font-medium text-lg border-b border-stone-200 pb-2">Specialties</a>
+      <a href="#menu" class="block text-maroon font-medium text-lg border-b border-stone-200 pb-2">Menu</a>
+      <a href="#testimonials" class="block text-maroon font-medium text-lg border-b border-stone-200 pb-2">Reviews</a>
+      <a href="#contact" class="block text-maroon font-medium text-lg pb-2">Contact Us</a>
+      
+      <div class="pt-4 flex flex-col space-y-3">
+        <a href="tel:+919876543210" class="text-maroon flex items-center space-x-2 font-semibold justify-center py-2.5 rounded-full border border-maroon/30 hover:bg-cream-dark transition-colors" th:href="${'tel:' + storePhone}">
+          <i data-lucide="phone" class="w-5 h-5 text-gold"></i>
+          <span th:text="${storePhone}">+91 98765 43210</span>
+        </a>
+        <a href="https://wa.me/919876543210?text=Hello%20Kanpur%20Sweet%20Palace%2C%20I%20would%20like%20to%20view%20your%20menu%20and%20place%20an%20order." 
+           target="_blank"
+           th:href="${whatsappUrl}" 
+           class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-5 rounded-full flex items-center justify-center space-x-2 shadow-lg shadow-emerald-600/25">
+          <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.335-1.662c1.746.953 3.71 1.458 5.704 1.459h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+          </svg>
+          <span>Order via WhatsApp</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-grow">
+    
+    <!-- ==================== HERO SECTION ==================== -->
+    <section class="relative min-h-[calc(100vh-5rem)] flex items-center py-16 md:py-24 overflow-hidden bg-gradient-to-br from-cream via-cream to-amber-50">
+      
+      <!-- Decorative gold background ring -->
+      <div class="absolute -right-32 top-10 w-[600px] h-[600px] border border-gold/10 rounded-full pointer-events-none hidden lg:block"></div>
+      <div class="absolute -right-16 top-24 w-[450px] h-[450px] border border-gold/20 rounded-full pointer-events-none hidden lg:block animate-pulse-slow"></div>
+      
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 items-center">
+          
+          <!-- Left Column: Copy & CTAs -->
+          <div class="text-center lg:text-left space-y-6 max-w-2xl mx-auto lg:mx-0">
+            <span class="inline-flex items-center px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider bg-maroon/10 text-maroon border border-maroon/15 shadow-sm">
+              ✨ Kanpur's Authentic Mithai Heritage
+            </span>
+            <h1 class="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold text-maroon leading-tight">
+              Authentic <span class="text-gold font-serif">Kanpur Sweets</span>, Crafted in Pure Desi Ghee
+            </h1>
+            <p class="text-stone-600 text-base sm:text-lg leading-relaxed" th:text="${heroSubtitle}">
+              For over 50 years, Kanpur Sweet Palace has been sweetening your festivals, celebrations, and daily moments with the finest handmade traditional Indian delicacies. Cooked by master karigars with pure ingredients, hygiene, and love.
+            </p>
+            
+            <!-- Button Group -->
+            <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-4">
+              <a href="#menu" class="w-full sm:w-auto text-center bg-maroon hover:bg-maroon-dark text-white font-bold py-4 px-8 rounded-full shadow-lg shadow-maroon/20 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5">
+                Explore Our Menu
+              </a>
+              <a href="tel:+919876543210" 
+                 th:href="${'tel:' + storePhone}" 
+                 class="w-full sm:w-auto text-center border-2 border-maroon hover:bg-maroon hover:text-white text-maroon font-bold py-3.5 px-8 rounded-full transition-all duration-300 flex items-center justify-center space-x-2">
+                <i data-lucide="phone" class="w-5 h-5"></i>
+                <span>Call Store</span>
+              </a>
+            </div>
+            
+            <!-- Quick stats / trust elements -->
+            <div class="grid grid-cols-3 gap-4 pt-8 border-t border-stone-200">
+              <div>
+                <p class="text-3xl font-serif font-bold text-maroon">50+</p>
+                <p class="text-xs text-stone-500 uppercase tracking-wider font-semibold">Years of Legacy</p>
+              </div>
+              <div>
+                <p class="text-3xl font-serif font-bold text-maroon">100%</p>
+                <p class="text-xs text-stone-500 uppercase tracking-wider font-semibold">Pure Desi Ghee</p>
+              </div>
+              <div>
+                <p class="text-3xl font-serif font-bold text-maroon">30k+</p>
+                <p class="text-xs text-stone-500 uppercase tracking-wider font-semibold">Happy Kanpurites</p>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Right Column: Premium Sweets Box Showcase -->
+          <div class="relative flex justify-center items-center lg:pl-8">
+            <div class="absolute inset-0 bg-gradient-to-tr from-gold/15 to-transparent rounded-full blur-3xl w-80 h-80 mx-auto pointer-events-none"></div>
+            <!-- Frame/Container -->
+            <div class="relative w-80 h-80 sm:w-96 sm:h-96 md:w-[420px] md:h-[420px] rounded-3xl overflow-hidden border-4 border-gold shadow-2xl animate-float group bg-stone-100">
+              <img src="images/hero_sweets.png" 
+                   th:src="@{/images/hero_sweets.png}" 
+                   alt="Signature Kanpur Sweets Box" 
+                   class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500">
+              <div class="absolute inset-0 bg-gradient-to-t from-maroon/70 via-transparent to-transparent flex items-end p-6">
+                <div class="text-white text-left">
+                  <span class="text-[10px] uppercase font-bold text-gold tracking-widest">Signature Selection</span>
+                  <h3 class="font-serif font-bold text-lg sm:text-xl">Shahi Utsav Assortment Box</h3>
+                  <p class="text-xs text-stone-200">Our signature festive collection curated for Kanpur's special occasions.</p>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Floating Badge -->
+            <div class="absolute -bottom-4 -left-4 sm:left-4 bg-white border-2 border-gold shadow-xl p-4 rounded-2xl flex items-center space-x-3 transform -rotate-3 hover:rotate-0 transition-transform duration-300 z-20">
+              <div class="bg-amber-100 p-2.5 rounded-xl flex items-center justify-center text-gold">
+                <i data-lucide="award" class="w-6 h-6"></i>
+              </div>
+              <div>
+                <p class="text-[10px] font-bold text-stone-400 uppercase tracking-widest">Quality Assurance</p>
+                <p class="font-bold text-maroon text-sm font-serif">FSSAI Certified Hygiene</p>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== ABOUT & STORY PITCH SECTION ==================== -->
+    <section id="about" class="py-20 bg-stone-50 border-y border-gold/15">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+          
+          <!-- Left: Heritage story images grid -->
+          <div class="grid grid-cols-2 gap-4">
+            <div class="space-y-4">
+              <div class="rounded-2xl overflow-hidden border-2 border-gold/30 shadow-lg h-48 bg-stone-200">
+                <img src="images/kaju_katli.png" th:src="@{/images/kaju_katli.png}" alt="Preparing Sweets" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300">
+              </div>
+              <div class="rounded-2xl overflow-hidden border-2 border-gold/30 shadow-lg h-64 bg-stone-200">
+                <img src="images/gift_box.png" th:src="@{/images/gift_box.png}" alt="Sweet Box Packing" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300">
+              </div>
+            </div>
+            <div class="space-y-4 pt-8">
+              <div class="rounded-2xl overflow-hidden border-2 border-gold/30 shadow-lg h-64 bg-stone-200">
+                <img src="images/desi_ghee_laddu.png" th:src="@{/images/desi_ghee_laddu.png}" alt="Desi Ghee Laddus" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300">
+              </div>
+              <div class="rounded-2xl overflow-hidden border-2 border-gold/30 shadow-lg h-48 bg-stone-200">
+                <img src="images/special_samosa.png" th:src="@{/images/special_samosa.png}" alt="Golden Samosas" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300">
+              </div>
+            </div>
+          </div>
+          
+          <!-- Right: Heritage Story text -->
+          <div class="space-y-6">
+            <span class="text-gold font-bold text-sm uppercase tracking-widest block">Our Heritage Story</span>
+            <h2 class="font-serif text-3xl sm:text-4xl font-bold text-maroon">50 Years of Sweetening Kanpur's Celebrations</h2>
+            <div class="h-1 w-20 bg-gold my-4"></div>
+            
+            <p class="text-stone-600 leading-relaxed">
+              Established in 1972 at the heart of Kanpur, our family-owned sweet shop started with a simple vision: to make the most authentic, rich, and high-quality traditional sweets using only 100% pure cow ghee.
+            </p>
+            <p class="text-stone-600 leading-relaxed">
+              Over the decades, we have maintained the exact same recipes passed down through generations. Our master karigars (artisans) take pride in hand-crafting each batch, ensuring the unique taste and quality that Kanpurites know and love.
+            </p>
+            
+            <!-- Legacy features list -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4">
+              <div class="flex items-start space-x-3">
+                <div class="bg-maroon/10 p-2 rounded-lg text-maroon shrink-0">
+                  <i data-lucide="check-circle" class="w-5 h-5"></i>
+                </div>
+                <div>
+                  <h4 class="font-serif font-bold text-maroon">Fresh Daily Production</h4>
+                  <p class="text-xs text-stone-500 mt-0.5">Every item is prepared fresh every morning with pure ingredients.</p>
+                </div>
+              </div>
+              <div class="flex items-start space-x-3">
+                <div class="bg-maroon/10 p-2 rounded-lg text-maroon shrink-0">
+                  <i data-lucide="shield" class="w-5 h-5"></i>
+                </div>
+                <div>
+                  <h4 class="font-serif font-bold text-maroon">Hygiene Guaranteed</h4>
+                  <p class="text-xs text-stone-500 mt-0.5">Untouched cooking process, sealed food-grade packaging.</p>
+                </div>
+              </div>
+              <div class="flex items-start space-x-3">
+                <div class="bg-maroon/10 p-2 rounded-lg text-maroon shrink-0">
+                  <i data-lucide="clock" class="w-5 h-5"></i>
+                </div>
+                <div>
+                  <h4 class="font-serif font-bold text-maroon">Festival Queue-skip</h4>
+                  <p class="text-xs text-stone-500 mt-0.5">Pre-order online via WhatsApp and collect your festival box instantly.</p>
+                </div>
+              </div>
+              <div class="flex items-start space-x-3">
+                <div class="bg-maroon/10 p-2 rounded-lg text-maroon shrink-0">
+                  <i data-lucide="shopping-cart" class="w-5 h-5"></i>
+                </div>
+                <div>
+                  <h4 class="font-serif font-bold text-maroon">Bulk Party Orders</h4>
+                  <p class="text-xs text-stone-500 mt-0.5">Catering and bulk packages customized for weddings and events.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== FEATURED SPECIALTIES GRID ==================== -->
+    <section id="specialties" class="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-3xl mx-auto mb-16 space-y-4">
+        <span class="text-gold font-bold text-sm uppercase tracking-widest block">Signature Sweets</span>
+        <h2 class="font-serif text-3xl sm:text-4xl font-bold text-maroon">Our Legendary Specialties</h2>
+        <div class="h-1 w-20 bg-gold mx-auto"></div>
+        <p class="text-stone-600">These are the classic, highly demanded delicacies that define our sweet shop. Beloved by locals, crafted with absolute precision.</p>
+      </div>
+
+      <!-- Specialties dynamic grid with Thymeleaf capabilities -->
+      <!-- th:remove="all-but-first" tells Thymeleaf to remove the static mock placeholders when rendering in production -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8" th:remove="all-but-first">
+        
+        <!-- Specialty Card 1 (Thymeleaf Loop Anchor) -->
+        <div class="bg-white rounded-2xl shadow-xl hover:shadow-2xl overflow-hidden group border border-gold/15 flex flex-col justify-between h-full transform hover:-translate-y-1 transition-all duration-300"
+             th:each="item : ${featuredItems}">
+          <div class="relative h-64 overflow-hidden bg-stone-200">
+            <img src="images/kaju_katli.png" 
+                 th:src="${item.imageUrl}" 
+                 th:alt="${item.name}" 
+                 alt="Legendary Kaju Katli" 
+                 class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500">
+            <div class="absolute top-4 right-4 bg-maroon text-gold font-bold px-4 py-1.5 rounded-full text-sm border border-gold/45 shadow-lg">
+              <span th:text="${'₹' + item.price + '/' + item.unit}">₹900/kg</span>
+            </div>
+          </div>
+          <div class="p-6 flex-grow flex flex-col justify-between space-y-4">
+            <div class="space-y-2">
+              <h3 class="font-serif text-xl font-bold text-maroon" th:text="${item.name}">Kaju Katli (Royal Cashew Fudge)</h3>
+              <p class="text-stone-600 text-sm leading-relaxed line-clamp-3" th:text="${item.description}">
+                Made with premium-grade cashews and pure sugar syrup, decorated with delicate edible silver foil (varq). It's smooth, rich, and melts seamlessly in the mouth.
+              </p>
+            </div>
+            
+            <button class="quick-view-btn w-full bg-maroon text-white hover:bg-maroon-dark py-3 rounded-xl font-bold transition-colors flex items-center justify-center space-x-2 border border-gold/20 shadow-md"
+                    data-name="Kaju Katli"
+                    data-price="900"
+                    data-image="images/kaju_katli.png"
+                    data-desc="Our signature Kaju Katli is prepared using top-tier cashews with zero adulterants, slow-cooked to perfection, and garnished with premium edible silver foil. A timeless traditional indulgence."
+                    data-unit="kg"
+                    th:attr="data-name=${item.name},data-price=${item.price},data-image=${item.imageUrl},data-desc=${item.description},data-unit=${item.unit}">
+              <i data-lucide="shopping-cart" class="w-4 h-4 text-gold"></i>
+              <span>Quick View & Order</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Specialty Card 2 (Static Mockup Fallback Only) -->
+        <div class="bg-white rounded-2xl shadow-xl hover:shadow-2xl overflow-hidden group border border-gold/15 flex flex-col justify-between h-full transform hover:-translate-y-1 transition-all duration-300">
+          <div class="relative h-64 overflow-hidden bg-stone-200">
+            <img src="images/desi_ghee_laddu.png" alt="Desi Ghee Laddu" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500">
+            <div class="absolute top-4 right-4 bg-maroon text-gold font-bold px-4 py-1.5 rounded-full text-sm border border-gold/45 shadow-lg">
+              <span>₹450/kg</span>
+            </div>
+          </div>
+          <div class="p-6 flex-grow flex flex-col justify-between space-y-4">
+            <div class="space-y-2">
+              <h3 class="font-serif text-xl font-bold text-maroon">Motichoor Laddu (Desi Ghee)</h3>
+              <p class="text-stone-600 text-sm leading-relaxed line-clamp-3">
+                Delicate, tiny gram flour pearls fried in pure cow ghee, sweetened to perfection, and mixed with melons, almonds, and cardamom. Hand-rolled with traditional care.
+              </p>
+            </div>
+            
+            <button class="quick-view-btn w-full bg-maroon text-white hover:bg-maroon-dark py-3 rounded-xl font-bold transition-colors flex items-center justify-center space-x-2 border border-gold/20 shadow-md"
+                    data-name="Motichoor Laddu (Desi Ghee)"
+                    data-price="450"
+                    data-image="images/desi_ghee_laddu.png"
+                    data-desc="Prepared in 100% pure desi ghee, these melt-in-mouth Motichoor Laddus are sweet, aromatic, and loaded with roasted nuts. An essential sweet for poojas, festivals, and celebrations in Kanpur."
+                    data-unit="kg">
+              <i data-lucide="shopping-cart" class="w-4 h-4 text-gold"></i>
+              <span>Quick View & Order</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Specialty Card 3 (Static Mockup Fallback Only) -->
+        <div class="bg-white rounded-2xl shadow-xl hover:shadow-2xl overflow-hidden group border border-gold/15 flex flex-col justify-between h-full transform hover:-translate-y-1 transition-all duration-300">
+          <div class="relative h-64 overflow-hidden bg-stone-200">
+            <img src="images/special_samosa.png" alt="Crispy Special Samosa" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500">
+            <div class="absolute top-4 right-4 bg-maroon text-gold font-bold px-4 py-1.5 rounded-full text-sm border border-gold/45 shadow-lg">
+              <span>₹20/pc</span>
+            </div>
+          </div>
+          <div class="p-6 flex-grow flex flex-col justify-between space-y-4">
+            <div class="space-y-2">
+              <h3 class="font-serif text-xl font-bold text-maroon">Special Kanpur Samosa</h3>
+              <p class="text-stone-600 text-sm leading-relaxed line-clamp-3">
+                Extra crispy, golden-fried pyramid pastry shells stuffed with perfectly spiced potatoes, crushed peas, paneer cubes, cashews, and traditional home-ground garam masala.
+              </p>
+            </div>
+            
+            <button class="quick-view-btn w-full bg-maroon text-white hover:bg-maroon-dark py-3 rounded-xl font-bold transition-colors flex items-center justify-center space-x-2 border border-gold/20 shadow-md"
+                    data-name="Special Kanpur Samosa"
+                    data-price="20"
+                    data-image="images/special_samosa.png"
+                    data-desc="Our special samosas are locally famous for their crispy shell and rich paneer-cashew spiced potato filling. Served piping hot with our special tangy mint and tamarind chutneys."
+                    data-unit="pc">
+              <i data-lucide="shopping-cart" class="w-4 h-4 text-gold"></i>
+              <span>Quick View & Order</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ==================== HERITAGE / WHY GO DIGITAL? BANNER ==================== -->
+    <section class="relative bg-maroon text-white py-20 overflow-hidden border-y-4 border-gold">
+      <!-- Backdrop Pattern -->
+      <div class="absolute inset-0 opacity-5 bg-[radial-gradient(#D4AF37_1.5px,transparent_1.5px)] bg-[size:16px_16px]"></div>
+      
+      <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 space-y-8">
+        <span class="text-gold font-bold uppercase tracking-widest text-xs sm:text-sm">Why We're Going Digital</span>
+        <h2 class="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight">
+          Bringing Kanpur's Favorite Flavors Directly to Your Screen
+        </h2>
+        <div class="h-1 w-24 bg-gold mx-auto"></div>
+        <p class="text-stone-300 max-w-3xl mx-auto leading-relaxed text-sm sm:text-base">
+          For half a century, you stood in queues to buy our special festival laddoos and morning samosas. We believe your busy life deserves convenience without compromising on authentic heritage. Today, we are opening this digital window so you can pre-order online, customize gift hampers, and receive pristine, fresh boxes seamlessly.
+        </p>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 pt-8">
+          <div class="p-6 bg-maroon-dark/50 rounded-2xl border border-gold/20 shadow-inner">
+            <div class="w-12 h-12 bg-gold/10 text-gold rounded-full flex items-center justify-center mx-auto mb-4 border border-gold/30">
+              <i data-lucide="clock" class="w-6 h-6"></i>
+            </div>
+            <h3 class="font-serif font-bold text-lg text-gold mb-2">Zero Waiting Time</h3>
+            <p class="text-xs text-stone-300 leading-relaxed">Place your festival orders beforehand on WhatsApp. Skip the crowds, show your code at the counter, and take your box in seconds.</p>
+          </div>
+          
+          <div class="p-6 bg-maroon-dark/50 rounded-2xl border border-gold/20 shadow-inner">
+            <div class="w-12 h-12 bg-gold/10 text-gold rounded-full flex items-center justify-center mx-auto mb-4 border border-gold/30">
+              <i data-lucide="shield" class="w-6 h-6"></i>
+            </div>
+            <h3 class="font-serif font-bold text-lg text-gold mb-2">100% Sealed Freshness</h3>
+            <p class="text-xs text-stone-300 leading-relaxed">Our digital pre-orders are vacuum-packed and sealed in double-secured eco-friendly containers. Stays untouched and fresh for longer.</p>
+          </div>
+          
+          <div class="p-6 bg-maroon-dark/50 rounded-2xl border border-gold/20 shadow-inner">
+            <div class="w-12 h-12 bg-gold/10 text-gold rounded-full flex items-center justify-center mx-auto mb-4 border border-gold/30">
+              <i data-lucide="award" class="w-6 h-6"></i>
+            </div>
+            <h3 class="font-serif font-bold text-lg text-gold mb-2">Personalized Gifts</h3>
+            <p class="text-xs text-stone-300 leading-relaxed">Choose custom combinations of dry fruit sweets, laddus, and savories. We will pack it in royal gift wrap with custom text tags.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== INTERACTIVE FILTERABLE MENU PREVIEW ==================== -->
+    <section id="menu" class="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-3xl mx-auto mb-12 space-y-4">
+        <span class="text-gold font-bold text-sm uppercase tracking-widest block">Taste Catalog</span>
+        <h2 class="font-serif text-3xl sm:text-4xl font-bold text-maroon">Explore Our Full Menu</h2>
+        <div class="h-1 w-20 bg-gold mx-auto"></div>
+        <p class="text-stone-600">Select a category below to filter our popular catalog items. Click on any item for quick customization and ordering.</p>
+      </div>
+
+      <!-- Filter Tabs Container -->
+      <div class="flex justify-center space-x-2 sm:space-x-4 mb-12 border-b border-stone-200 max-w-md mx-auto pb-4">
+        <button class="menu-tab-btn active px-5 py-2.5 rounded-full font-bold text-sm transition-all bg-maroon text-white border border-maroon" data-filter="all">All</button>
+        <button class="menu-tab-btn px-5 py-2.5 rounded-full font-bold text-sm transition-all bg-white text-maroon hover:bg-stone-100 border border-stone-200" data-filter="sweets">Sweets</button>
+        <button class="menu-tab-btn px-5 py-2.5 rounded-full font-bold text-sm transition-all bg-white text-maroon hover:bg-stone-100 border border-stone-200" data-filter="snacks">Snacks</button>
+        <button class="menu-tab-btn px-5 py-2.5 rounded-full font-bold text-sm transition-all bg-white text-maroon hover:bg-stone-100 border border-stone-200" data-filter="gifts">Gift Boxes</button>
+      </div>
+
+      <!-- Filterable Items Grid -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="menu-items-grid" th:remove="all-but-first">
+        
+        <!-- Menu Item 1: Sweets -->
+        <div class="menu-card sweets bg-white p-4 rounded-2xl shadow-md border border-stone-100 hover:border-gold/30 hover:shadow-lg transition-all flex space-x-4">
+          <div class="w-24 h-24 rounded-xl overflow-hidden shrink-0 bg-stone-200">
+            <img src="images/kaju_katli.png" alt="Kaju Katli" class="w-full h-full object-cover">
+          </div>
+          <div class="flex-grow flex flex-col justify-between">
+            <div>
+              <h4 class="font-serif font-bold text-maroon text-base">Classic Kaju Katli</h4>
+              <p class="text-stone-500 text-xs mt-1 line-clamp-2">Diamond cut cashew fudge with high grade cashew content.</p>
+            </div>
+            <div class="flex items-center justify-between mt-2">
+              <span class="font-bold text-maroon text-sm">₹900/kg</span>
+              <button class="quick-view-btn text-gold hover:text-gold-dark font-bold text-xs flex items-center space-x-1"
+                      data-name="Classic Kaju Katli"
+                      data-price="900"
+                      data-image="images/kaju_katli.png"
+                      data-desc="Genuinely prepared by master artisans. It stands as a crown jewel of Indian traditional sweet heritage."
+                      data-unit="kg">
+                <span>View & Order</span>
+                <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Menu Item 2: Sweets -->
+        <div class="menu-card sweets bg-white p-4 rounded-2xl shadow-md border border-stone-100 hover:border-gold/30 hover:shadow-lg transition-all flex space-x-4">
+          <div class="w-24 h-24 rounded-xl overflow-hidden shrink-0 bg-stone-200">
+            <img src="images/desi_ghee_laddu.png" alt="Motichoor Laddu" class="w-full h-full object-cover">
+          </div>
+          <div class="flex-grow flex flex-col justify-between">
+            <div>
+              <h4 class="font-serif font-bold text-maroon text-base">Shahi Motichoor Laddu</h4>
+              <p class="text-stone-500 text-xs mt-1 line-clamp-2">Golden boondi fried in pure cow ghee and hand shaped.</p>
+            </div>
+            <div class="flex items-center justify-between mt-2">
+              <span class="font-bold text-maroon text-sm">₹450/kg</span>
+              <button class="quick-view-btn text-gold hover:text-gold-dark font-bold text-xs flex items-center space-x-1"
+                      data-name="Shahi Motichoor Laddu"
+                      data-price="450"
+                      data-image="images/desi_ghee_laddu.png"
+                      data-desc="Juicy, soft, and richly flavored, made using top quality gram flour, cardamom, and cow ghee."
+                      data-unit="kg">
+                <span>View & Order</span>
+                <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Menu Item 3: Sweets (Placeholder Kesar Peda) -->
+        <div class="menu-card sweets bg-white p-4 rounded-2xl shadow-md border border-stone-100 hover:border-gold/30 hover:shadow-lg transition-all flex space-x-4">
+          <div class="w-24 h-24 rounded-xl overflow-hidden shrink-0 bg-stone-200">
+            <!-- Reuse laddu for pedal mockup -->
+            <img src="images/desi_ghee_laddu.png" alt="Kesar Peda" class="w-full h-full object-cover filter sepia-[15%]">
+          </div>
+          <div class="flex-grow flex flex-col justify-between">
+            <div>
+              <h4 class="font-serif font-bold text-maroon text-base">Kesari Mathura Peda</h4>
+              <p class="text-stone-500 text-xs mt-1 line-clamp-2">Traditional condensed milk sweet blended with saffron strands.</p>
+            </div>
+            <div class="flex items-center justify-between mt-2">
+              <span class="font-bold text-maroon text-sm">₹600/kg</span>
+              <button class="quick-view-btn text-gold hover:text-gold-dark font-bold text-xs flex items-center space-x-1"
+                      data-name="Kesari Mathura Peda"
+                      data-price="600"
+                      data-image="images/desi_ghee_laddu.png"
+                      data-desc="Saffron flavored milk solid circles, traditional recipe bringing Mathura sweetness directly to Kanpur."
+                      data-unit="kg">
+                <span>View & Order</span>
+                <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Menu Item 4: Snacks -->
+        <div class="menu-card snacks bg-white p-4 rounded-2xl shadow-md border border-stone-100 hover:border-gold/30 hover:shadow-lg transition-all flex space-x-4">
+          <div class="w-24 h-24 rounded-xl overflow-hidden shrink-0 bg-stone-200">
+            <img src="images/special_samosa.png" alt="Samosa" class="w-full h-full object-cover">
+          </div>
+          <div class="flex-grow flex flex-col justify-between">
+            <div>
+              <h4 class="font-serif font-bold text-maroon text-base">Kanpur Spiced Samosa</h4>
+              <p class="text-stone-500 text-xs mt-1 line-clamp-2">Crispy pyramid shell with cashew and paneer potato filling.</p>
+            </div>
+            <div class="flex items-center justify-between mt-2">
+              <span class="font-bold text-maroon text-sm">₹20/pc</span>
+              <button class="quick-view-btn text-gold hover:text-gold-dark font-bold text-xs flex items-center space-x-1"
+                      data-name="Kanpur Spiced Samosa"
+                      data-price="20"
+                      data-image="images/special_samosa.png"
+                      data-desc="Fried to a flawless gold, stuffed with perfectly spiced potatoes, paneer, and cashew bits."
+                      data-unit="pc">
+                <span>View & Order</span>
+                <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Menu Item 5: Snacks (Placeholder Pyaz Kachori) -->
+        <div class="menu-card snacks bg-white p-4 rounded-2xl shadow-md border border-stone-100 hover:border-gold/30 hover:shadow-lg transition-all flex space-x-4">
+          <div class="w-24 h-24 rounded-xl overflow-hidden shrink-0 bg-stone-200">
+            <img src="images/special_samosa.png" alt="Pyaz Kachori" class="w-full h-full object-cover filter hue-rotate-15">
+          </div>
+          <div class="flex-grow flex flex-col justify-between">
+            <div>
+              <h4 class="font-serif font-bold text-maroon text-base">Crispy Pyaz Kachori</h4>
+              <p class="text-stone-500 text-xs mt-1 line-clamp-2">Flaky hot pastry filled with spiced onions and dal paste.</p>
+            </div>
+            <div class="flex items-center justify-between mt-2">
+              <span class="font-bold text-maroon text-sm">₹30/pc</span>
+              <button class="quick-view-btn text-gold hover:text-gold-dark font-bold text-xs flex items-center space-x-1"
+                      data-name="Crispy Pyaz Kachori"
+                      data-price="30"
+                      data-image="images/special_samosa.png"
+                      data-desc="Rich, flaky, crispy kachori with standard spicy Rajasthani-Kanpuri onion fillings. Served with dry ginger sweet chutney."
+                      data-unit="pc">
+                <span>View & Order</span>
+                <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Menu Item 6: Gift Boxes -->
+        <div class="menu-card gifts bg-white p-4 rounded-2xl shadow-md border border-stone-100 hover:border-gold/30 hover:shadow-lg transition-all flex space-x-4">
+          <div class="w-24 h-24 rounded-xl overflow-hidden shrink-0 bg-stone-200">
+            <img src="images/gift_box.png" alt="Shahi Gift Box" class="w-full h-full object-cover">
+          </div>
+          <div class="flex-grow flex flex-col justify-between">
+            <div>
+              <h4 class="font-serif font-bold text-maroon text-base">Shahi Utsav Gift Box</h4>
+              <p class="text-stone-500 text-xs mt-1 line-clamp-2">Royal crimson packaging with mixed premium sweets.</p>
+            </div>
+            <div class="flex items-center justify-between mt-2">
+              <span class="font-bold text-maroon text-sm">₹1200/box</span>
+              <button class="quick-view-btn text-gold hover:text-gold-dark font-bold text-xs flex items-center space-x-1"
+                      data-name="Shahi Utsav Gift Box"
+                      data-price="1200"
+                      data-image="images/gift_box.png"
+                      data-desc="Includes 250g Kaju Katli, 250g Motichoor Laddus, 250g Peda, and 250g Premium Salted Dryfruits."
+                      data-unit="box">
+                <span>View & Order</span>
+                <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Spring Boot Thymeleaf code block rendering anchor -->
+      <!-- This block serves as documentation for Spring Boot developers on how to dynamically render categories. -->
+      <div class="hidden" th:each="category : ${categories}">
+        <!-- This code block won't render in static HTML but shows Thymeleaf structure -->
+        <p th:text="${category.name}">Category Name</p>
+      </div>
+    </section>
+
+    <!-- ==================== TESTIMONIALS SECTION ==================== -->
+    <section id="testimonials" class="py-20 bg-stone-50 border-t border-stone-200">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div class="text-center max-w-3xl mx-auto mb-16 space-y-4">
+          <span class="text-gold font-bold text-sm uppercase tracking-widest block">Customer Reviews</span>
+          <h2 class="font-serif text-3xl sm:text-4xl font-bold text-maroon">What Kanpurites Say About Us</h2>
+          <div class="h-1 w-20 bg-gold mx-auto"></div>
+          <p class="text-stone-600">Pure taste creates lifelong relationships. Here is some feedback from our long-term patrons.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8" th:remove="all-but-first">
+          
+          <!-- Testimonial 1 -->
+          <div class="bg-white p-8 rounded-2xl shadow-md border border-stone-100 flex flex-col justify-between space-y-6" th:each="review : ${reviews}">
+            <div class="space-y-4">
+              <div class="flex text-amber-400">
+                <i data-lucide="star" class="w-5 h-5 fill-current"></i>
+                <i data-lucide="star" class="w-5 h-5 fill-current"></i>
+                <i data-lucide="star" class="w-5 h-5 fill-current"></i>
+                <i data-lucide="star" class="w-5 h-5 fill-current"></i>
+                <i data-lucide="star" class="w-5 h-5 fill-current"></i>
+              </div>
+              <p class="text-stone-600 italic text-sm leading-relaxed" th:text="${review.content}">
+                "For three generations, my family has bought sweets from here for every festival. Their Kaju Katli has the most authentic texture and flavor. The pure desi ghee aroma in their Motichoor Laddus is unmistakable!"
+              </p>
+            </div>
+            <div class="flex items-center space-x-3">
+              <div class="w-10 h-10 bg-maroon/10 text-maroon rounded-full flex items-center justify-center font-bold font-serif text-base">
+                A
+              </div>
+              <div>
+                <h4 class="font-serif font-bold text-maroon text-sm" th:text="${review.author}">Anand Singhania</h4>
+                <p class="text-stone-400 text-xs" th:text="${review.location}">Swaroop Nagar, Kanpur</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Testimonial 2 (Static Fallback Only) -->
+          <div class="bg-white p-8 rounded-2xl shadow-md border border-stone-100 flex flex-col justify-between space-y-6">
+            <div class="space-y-4">
+              <div class="flex text-amber-400">
+                <i data-lucide="star" class="w-5 h-5 fill-current"></i>
+                <i data-lucide="star" class="w-5 h-5 fill-current"></i>
+                <i data-lucide="star" class="w-5 h-5 fill-current"></i>
+                <i data-lucide="star" class="w-5 h-5 fill-current"></i>
+                <i data-lucide="star" class="w-5 h-5 fill-current"></i>
+              </div>
+              <p class="text-stone-600 italic text-sm leading-relaxed">
+                "Their samosas are legendary! Whenever relatives visit us in Kanpur, our first evening snack stop is always here. Crispy outer crust with heavily paneer-stuffed potato core. Highly recommended!"
+              </p>
+            </div>
+            <div class="flex items-center space-x-3">
+              <div class="w-10 h-10 bg-maroon/10 text-maroon rounded-full flex items-center justify-center font-bold font-serif text-base">
+                R
+              </div>
+              <div>
+                <h4 class="font-serif font-bold text-maroon text-sm">Ruchi Gupta</h4>
+                <p class="text-stone-400 text-xs">Arya Nagar, Kanpur</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Testimonial 3 (Static Fallback Only) -->
+          <div class="bg-white p-8 rounded-2xl shadow-md border border-stone-100 flex flex-col justify-between space-y-6">
+            <div class="space-y-4">
+              <div class="flex text-amber-400">
+                <i data-lucide="star" class="w-5 h-5 fill-current"></i>
+                <i data-lucide="star" class="w-5 h-5 fill-current"></i>
+                <i data-lucide="star" class="w-5 h-5 fill-current"></i>
+                <i data-lucide="star" class="w-5 h-5 fill-current"></i>
+                <i data-lucide="star" class="w-5 h-5 fill-current"></i>
+              </div>
+              <p class="text-stone-600 italic text-sm leading-relaxed">
+                "Absolutely loved the online pre-ordering! Stood zero minutes in queue on Diwali night. Checked out in seconds. The gift boxes packaging is extremely royal and clean. Perfect visual aesthetics."
+              </p>
+            </div>
+            <div class="flex items-center space-x-3">
+              <div class="w-10 h-10 bg-maroon/10 text-maroon rounded-full flex items-center justify-center font-bold font-serif text-base">
+                V
+              </div>
+              <div>
+                <h4 class="font-serif font-bold text-maroon text-sm">Vikram Bajpai</h4>
+                <p class="text-stone-400 text-xs">Kalyanpur, Kanpur</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== LEAD CAPTURE & CONTACT FOOTER ==================== -->
+    <section id="contact" class="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="bg-white rounded-3xl border border-gold/25 shadow-2xl overflow-hidden">
+        <div class="grid grid-cols-1 lg:grid-cols-2">
+          
+          <!-- Left Side: Lead Capture Form -->
+          <div class="p-8 sm:p-12 space-y-6">
+            <div class="space-y-2">
+              <span class="text-gold font-bold text-xs uppercase tracking-widest block">Get in Touch</span>
+              <h2 class="font-serif text-2xl sm:text-3xl font-bold text-maroon">Place an Inquiry / Pre-order</h2>
+              <p class="text-xs text-stone-500">Submit this form and our manager will call you back to confirm pricing and bulk arrangements.</p>
+            </div>
+            
+            <form action="#" method="POST" th:action="@{/submit-inquiry}" class="space-y-4">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-xs font-semibold text-stone-600 uppercase mb-1">Your Name</label>
+                  <input type="text" name="name" required placeholder="E.g., Rajesh Kumar" class="w-full bg-stone-50 border border-stone-200 focus:border-maroon rounded-xl px-4 py-3 text-sm focus:outline-none transition-colors">
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-stone-600 uppercase mb-1">Phone Number</label>
+                  <input type="tel" name="phone" required placeholder="E.g., +91 98765 43210" class="w-full bg-stone-50 border border-stone-200 focus:border-maroon rounded-xl px-4 py-3 text-sm focus:outline-none transition-colors">
+                </div>
+              </div>
+              
+              <div>
+                <label class="block text-xs font-semibold text-stone-600 uppercase mb-1">Select Inquiry Type</label>
+                <select name="type" class="w-full bg-stone-50 border border-stone-200 focus:border-maroon rounded-xl px-4 py-3 text-sm focus:outline-none transition-colors">
+                  <option value="festival">Festival Pre-ordering</option>
+                  <option value="wedding">Wedding / Bulk Catering</option>
+                  <option value="corporate">Corporate Gifting</option>
+                  <option value="feedback">General Inquiry / Feedback</option>
+                </select>
+              </div>
+              
+              <div>
+                <label class="block text-xs font-semibold text-stone-600 uppercase mb-1">Detailed Message</label>
+                <textarea name="message" rows="4" required placeholder="E.g., I would like to order 15 boxes of Shahi Utsav Gift Boxes for Diwali distribution on 20th Oct..." class="w-full bg-stone-50 border border-stone-200 focus:border-maroon rounded-xl px-4 py-3 text-sm focus:outline-none transition-colors resize-none"></textarea>
+              </div>
+
+              <!-- Button -->
+              <button type="submit" class="w-full bg-maroon hover:bg-maroon-dark text-white font-bold py-3.5 rounded-xl border border-gold/30 shadow-md hover:shadow-lg transition-all text-center">
+                Submit Inquiry / Pre-order
+              </button>
+            </form>
+          </div>
+          
+          <!-- Right Side: Details & Interactive Map Mockup -->
+          <div class="bg-gradient-to-br from-maroon via-maroon-dark to-[#400010] text-white p-8 sm:p-12 flex flex-col justify-between relative">
+            <div class="absolute inset-0 opacity-5 bg-[radial-gradient(#D4AF37_1px,transparent_1px)] bg-[size:12px_12px] pointer-events-none"></div>
+            
+            <div class="space-y-6 relative z-10">
+              <h3 class="font-serif text-xl sm:text-2xl font-bold text-gold">Store Information</h3>
+              
+              <div class="space-y-4">
+                
+                <!-- Address -->
+                <div class="flex items-start space-x-3">
+                  <i data-lucide="map-pin" class="w-5 h-5 text-gold shrink-0 mt-0.5"></i>
+                  <div>
+                    <h4 class="font-bold text-stone-200 text-sm">Our Store Location</h4>
+                    <p class="text-xs text-stone-300 mt-0.5 leading-relaxed" th:text="${storeAddress}">
+                      112/45, Swaroop Nagar Main Road, opposite Moti Jheel, Kanpur, Uttar Pradesh 208002
+                    </p>
+                  </div>
+                </div>
+
+                <!-- Timings -->
+                <div class="flex items-start space-x-3">
+                  <i data-lucide="clock" class="w-5 h-5 text-gold shrink-0 mt-0.5"></i>
+                  <div>
+                    <h4 class="font-bold text-stone-200 text-sm">Working Hours</h4>
+                    <p class="text-xs text-stone-300 mt-0.5 leading-relaxed" th:text="${storeHours}">
+                      Monday - Sunday: 8:00 AM - 10:00 PM (Open all festival days)
+                    </p>
+                  </div>
+                </div>
+
+                <!-- Call Support -->
+                <div class="flex items-start space-x-3">
+                  <i data-lucide="phone" class="w-5 h-5 text-gold shrink-0 mt-0.5"></i>
+                  <div>
+                    <h4 class="font-bold text-stone-200 text-sm">Call Support / Manager</h4>
+                    <p class="text-xs text-stone-300 mt-0.5 leading-relaxed" th:text="${storePhone}">
+                      +91 98765 43210
+                    </p>
+                  </div>
+                </div>
+                
+              </div>
+            </div>
+
+            <!-- Map Mockup Container -->
+            <div class="mt-8 relative z-10 w-full rounded-2xl overflow-hidden border border-gold/30 shadow-lg h-44 sm:h-52 bg-maroon-dark flex items-center justify-center">
+              <!-- Inline Iframe Google Map for Swaroop Nagar Kanpur -->
+              <iframe 
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14285.498450165507!2d80.31557008107693!3d26.47585098939634!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x399c388d55555555%3A0x7d0a2830ad288efd!2sSwaroop%20Nagar%20Kanpur!5e0!3m2!1sen!2sin!4v1717462000000!5m2!1sen!2sin" 
+                class="w-full h-full border-0 grayscale opacity-85 hover:grayscale-0 hover:opacity-100 transition-all duration-500" 
+                allowfullscreen="" 
+                loading="lazy" 
+                referrerpolicy="no-referrer-when-downgrade">
+              </iframe>
+              <div class="absolute bottom-2 right-2 bg-maroon border border-gold/50 text-gold text-[10px] font-bold py-1 px-3.5 rounded-full pointer-events-none shadow-md">
+                Kanpur, UP
+              </div>
+            </div>
+
+          </div>
+          
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="bg-maroon-dark text-white border-t-2 border-gold py-12 relative">
+    <div class="absolute inset-0 opacity-[0.02] bg-[radial-gradient(#D4AF37_1px,transparent_1px)] bg-[size:10px_10px] pointer-events-none"></div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+        
+        <!-- About Column -->
+        <div class="space-y-4">
+          <div class="flex items-center space-x-2">
+            <div class="w-8 h-8 bg-maroon rounded-full flex items-center justify-center border border-gold shadow">
+              <span class="text-gold font-serif font-bold text-sm">K</span>
+            </div>
+            <h4 class="font-serif font-bold text-lg text-gold tracking-wide">Kanpur Sweet Palace</h4>
+          </div>
+          <p class="text-xs text-stone-300 leading-relaxed">
+            Preserving the ancient culinary craftsmanship of traditional Indian sweets and savories with cow-ghee preparation.
+          </p>
+        </div>
+
+        <!-- Quick Links Column -->
+        <div class="space-y-4">
+          <h4 class="font-serif font-bold text-gold text-sm tracking-wide">Quick Navigation</h4>
+          <ul class="space-y-2 text-xs text-stone-300">
+            <li><a href="#about" class="hover:text-gold transition-colors">Our Heritage</a></li>
+            <li><a href="#specialties" class="hover:text-gold transition-colors">Specialties</a></li>
+            <li><a href="#menu" class="hover:text-gold transition-colors">Browse Menu</a></li>
+            <li><a href="#testimonials" class="hover:text-gold transition-colors">Reviews</a></li>
+          </ul>
+        </div>
+
+        <!-- Contact details links -->
+        <div class="space-y-4">
+          <h4 class="font-serif font-bold text-gold text-sm tracking-wide">Contact Details</h4>
+          <ul class="space-y-2 text-xs text-stone-300">
+            <li class="flex items-center gap-2">
+              <i data-lucide="phone" class="w-3.5 h-3.5 text-gold"></i>
+              <span>+91 98765 43210</span>
+            </li>
+            <li class="flex items-center gap-2">
+              <i data-lucide="map-pin" class="w-3.5 h-3.5 text-gold shrink-0"></i>
+              <span>Swaroop Nagar, Kanpur, UP</span>
+            </li>
+            <li class="flex items-center gap-2">
+              <i data-lucide="clock" class="w-3.5 h-3.5 text-gold"></i>
+              <span>8:00 AM - 10:00 PM</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Social Column -->
+        <div class="space-y-4">
+          <h4 class="font-serif font-bold text-gold text-sm tracking-wide">Connect With Us</h4>
+          <div class="flex space-x-3">
+            <a href="#" class="w-9 h-9 bg-maroon hover:bg-gold hover:text-maroon text-gold border border-gold/20 rounded-full flex items-center justify-center transition-all duration-300">
+              <i data-lucide="facebook" class="w-4 h-4"></i>
+            </a>
+            <a href="#" class="w-9 h-9 bg-maroon hover:bg-gold hover:text-maroon text-gold border border-gold/20 rounded-full flex items-center justify-center transition-all duration-300">
+              <i data-lucide="instagram" class="w-4 h-4"></i>
+            </a>
+            <a href="#" class="w-9 h-9 bg-maroon hover:bg-gold hover:text-maroon text-gold border border-gold/20 rounded-full flex items-center justify-center transition-all duration-300">
+              <!-- Standard message circle for chat / social link -->
+              <i data-lucide="message-square" class="w-4 h-4"></i>
+            </a>
+          </div>
+          <p class="text-[10px] text-stone-400 font-semibold leading-relaxed">© <span id="year">2026</span> Kanpur Sweet Palace. All rights reserved.</p>
+        </div>
+
+      </div>
+
+      <div class="mt-8 pt-6 border-t border-stone-800 text-center text-[10px] text-stone-400">
+        Designed for visual presentation. Fully compatible with Spring Boot & Thymeleaf attributes.
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==================== INTERACTIVE QUICK VIEW MODAL ==================== -->
+  <div id="quick-view-modal" class="fixed inset-0 z-50 overflow-y-auto flex items-center justify-center p-4 opacity-0 pointer-events-none transition-all duration-300 bg-stone-900/60 backdrop-blur-sm">
+    
+    <!-- Modal Content Card -->
+    <div class="bg-white rounded-3xl border border-gold/30 shadow-2xl w-full max-w-2xl overflow-hidden transform scale-95 transition-all duration-300 flex flex-col md:flex-row relative">
+      
+      <!-- Close Button -->
+      <button id="close-modal-btn" class="absolute top-4 right-4 z-10 w-9 h-9 bg-stone-100 hover:bg-stone-200 text-stone-600 rounded-full flex items-center justify-center shadow-md border border-stone-200 focus:outline-none transition-colors">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+
+      <!-- Left Panel: Product Image -->
+      <div class="w-full md:w-1/2 h-64 md:h-auto bg-stone-100 relative shrink-0">
+        <img id="modal-img" src="images/kaju_katli.png" alt="Mithai" class="w-full h-full object-cover">
+        <!-- Floating category badge -->
+        <span class="absolute top-4 left-4 bg-maroon text-gold text-xs font-bold py-1 px-3 border border-gold/40 rounded-full shadow-lg">
+          Kanpur's Choice
+        </span>
+      </div>
+
+      <!-- Right Panel: Description & Action -->
+      <div class="w-full md:w-1/2 p-6 sm:p-8 flex flex-col justify-between space-y-6">
+        
+        <div class="space-y-3">
+          <h3 id="modal-title" class="font-serif text-2xl font-bold text-maroon">Kaju Katli (Cashew Fudge)</h3>
+          
+          <!-- Price display -->
+          <div class="flex items-baseline space-x-1">
+            <span class="text-stone-400 text-sm font-semibold">Price:</span>
+            <span class="text-maroon font-bold text-xl font-serif">₹</span>
+            <span id="modal-price-val" class="text-maroon font-bold text-xl font-serif">900</span>
+            <span class="text-stone-500 text-sm font-semibold">/</span>
+            <span id="modal-unit" class="text-stone-500 text-sm font-semibold">kg</span>
+          </div>
+
+          <div class="h-px bg-stone-200 w-full my-3"></div>
+          
+          <p id="modal-desc" class="text-stone-600 text-xs sm:text-sm leading-relaxed">
+            Our signature Kaju Katli is prepared using top-tier cashews with zero adulterants, slow-cooked to perfection, and garnished with premium edible silver foil. A timeless traditional indulgence.
+          </p>
+        </div>
+
+        <div class="space-y-4">
+          <!-- Counter Block -->
+          <div class="flex items-center justify-between bg-stone-50 p-3 rounded-xl border border-stone-200">
+            <span class="text-xs font-bold text-stone-600 uppercase">Quantity</span>
+            
+            <div class="flex items-center space-x-3">
+              <button id="counter-minus" class="w-8 h-8 rounded-lg bg-stone-200 hover:bg-stone-300 flex items-center justify-center text-stone-700 font-bold focus:outline-none transition-colors">
+                <i data-lucide="minus" class="w-4 h-4"></i>
+              </button>
+              <span id="counter-value" class="font-serif font-bold text-base text-maroon w-8 text-center select-none">1</span>
+              <button id="counter-plus" class="w-8 h-8 rounded-lg bg-stone-200 hover:bg-stone-300 flex items-center justify-center text-stone-700 font-bold focus:outline-none transition-colors">
+                <i data-lucide="plus" class="w-4 h-4"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Total Calculation Block -->
+          <div class="flex justify-between items-center text-sm font-bold text-stone-800">
+            <span>Total Price:</span>
+            <span class="text-lg text-maroon font-serif">₹<span id="modal-total-val">900</span></span>
+          </div>
+
+          <!-- WhatsApp Cart CTA -->
+          <a id="modal-whatsapp-cta" 
+             href="#" 
+             target="_blank" 
+             class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 rounded-xl flex items-center justify-center space-x-2 shadow-lg shadow-emerald-600/20 transition-all border border-emerald-500/20 text-sm">
+            <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.335-1.662c1.746.953 3.71 1.458 5.704 1.459h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+            </svg>
+            <span>Order via WhatsApp</span>
+          </a>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== JAVASCRIPT CONTROLLERS ==================== -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      
+      // 1. Initialize Lucide Icons
+      lucide.createIcons();
+
+      // Set current year in footer
+      const yearEl = document.getElementById("year");
+      if (yearEl) {
+        yearEl.textContent = new Date().getFullYear();
+      }
+
+      // 2. Mobile Menu Controller
+      const mobileMenuBtn = document.getElementById("mobile-menu-btn");
+      const mobileMenu = document.getElementById("mobile-menu");
+      const menuIcon = document.getElementById("menu-icon");
+
+      mobileMenuBtn.addEventListener("click", () => {
+        const isHidden = mobileMenu.classList.contains("hidden");
+        if (isHidden) {
+          mobileMenu.classList.remove("hidden");
+          // Change icon to X
+          menuIcon.setAttribute("data-lucide", "x");
+        } else {
+          mobileMenu.classList.add("hidden");
+          // Change icon to menu
+          menuIcon.setAttribute("data-lucide", "menu");
+        }
+        lucide.createIcons();
+      });
+
+      // Close mobile menu when a link is clicked
+      const mobileLinks = mobileMenu.querySelectorAll("a");
+      mobileLinks.forEach(link => {
+        link.addEventListener("click", () => {
+          mobileMenu.classList.add("hidden");
+          menuIcon.setAttribute("data-lucide", "menu");
+          lucide.createIcons();
+        });
+      });
+
+      // 3. Filterable Menu Preview Controller
+      const tabButtons = document.querySelectorAll(".menu-tab-btn");
+      const menuCards = document.querySelectorAll(".menu-card");
+
+      tabButtons.forEach(btn => {
+        btn.addEventListener("click", () => {
+          // Remove active styles from all buttons
+          tabButtons.forEach(tb => {
+            tb.classList.remove("active", "bg-maroon", "text-white", "border-maroon");
+            tb.classList.add("bg-white", "text-maroon", "hover:bg-stone-100", "border-stone-200");
+          });
+
+          // Add active styles to clicked button
+          btn.classList.remove("bg-white", "text-maroon", "hover:bg-stone-100", "border-stone-200");
+          btn.classList.add("active", "bg-maroon", "text-white", "border-maroon");
+
+          const filterVal = btn.getAttribute("data-filter");
+
+          // Toggle visibility of menu items with smooth fade transitions
+          menuCards.forEach(card => {
+            if (filterVal === "all") {
+              card.style.display = "flex";
+              setTimeout(() => { card.style.opacity = "1"; card.style.transform = "scale(1)"; }, 50);
+            } else {
+              if (card.classList.contains(filterVal)) {
+                card.style.display = "flex";
+                setTimeout(() => { card.style.opacity = "1"; card.style.transform = "scale(1)"; }, 50);
+              } else {
+                card.style.opacity = "0";
+                card.style.transform = "scale(0.95)";
+                setTimeout(() => { card.style.display = "none"; }, 200);
+              }
+            }
+          });
+        });
+      });
+
+      // 4. Quick View Modal Controller
+      const modal = document.getElementById("quick-view-modal");
+      const modalTitle = document.getElementById("modal-title");
+      const modalPriceVal = document.getElementById("modal-price-val");
+      const modalUnit = document.getElementById("modal-unit");
+      const modalDesc = document.getElementById("modal-desc");
+      const modalImg = document.getElementById("modal-img");
+      const modalTotalVal = document.getElementById("modal-total-val");
+      const modalWhatsappCta = document.getElementById("modal-whatsapp-cta");
+      const counterValue = document.getElementById("counter-value");
+
+      const minusBtn = document.getElementById("counter-minus");
+      const plusBtn = document.getElementById("counter-plus");
+      const closeModalBtn = document.getElementById("close-modal-btn");
+      
+      let currentPrice = 0;
+      let currentQuantity = 1;
+      let currentItemName = "";
+      let currentUnit = "kg";
+      const storeName = "Kanpur Sweet Palace";
+
+      // Function to open Modal and populate details
+      const openModal = (name, price, image, desc, unit) => {
+        currentItemName = name;
+        currentPrice = parseFloat(price);
+        currentUnit = unit;
+        currentQuantity = 1;
+        
+        modalTitle.textContent = name;
+        modalPriceVal.textContent = price;
+        modalUnit.textContent = unit;
+        modalDesc.textContent = desc;
+        modalImg.src = image;
+        counterValue.textContent = currentQuantity;
+        
+        updateTotal();
+
+        // Show Modal
+        modal.classList.remove("opacity-0", "pointer-events-none");
+        modal.firstElementChild.classList.remove("scale-95");
+        modal.firstElementChild.classList.add("scale-100");
+      };
+
+      // Function to close Modal
+      const closeModal = () => {
+        modal.classList.add("opacity-0", "pointer-events-none");
+        modal.firstElementChild.classList.remove("scale-100");
+        modal.firstElementChild.classList.add("scale-95");
+      };
+
+      // Update total price and WhatsApp link
+      const updateTotal = () => {
+        const total = currentPrice * currentQuantity;
+        modalTotalVal.textContent = total;
+
+        // WhatsApp message generation
+        const baseMessage = `Hello ${storeName}! I would like to order:
+- Product: *${currentItemName}*
+- Quantity: *${currentQuantity} ${currentUnit}*
+- Total Price: *₹${total}*
+
+Please confirm my order. Thank you!`;
+        
+        const encodedMsg = encodeURIComponent(baseMessage);
+        modalWhatsappCta.href = `https://wa.me/919876543210?text=${encodedMsg}`;
+      };
+
+      // Attach event listeners to all Quick View buttons
+      const quickViewBtns = document.querySelectorAll(".quick-view-btn");
+      quickViewBtns.forEach(btn => {
+        btn.addEventListener("click", () => {
+          const name = btn.getAttribute("data-name");
+          const price = btn.getAttribute("data-price");
+          const image = btn.getAttribute("data-image");
+          const desc = btn.getAttribute("data-desc");
+          const unit = btn.getAttribute("data-unit") || "kg";
+          
+          openModal(name, price, image, desc, unit);
+        });
+      });
+
+      // Quantity adjustments
+      plusBtn.addEventListener("click", () => {
+        currentQuantity++;
+        counterValue.textContent = currentQuantity;
+        updateTotal();
+      });
+
+      minusBtn.addEventListener("click", () => {
+        if (currentQuantity > 1) {
+          currentQuantity--;
+          counterValue.textContent = currentQuantity;
+          updateTotal();
+        }
+      });
+
+      // Close modal events
+      closeModalBtn.addEventListener("click", closeModal);
+      modal.addEventListener("click", (e) => {
+        if (e.target === modal) {
+          closeModal();
+        }
+      });
+
+      // Close modal on Escape key
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+          closeModal();
+        }
+      });
+
+    });
+  </script>
+</body>
+</html>
